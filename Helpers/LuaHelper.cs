@@ -1,10 +1,16 @@
 //THIS IS ALL STOLEN FROM LUACUTSCENES https://github.com/Cruor/LuaCutscenes/blob/master/Helpers/LuaHelper.cs
+//you can tell which code is mine by looking at the lack of newlines before brackets
 
 using Celeste.Mod.GooberHelper.Entities;
+using Celeste.Mod.Helpers;
 using FMOD;
+using Iced.Intel;
 using Microsoft.Xna.Framework;
 using Monocle;
+using MonoMod.Cil;
+using MonoMod.RuntimeDetour;
 using NLua;
+using NLua.Exceptions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +24,34 @@ namespace Celeste.Mod.GooberHelper
 {
     public static class LuaHelper
     {
+        private static ILHook objectTranslatorThrowErrorHook;
+
+        public static void Load() {
+            MethodInfo objectTranslatorThrowError = typeof(ObjectTranslator).GetMethod("ThrowError", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            objectTranslatorThrowErrorHook = new ILHook(objectTranslatorThrowError, modifyObjectTranslatorThrowError);
+        }
+
+        public static void Unload() {
+            objectTranslatorThrowErrorHook.Dispose();
+        }
+
+        public static void modifyObjectTranslatorThrowError(ILContext il) {
+            var cursor = new ILCursor(il);
+
+            if(cursor.TryGotoNextBestFit(MoveType.After,
+                instr => instr.MatchCall<ObjectTranslator>("Push"),
+                instr => instr.MatchRet()
+            )) {
+                cursor.Index--;
+
+                cursor.EmitLdarg1();
+                cursor.EmitDelegate((KeraLua.Lua luaState) => {
+                    luaState.Error();
+                });
+            }
+        }
+
         public static string GetFileContent(string path)
         {
             Stream stream = Everest.Content.Get(path)?.Stream;
@@ -120,61 +154,18 @@ namespace Celeste.Mod.GooberHelper
             }
         }
 
+        //everything after this is not stolen from luacutscenes
         public static LuaFunction MakeGeneric(LuaTable outerTable, params Type[] types) {
-            Console.WriteLine("HI I AM HERE");
-
-            // int top = Everest.LuaLoader.Context.State.GetTop();
-
-            // Console.WriteLine(top);
-
-            // Everest.LuaLoader.Context.State.GetType();
-
             if(
                 Utils.GetEnumeratorIndex(outerTable.Values.GetEnumerator(), 0) is not LuaTable innerTable ||
                 Utils.GetEnumeratorIndex(innerTable.Values.GetEnumerator(), 0) is not MethodInfo methodInfo
             ) {
-                throw new Exception($"couldnt make the method generic");
+                throw new Exception($"couldnt make the method generic (weird input)");
             }
 
             var genericMethod = methodInfo.MakeGenericMethod(types);
             
             return Everest.LuaLoader.Context.RegisterFunction("generic_method", genericMethod);
-
-            // Console.WriteLine(innerTable.Values);
-            // Console.WriteLine(innerTable.Values.GetEnumerator());
-            // var luaFunctionValue = Utils.GetEnumeratorIndex(innerTable.Values.GetEnumerator(), 0) as KeraLua.LuaFunction;
-            // var luaFunctionKey = Utils.GetEnumeratorIndex(innerTable.Keys.GetEnumerator(), 0);
-            // var methodInfo = luaFunctionValue.Method;
-
-            // Console.WriteLine(innerTable[luaFunctionKey]);
-            // Console.WriteLine(luaFunctionValue);
-
-            // innerTable[luaFunctionKey] = methodInfo.MakeGenericMethod(types).CreateDelegate(typeof(KeraLua.LuaFunction));
-
-            // var parameterTypes = methodInfo.GetParameters().Select(param => param.ParameterType).ToArray();
-
-            // innerTable[innerTable.Keys.GetEnumerator()]
-
-            // Utils.GetEnumeratorIndex(outerTable.GetEnumerator(), 1);
-
-            // return outerTable;
-
-            // return methodInfo.MakeGenericMethod(types).CreateDelegate(
-            //     methodInfo.ReturnType == typeof(void) ?
-            //         typeof(Action).MakeGenericType(parameterTypes) :
-            //         typeof(Func<>).MakeGenericType([methodInfo.ReturnType, ..parameterTypes])
-            // );
-
-            // var outerTableEnumerator = outerTable.GetEnumerator();
-            //     outerTableEnumerator.MoveNext();
-            //     outerTableEnumerator.MoveNext();
-
-            // var innerTable = outerTableEnumerator.Current as LuaTable;
-
-            // var innerTableEnumerator = innerTable.GetEnumerator();
-            //     innerTableEnumerator.MoveNext();
-
-            // var methodInfo = innerTableEnumerator.Current as MethodInfo;
         }
 
         public static Type GetCSharpType(string name) {
@@ -185,7 +176,6 @@ namespace Celeste.Mod.GooberHelper
             throw new Exception($"couldnt find type {name}. please make sure to include the parent namespaces and use PascalCase");
         }
 
-        //this is not stolen from lua cutscenes
         //paste this into CelesteREPL and change the interestingTypes local variable to whatever you want
         public static void GenerateLuaLsTypeAnnotations() {
 //using Celeste.Mod.GooberHelper;

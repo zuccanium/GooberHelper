@@ -28,7 +28,7 @@ function loader.loadFile(path)
     local chunk = load(utilsFile)
 
     if chunk then
-        pcall(chunk)
+        return pcall(chunk)
     end
 end
 
@@ -41,25 +41,16 @@ function loader.load(name, props)
     --     end
     -- end
 
-    local patternFile = loader.readFile(name)
-
-    local chunk = load(patternFile)
-
     _G.Parent = props.Parent
     _G.Player = props.Player
     _G.Level = props.Level
 
     loader.loadFile("BulletPatternThings/utils")
     loader.loadFile("BulletPatternThings/types")
+    local res = loader.loadFile(name)
 
-    print("iuiuii")
-    
-    if chunk then
-        local res = pcall(chunk)
-        
-        if res then
-            AddCoroutine(_G.Run)
-        end
+    if res then
+        AddCoroutine(_G.Run)
     end
 end
 

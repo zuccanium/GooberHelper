@@ -216,15 +216,8 @@ namespace Celeste.Mod.GooberHelper {
         }
 
         public static object GetEnumeratorIndex(IEnumerator enumerator, int index) {
-            Console.WriteLine("hi");
-
-            for(int i = 0; i <= index; i++) {
-                Console.WriteLine("b");
-                
+            for(int i = 0; i <= index; i++) 
                 enumerator.MoveNext();
-            }
-
-            Console.WriteLine("z");
 
             return enumerator.Current;
         }

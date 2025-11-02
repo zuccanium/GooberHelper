@@ -49,9 +49,10 @@ end
 ---@param method table method to make generic
 ---@param ... Type type arguments
 _G.Generic = function(method, ...)
-    LuaHelper.MakeGeneric(method, {...})
+    LuaHelper.MakeGeneric(method, ...)
 
-    return generic_method
+    --i swear it exists
+    return _G["generic_method"]
 end
 
 ---@return Type
@@ -176,7 +177,3 @@ end
 _G.AddCoroutine = function(co)
     return Parent:AddLuaCoroutine(Celeste.Mod.LuaCoroutine({value = coroutine.create(co), resume = ThreadProxyResume}))
 end
-
----@overload fun(b: string): nil
----@overload fun(a: number): number
-local buh = function() end

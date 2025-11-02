@@ -82,7 +82,8 @@ namespace Celeste.Mod.GooberHelper {
             BufferOffsetIndicator.Load();
             DebugMapThings.Load();
             SyncedMusicHelper.Load();
-            Bullet.HighResolutionBulletRenderer.Load();
+            HighResolutionBulletRenderer.Load();
+            LuaHelper.Load();
 
             Everest.Events.Level.OnCreatePauseMenuButtons += createPauseMenuButton;
 
@@ -211,7 +212,8 @@ namespace Celeste.Mod.GooberHelper {
             BufferOffsetIndicator.Unload();
             DebugMapThings.Unload();
             SyncedMusicHelper.Unload();
-            Bullet.HighResolutionBulletRenderer.Unload();
+            HighResolutionBulletRenderer.Unload();
+            LuaHelper.Unload();
 
             Everest.Events.Level.OnCreatePauseMenuButtons -= createPauseMenuButton;
 

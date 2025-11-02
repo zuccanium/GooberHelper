@@ -85,26 +85,28 @@ function PanCamera()
 end
 
 function Run()
-    -- local func = require("#Celeste.Mod.GooberHelper").LuaHelper.MakeGeneric(Engine.Scene.Tracker.GetEntities, GetType("Celeste.SolidTiles"))
+    -- Generic(Engine.Scene.Tracker.GetEntities, GetType("Celeste.Player"))
 
-    -- print(generic_method(Engine.Scene.Tracker)[0])
+    -- coroutine.yield(0.1)
+
+    -- local zingle, zongle = pcall(function() LuaHelper.MakeGeneric(Engine.Scene.Tracker.GetEntities) end)
+    -- LuaHelper.MakeGeneric(Engine.Scene.Tracker.GetEntities)
+    
+    -- print(zingle, zongle)
 
     print(Generic(Engine.Scene.Tracker.GetEntities, GetType("Celeste.Player"))(Engine.Scene.Tracker)[0])
 
-    -- print(func)
-    -- print(func(Engine.Scene.Tracker))
+    local bong = Shoot{
+        position = Vector2(20, -100),
+        velocity = Vector2(50, 0),
+        texture = "bullets/GooberHelper/arrow",
+        scale = 0.5,
+        color = Hsv(2, 1, 1)
+    }
 
-    -- local bong = Shoot{
-    --     position = Vector2(20, -100),
-    --     velocity = Vector2(50, 0),
-    --     texture = "bullets/GooberHelper/arrow",
-    --     scale = 0.5,
-    --     color = Hsv(2, 1, 1)
-    -- }
-
-    -- bong.PositionRotationSpeed = 4
-    -- bong.VelocityRotationSpeed = 4
-    -- bong.RotationCenter = Vector2(0, -100)
+    bong.PositionRotationSpeed = 4
+    bong.VelocityRotationSpeed = 4
+    bong.RotationCenter = Vector2(0, -100)
 
     coroutine.yield(100000000)
     

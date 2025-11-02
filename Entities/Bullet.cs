@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Celeste.Mod.GooberHelper.ModIntegration;
+using Celeste.Mod.GooberHelper.UI;
 using Celeste.Mod.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -143,84 +144,6 @@ namespace Celeste.Mod.GooberHelper.Entities {
             PositionChange
         }
 
-        public class HighResolutionBulletRenderer : HiresRenderer {
-            public static bool DontRender = false;
-            private static Type? celesteTasHitboxToggleType;
-
-            public override void RenderContent(Scene scene) {
-                BeginRender();
-                DontRender = false;
-
-                renderState_Effect = "string that wont ever be equal to a real shader";
-                renderState_Additive = false;
-
-                foreach(Bullet entity in scene.Tracker.GetEntities<Bullet>()) {
-                    if(!entity.LowResolution) {
-                        if(entity.Visible)
-                            entity.Render();
-                    } 
-                }
-
-                Bullet.EndRender(false);
-                Bullet.BeginRender(false, "", false);
-
-                bool debugRender = (bool)(celesteTasHitboxToggleType?.GetProperty("DrawHitboxes")?.GetValue(null) ?? false) || Engine.Commands.Open;
-
-                if(debugRender) {
-                    foreach(Bullet entity in scene.Tracker.GetEntities<Bullet>()) {
-                        if(!entity.LowResolution)
-                            entity.DebugRender((scene as Level)!.Camera);
-                    }
-                }
-
-                Bullet.EndRender(false);
-
-                EndRender();
-            }
-
-            public static void Load() {
-                On.Celeste.LevelLoader.LoadingThread += modLevelLoadingThread;
-                IL.Celeste.Level.Render += modifyLevelRender;
-            }
-
-            public static void Unload() {
-                On.Celeste.LevelLoader.LoadingThread -= modLevelLoadingThread;
-                IL.Celeste.Level.Render -= modifyLevelRender;
-            }
-
-            public static void modLevelLoadingThread(On.Celeste.LevelLoader.orig_LoadingThread orig, LevelLoader self) {
-                orig(self);
-
-                var renderer = new HighResolutionBulletRenderer();
-
-                self.Level.Add(renderer);
-                DynamicData.For(self.Level).Set("HighResolutionBulletRenderer", renderer);
-
-                //this should probably belong in the load method but i dont want to add celestetas as a dependency to make sure it actually works consistently so into here it goes
-                if(Everest.Loader.DependencyLoaded(new EverestModuleMetadata() { Name = "CelesteTAS", Version = new Version(3, 0, 0) })) {
-                    celesteTasHitboxToggleType = Type.GetType("TAS.EverestInterop.Hitboxes.HitboxToggle, CelesteTAS-EverestInterop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")!;
-                }
-            }
-
-            public static void modifyLevelRender(ILContext il) {
-                ILCursor cursor = new ILCursor(il);
-
-                //dont let the gameplay renderer render high resolution bullets
-                cursor.EmitDelegate(() => { DontRender = true; });
-
-                if(cursor.TryGotoNextBestFit(MoveType.AfterLabel,
-                    instr => instr.MatchLdarg0(),
-                    instr => instr.MatchLdfld<Scene>("Paused"),
-                    instr => instr.MatchBrfalse(out var _)
-                )) {
-                    cursor.EmitLdarg0();
-                    cursor.EmitDelegate((Level level) => {
-                        DynamicData.For(level).Get<HighResolutionBulletRenderer>("HighResolutionBulletRenderer")?.Render(level);
-                    });
-                }
-            }
-        }
-
         //render state
         private static string renderState_Effect = "";
         private static bool renderState_Additive = false;
@@ -294,7 +217,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             if(acceleration is not null) Acceleration = (Vector2)acceleration;
             if(color is not null) Color = (Color)color;
             if(texture is not null) Texture = texture;
-            if(scale is not null) Scale = (float)scale;
+            if(scale is not null) Scale = Convert.ToSingle(scale);
             if(effect is not null) Effect = effect;
             if(additive is not null) Additive = (bool)additive;
             if(lowResolution is not null) LowResolution = (bool)lowResolution;
@@ -402,13 +325,16 @@ namespace Celeste.Mod.GooberHelper.Entities {
             RemoveSelf();
         }
 
-        private static void BeginRender(bool lowResolution, string effectName, bool additive) {
+        public static void BeginRender(bool lowResolution, string effectName, bool additive) {
+            if(Engine.Scene is not Level level)
+                return;
+            
             if(lowResolution)
                 GameplayRenderer.End();
             else
                 Draw.SpriteBatch.End();
 
-            var camera = (Engine.Scene as Level)!.GameplayRenderer.Camera;
+            var camera = level.GameplayRenderer.Camera;
 
             var effect = effectName != "" ? FrostHelperAPI.GetEffectOrNull.Invoke(effectName) : null;
             var matrix = camera.Matrix;
@@ -436,7 +362,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             renderState_Effect = effectName;
         }
 
-        private static void EndRender(bool lowResolution) {
+        public static void EndRender(bool lowResolution) {
             Draw.SpriteBatch.End();
             
             if(lowResolution)
@@ -475,54 +401,3 @@ namespace Celeste.Mod.GooberHelper.Entities {
         }
     }
 }
-
-/*
-        // public class BulletReference {
-        //     private static Dictionary<string, FieldInfo> bulletFieldMap = generateBulletFieldMap();
-        //     public Bullet Reference;
-
-        //     public BulletReference(Bullet reference) {
-        //         this.Reference = reference;
-
-        //         Console.WriteLine("yo");
-        //     }
-
-        //     private static Dictionary<string, FieldInfo> generateBulletFieldMap() {
-        //         return typeof(Bullet)
-        //             .GetFields(BindingFlags.Instance | BindingFlags.Public)
-        //             .ToDictionary(field => field.Name.ToLower(), field => field);
-        //     }
-
-        //     public object this[string key] {
-        //         get {
-        //             Console.WriteLine("ijef");
-
-        //             FieldInfo fieldInfo = bulletFieldMap[key.ToLower()];
-
-        //             if(fieldInfo.GetValue(Reference) is object obj)
-        //                 return new ValueContainer<object>(obj);
-
-        //             Logger.Error("GooberHelper", "tried to access invalid bullet field");
-
-        //             return null;
-        //         }
-        //         set {
-        //             FieldInfo fieldInfo = bulletFieldMap[key.ToLower()];
-
-        //             fieldInfo.SetValue(Reference, value);
-        //         } 
-        //     }
-        // }
-
-        // public class ValueContainer<T> {
-        //     public T Value;
-
-        //     public ValueContainer(T value) {
-        //         Value = value;
-        //     }
-
-        //     public static implicit operator T(ValueContainer<T> obj) {
-        //         return (T)obj;
-        //     }
-        // }
-*/  
