@@ -11,68 +11,47 @@ namespace Celeste.Mod.GooberHelper {
     public static class SyncedMusicHelper {
         private static bool resumedMusic = false;
         private static bool resumeMusicNextFrame = false;
-
-        // public class SyncedMusicInstance {
-        //     public string Path;
-        //     public bool PauseOnPause;
-            
-        //     public SyncedMusicInstance(string path) {
-        //         Path = path;
-        //     }
-        // }
+        public static bool PlayingSyncedMusic = false;
 
         public static void Load() {
             On.Celeste.Level.Pause += modLevelPause;
-            On.Celeste.Level.Unpause += modLevelUnpause;
             On.Celeste.Level.Update += modLevelUpdate;
+            On.Celeste.Audio.SetMusic += modAudioSetMusic;
         }
 
         public static void Unload() {
             On.Celeste.Level.Pause -= modLevelPause;
-            On.Celeste.Level.Unpause -= modLevelUnpause;
             On.Celeste.Level.Update -= modLevelUpdate;
-
+            On.Celeste.Audio.SetMusic -= modAudioSetMusic;
+        }
+        
+        private static bool modAudioSetMusic(On.Celeste.Audio.orig_SetMusic orig, string path, bool startPlaying, bool allowFadeOut) {
+            PlayingSyncedMusic = false;
             
-
-            // 184.56521739130434
+            return orig(path, startPlaying, allowFadeOut);
         }
 
-        public static void modLevelPause(On.Celeste.Level.orig_Pause orig, Level self, int startIndex, bool minimal, bool quickReset) {
+        private static void modLevelPause(On.Celeste.Level.orig_Pause orig, Level self, int startIndex, bool minimal, bool quickReset) {
             orig(self, startIndex, minimal, quickReset);
 
-            // var timer = new Timer(10);
+            if(!PlayingSyncedMusic) return;
 
-            // timer.Elapsed += (source, args) => {
-                Audio.CurrentMusicEventInstance.setPaused(true);
-            // };
-
-            // timer.Start();
-
-            // Audio.CurrentMusicEventInstance.setVolume(0);
-            // Audio.CurrentMusicEventInstance.getTimelinePosition(out var timelinePosition);
-            // Audio.CurrentMusicEventInstance.setTimelinePosition((int)(timelinePosition + offset));
+            Audio.CurrentMusicEventInstance.setPaused(true);
 
             resumedMusic = false;
             resumeMusicNextFrame = false;
         }
 
-        public static void modLevelUnpause(On.Celeste.Level.orig_Unpause orig, Level self) {
+        private static void modLevelUpdate(On.Celeste.Level.orig_Update orig, Level self) {
             orig(self);
-        }
-
-        public static void modLevelUpdate(On.Celeste.Level.orig_Update orig, Level self) {
-            // if(self.unpauseTimer == 0.15f) {
-            //     Audio.CurrentMusicEventInstance.setTimelinePosition(pauseTimelinePosition - (int)(self.unpauseTimer * 1000));
-            // }
             
-            orig(self);
+            if(!PlayingSyncedMusic) return;
 
             if(resumeMusicNextFrame && !resumedMusic) {
                 Audio.CurrentMusicEventInstance.setPaused(false);
 
                 Console.WriteLine("resetting");
 
-                // Audio.CurrentMusicEventInstance.setVolume(1);
                 resumedMusic = true;
             }
 
@@ -84,42 +63,6 @@ namespace Celeste.Mod.GooberHelper {
             Audio.CurrentMusicEventInstance.getTimelinePosition(out var timelinePosition);
             
             return timelinePosition;
-        }
-
-        public static void MeasurePauseTime(bool paused) {
-            var stopwatch = new Stopwatch();
-            var counter = 0;
-            var lastTimelinePosition = 0;
-
-            Audio.CurrentMusicEventInstance.setPaused(paused);
-
-            var timer = new Timer(0.1);
-            timer.AutoReset = true;
-            timer.Elapsed += (source, args) => {
-                Audio.CurrentMusicEventInstance.getTimelinePosition(out var timelinePosition);
-
-                Console.WriteLine($"{lastTimelinePosition} -> {timelinePosition}");
-
-                // if(paused ? lastTimelinePosition == timelinePosition : timelinePosition != lastTimelinePosition) {
-                //     timer.Stop();
-                //     stopwatch.Stop();
-
-                //     Console.WriteLine($"it took {stopwatch.Elapsed} to {(paused ? "pause" : "unpause")}");
-                // }
-
-                if(counter > 100) {
-                    timer.Stop();
-                    stopwatch.Stop();
-
-                    Console.WriteLine("bail");
-                }
-
-                counter++;
-                lastTimelinePosition = timelinePosition;
-            };
-
-            timer.Start();
-            stopwatch.Start();
         }
 
         public static IEnumerator PlaySyncedMusic(string path) {            
@@ -144,6 +87,8 @@ namespace Celeste.Mod.GooberHelper {
             }
 
             Logger.Debug("GooberHelper", "done waiting for audio!");
+
+            PlayingSyncedMusic = true;
 
             yield break;
         }
