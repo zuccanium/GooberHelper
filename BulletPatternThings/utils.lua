@@ -13,13 +13,16 @@ _G.spb = 0
     ---@field acceleration Vector2?
     ---@field color Color? 
     ---@field texture string? 
+    ---@field animationFrames number?
+    ---@field animationSpeed number? frames per second
     ---@field scale number?
     ---@field effect string? the effect (aka shader) used to render the bullet (defaults to "coloredBullet")
     ---@field additive boolean? whether the rendering uses additive blending or not
     ---@field lowResolution boolean?
     ---@field rotation number?
-    ---@field colliderRadius number?
     ---@field rotationMode BulletRotationMode?
+    ---@field spin number? degrees per second that the bullet spins (**only when RotationMode is BulletRotationMode.Spin**)
+    ---@field colliderRadius number?
     ---@field cullDistance number? the distance away from the edge of the screen for the bullet to be removed
     ---@field rotationCenter Vector2? the point around which the bullet should rotate with a speed of PositionRotationSpeed
     ---@field positionRotationSpeed number? the speed at which the bullet position should rotate around RotationCenter
@@ -104,11 +107,15 @@ _G.CreateBulletTemplate = function(props)
         props.acceleration,
         props.color,
         props.texture,
+        props.animationFrames,
+        props.animationSpeed,
         props.scale,
         props.effect,
         props.additive,
         props.lowResolution,
         props.rotation,
+        props.rotationMode,
+        props.spin,
         props.colliderRadius,
         props.cullDistance,
         props.rotationCenter,
@@ -129,11 +136,15 @@ _G.Shoot = function(props)
         props.acceleration,
         props.color,
         props.texture,
+        props.animationFrames,
+        props.animationSpeed,
         props.scale,
         props.effect,
         props.additive,
         props.lowResolution,
         props.rotation,
+        props.rotationMode,
+        props.spin,
         props.colliderRadius,
         props.cullDistance,
         props.rotationCenter,

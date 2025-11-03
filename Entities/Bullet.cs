@@ -38,11 +38,15 @@ namespace Celeste.Mod.GooberHelper {
         public Vector2? Acceleration;
         public Color? Color;
         public string? Texture;
+        public int? AnimationFrames = 1;
+        public float? AnimationSpeed = 0f;
         public float? Scale;
         public string? Effect;
         public bool? Additive;
         public bool? LowResolution;
         public float? Rotation;
+        public Entities.Bullet.BulletRotationMode? RotationMode;
+        public float? Spin;
         public float? ColliderRadius;
         public int? CullDistance = 10;
         public Vector2? RotationCenter = Vector2.Zero;
@@ -55,11 +59,15 @@ namespace Celeste.Mod.GooberHelper {
             if(Acceleration is not null) bullet.Acceleration = (Vector2)Acceleration;
             if(Color is not null) bullet.Color = (Color)Color;
             if(Texture is not null) bullet.Texture = Texture;
+            if(AnimationFrames is not null) bullet.AnimationFrames = (int)AnimationFrames;
+            if(AnimationSpeed is not null) bullet.AnimationSpeed = (float)AnimationSpeed;
             if(Scale is not null) bullet.Scale = (float)Scale;
             if(Effect is not null) bullet.Effect = Effect;
             if(Additive is not null) bullet.Additive = (bool)Additive;
             if(LowResolution is not null) bullet.LowResolution = (bool)LowResolution;
             if(Rotation is not null) bullet.Rotation = (float)Rotation;
+            if(RotationMode is not null) bullet.RotationMode = (Entities.Bullet.BulletRotationMode)RotationMode;
+            if(Spin is not null) bullet.Spin = (float)Spin;
             if(ColliderRadius is not null) bullet.ColliderRadius = (float)ColliderRadius;
             if(CullDistance is not null) bullet.CullDistance = (int)CullDistance;
             if(RotationCenter is not null) bullet.RotationCenter = (Vector2)RotationCenter;
@@ -77,11 +85,15 @@ namespace Celeste.Mod.GooberHelper {
             if(Acceleration is not null) template.Acceleration = Acceleration;
             if(Color is not null) template.Color = Color;
             if(Texture is not null) template.Texture = Texture;
+            if(AnimationFrames is not null) template.AnimationFrames = AnimationFrames;
+            if(AnimationSpeed is not null) template.AnimationSpeed = AnimationSpeed;
             if(Scale is not null) template.Scale = Scale;
             if(Effect is not null) template.Effect = Effect;
             if(Additive is not null) template.Additive = Additive;
             if(LowResolution is not null) template.LowResolution = LowResolution;
             if(Rotation is not null) template.Rotation = Rotation;
+            if(RotationMode is not null) template.RotationMode = RotationMode;
+            if(Spin is not null) template.Spin = Spin;
             if(ColliderRadius is not null) template.ColliderRadius = ColliderRadius;
             if(CullDistance is not null) template.CullDistance = CullDistance;
             if(RotationCenter is not null) template.RotationCenter = RotationCenter;
@@ -95,11 +107,15 @@ namespace Celeste.Mod.GooberHelper {
             Vector2? acceleration,
             Color? color,
             string? texture,
+            object? animationFrames,
+            object? animationSpeed,
             object? scale,
             string? effect,
             object? additive,
             object? lowResolution,
             object? rotation,
+            object? rotationMode,
+            object? spin,
             object? colliderRadius,
             object? cullDistance,
             Vector2? rotationCenter,
@@ -111,17 +127,21 @@ namespace Celeste.Mod.GooberHelper {
             if(acceleration is not null) Acceleration = (Vector2)acceleration;
             if(color is not null) Color = (Color)color;
             if(texture is not null) Texture = texture;
-            if(scale is not null) Scale = (float)(double)scale;
+            if(animationFrames is not null) AnimationFrames = Convert.ToInt32(animationFrames);
+            if(animationSpeed is not null) AnimationSpeed = Convert.ToSingle(animationSpeed);
+            if(scale is not null) Scale = Convert.ToSingle(scale);
             if(effect is not null) Effect = effect;
             if(additive is not null) Additive = (bool)additive;
             if(lowResolution is not null) LowResolution = (bool)lowResolution;
-            if(rotation is not null) Rotation = (float)(double)rotation / 180f * MathF.PI;
-            if(colliderRadius is not null) ColliderRadius = (float)(double)colliderRadius;
-            if(cullDistance is not null) CullDistance = (int)(double)cullDistance;
+            if(rotation is not null) Rotation = Convert.ToSingle(rotation);
+            if(rotationMode is not null) RotationMode = (Entities.Bullet.BulletRotationMode)Convert.ToInt32(rotationMode);
+            if(spin is not null) Spin = Convert.ToSingle(spin);
+            if(colliderRadius is not null) ColliderRadius = Convert.ToSingle(colliderRadius);
+            if(cullDistance is not null) CullDistance = Convert.ToInt32(cullDistance);
             if(rotationCenter is not null) RotationCenter = (Vector2)rotationCenter;
-            if(positionRotationSpeed is not null) PositionRotationSpeed = (float)(double)positionRotationSpeed;
-            if(velocityRotationSpeed is not null) VelocityRotationSpeed = (float)(double)velocityRotationSpeed;
-            if(friction is not null) Friction = (float)(double)friction;
+            if(positionRotationSpeed is not null) PositionRotationSpeed = Convert.ToSingle(positionRotationSpeed);
+            if(velocityRotationSpeed is not null) VelocityRotationSpeed = Convert.ToSingle(velocityRotationSpeed);
+            if(friction is not null) Friction = Convert.ToSingle(friction);
         }
 
         public static BulletTemplate operator+(BulletTemplate a, BulletTemplate b) {
@@ -141,7 +161,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
         public enum BulletRotationMode {
             None,
             Velocity,
-            PositionChange
+            PositionChange,
+            Spin
         }
 
         public Level level;
@@ -151,12 +172,15 @@ namespace Celeste.Mod.GooberHelper.Entities {
         public Vector2 Acceleration = Vector2.Zero;
         public Color Color = Color.White;
         public string Texture = "bullets/GooberHelper/arrow";
+        public int AnimationFrames = 1;
+        public float AnimationSpeed = 0f;
         public float Scale = 1f;
         public string Effect = "coloredBullet";
         public bool Additive = false;
         public bool LowResolution = false;
         public float Rotation = 0f;
         public BulletRotationMode RotationMode = BulletRotationMode.PositionChange;
+        public float Spin = 0f;
         public int CullDistance = 10;
         public Vector2 RotationCenter = Vector2.Zero;
         public float PositionRotationSpeed = 0f;
@@ -179,6 +203,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
             set => base.Position = value;
         }
 
+        private MTexture[] frames = [];
+
         public PlayerCollider PlayerCollider;
 
         public Bullet(
@@ -189,11 +215,15 @@ namespace Celeste.Mod.GooberHelper.Entities {
             Vector2? acceleration,
             Color? color,
             string? texture,
+            object? animationFrames,
+            object? animationSpeed,
             object? scale,
             string? effect,
             object? additive,
             object? lowResolution,
             object? rotation,
+            object? rotationMode,
+            object? spin,
             object? colliderRadius,
             object? cullDistance,
             Vector2? rotationCenter,
@@ -213,17 +243,37 @@ namespace Celeste.Mod.GooberHelper.Entities {
             if(acceleration is not null) Acceleration = (Vector2)acceleration;
             if(color is not null) Color = (Color)color;
             if(texture is not null) Texture = texture;
-            if(scale is not null) Scale = (float)(double)scale;
+            if(animationFrames is not null) AnimationFrames = Convert.ToInt32(animationFrames);
+            if(animationSpeed is not null) AnimationSpeed = Convert.ToSingle(animationSpeed);
+            if(scale is not null) Scale = Convert.ToSingle(scale);
             if(effect is not null) Effect = effect;
             if(additive is not null) Additive = (bool)additive;
             if(lowResolution is not null) LowResolution = (bool)lowResolution;
-            if(rotation is not null) Rotation = (float)(double)rotation / 180f * MathF.PI;
-            if(colliderRadius is not null) ColliderRadius = (float)(double)colliderRadius;
-            if(cullDistance is not null) CullDistance = (int)(double)cullDistance;
+            if(rotation is not null) Rotation = Convert.ToSingle(rotation);
+            if(rotationMode is not null) RotationMode = (BulletRotationMode)Convert.ToInt32(rotationMode);
+            if(spin is not null) Spin = Convert.ToSingle(spin);
+            if(colliderRadius is not null) ColliderRadius = Convert.ToSingle(colliderRadius);
+            if(cullDistance is not null) CullDistance = Convert.ToInt32(cullDistance);
             if(rotationCenter is not null) RotationCenter = (Vector2)rotationCenter;
-            if(positionRotationSpeed is not null) PositionRotationSpeed = (float)(double)positionRotationSpeed;
-            if(velocityRotationSpeed is not null) VelocityRotationSpeed = (float)(double)velocityRotationSpeed;
-            if(friction is not null) Friction = (float)(double)friction;
+            if(positionRotationSpeed is not null) PositionRotationSpeed = Convert.ToSingle(positionRotationSpeed);
+            if(velocityRotationSpeed is not null) VelocityRotationSpeed = Convert.ToSingle(velocityRotationSpeed);
+            if(friction is not null) Friction = Convert.ToSingle(friction);
+
+            UpdateFrames();
+        }
+
+        public void UpdateFrames() {
+            frames = new MTexture[Math.Max(AnimationFrames, 1)];
+
+            if(AnimationFrames <= 1 && GFX.Game.Has(Texture)) {
+                frames[0] = GFX.Game[Texture];
+                
+                return;
+            }
+
+            for(int i = 0; i < AnimationFrames; i++) {
+                frames[i] = GFX.Game[Texture + i.ToString(2)];
+            }
         }
 
         public void InterpolateValue(string key, object to, float time = 1f, Ease.Easer? easer = null) {
@@ -298,8 +348,9 @@ namespace Celeste.Mod.GooberHelper.Entities {
             }
 
             Rotation = RotationMode switch {
-                BulletRotationMode.Velocity => Rotation = Velocity.Angle() + MathF.PI / 2,
-                BulletRotationMode.PositionChange => Rotation = (Position - oldPosition).Angle() + MathF.PI / 2,
+                BulletRotationMode.Velocity => Velocity.Angle() * Calc.RadToDeg + 90f,
+                BulletRotationMode.PositionChange => (Position - oldPosition).Angle() * Calc.RadToDeg + 90f,
+                BulletRotationMode.Spin => Rotation + Spin * Engine.DeltaTime,
                 _ => Rotation,
             };
 
@@ -382,7 +433,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             //actual rendering
             base.Render();
             
-            GFX.Game[Texture].DrawCentered(this.ActualPosition, this.Color, this.Scale, this.Rotation);
+            frames[(int)(Engine.Scene.TimeActive * AnimationSpeed % AnimationFrames)].DrawCentered(this.ActualPosition, this.Color, this.Scale, this.Rotation * Calc.DegToRad);
             
             if(LowResolution)
                 EndRender(true);

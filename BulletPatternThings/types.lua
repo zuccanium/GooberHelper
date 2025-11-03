@@ -851,6 +851,7 @@ _G.BulletRotationMode = {
 	None = 0,
 	Velocity = 1,
 	PositionChange = 2,
+	Spin = 3,
 }
 
 

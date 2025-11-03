@@ -96,21 +96,25 @@ function Run()
 
     -- print(Generic(Engine.Scene.Tracker.GetEntities, GetType("Celeste.Player"))(Engine.Scene.Tracker)[0])
 
-    -- for i = -10, 10, 1 do
-    --     local bong = Shoot{
-    --         position = Vector2(20 * i / math.abs(i), -100),
-    --         velocity = Vector2(12.5 * i, 0),
-    --         texture = "bullets/GooberHelper/arrow",
-    --         scale = 0.5,
-    --         color = Hsv(2, 1, 1),
-    --         positionRotationSpeed = i,
-    --         velocityRotationSpeed = i,
-    --         rotationCenter = Vector2(0, -100),
-    --         lowResolution = i % 2 == 0
-    --     }
-    -- end
+    for i = -10, 10, 1 do
+        local bong = Shoot{
+            position = Vector2(20 * i / math.abs(i), -100),
+            velocity = Vector2(12.5 * i, 0),
+            texture = "characters/badelineBoss/projectile",
+            scale = 1,
+            color = Hsv(2, 1, 1),
+            positionRotationSpeed = i,
+            velocityRotationSpeed = i,
+            rotationCenter = Vector2(0, -100),
+            lowResolution = i % 2 == 0,
+            animationFrames = 13,
+            animationSpeed = 60,
+            rotationMode = BulletRotationMode.Spin,
+            spin = 360
+        }
+    end
 
-    -- coroutine.yield(10000)
+    coroutine.yield(10000)
     
     -- coroutine.yield(PlaySyncedMusic("event:/Unowen_Music/bubble"))
     coroutine.yield(PlaySyncedMusic("event:/music/lvl3/oshiro_chase", 98))
