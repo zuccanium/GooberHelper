@@ -25,6 +25,7 @@ namespace Celeste.Mod.GooberHelper
     public static class LuaHelper
     {
         private static ILHook objectTranslatorThrowErrorHook;
+        public static bool UserCodeIsRunning;
 
         public static void Load() {
             MethodInfo objectTranslatorThrowError = typeof(ObjectTranslator).GetMethod("ThrowError", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -46,8 +47,19 @@ namespace Celeste.Mod.GooberHelper
                 cursor.Index--;
 
                 cursor.EmitLdarg1();
-                cursor.EmitDelegate((KeraLua.Lua luaState) => {
-                    luaState.Error();
+                cursor.EmitLdarg2();
+                cursor.EmitDelegate((KeraLua.Lua luaState, object e) => {                    
+                    if(!UserCodeIsRunning) return;
+
+                    if(e is LuaScriptException exception) {
+                        Logger.LogDetailed(LogLevel.Error, "GooberHelper", exception.ToString() + "\n" + exception.InnerException);
+
+                        luaState.Error(exception.Message);
+                    } else {
+                        Logger.LogDetailed(LogLevel.Error, "GooberHelper", $"Error of unknown type {e.GetType()} occurred! {e}");
+
+                        luaState.Error();
+                    }
                 });
             }
         }
@@ -69,6 +81,8 @@ namespace Celeste.Mod.GooberHelper
 
         private static bool SafeMoveNext(this LuaCoroutine enumerator)
         {
+            UserCodeIsRunning = true;
+
             try
             {
                 return enumerator.MoveNext();
@@ -79,6 +93,8 @@ namespace Celeste.Mod.GooberHelper
                 Logger.LogDetailed(e);
 
                 return false;
+            } finally {
+                UserCodeIsRunning = false;
             }
         }
 

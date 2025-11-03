@@ -73,21 +73,21 @@ namespace Celeste.Mod.GooberHelper {
         //please forgive me
 
         public void ApplyToBulletTemplate(BulletTemplate template) {
-            if(Velocity is not null) template.Velocity = (Vector2)Velocity;
-            if(Acceleration is not null) template.Acceleration = (Vector2)Acceleration;
-            if(Color is not null) template.Color = (Color)Color;
+            if(Velocity is not null) template.Velocity = Velocity;
+            if(Acceleration is not null) template.Acceleration = Acceleration;
+            if(Color is not null) template.Color = Color;
             if(Texture is not null) template.Texture = Texture;
-            if(Scale is not null) template.Scale = (float)Scale;
+            if(Scale is not null) template.Scale = Scale;
             if(Effect is not null) template.Effect = Effect;
-            if(Additive is not null) template.Additive = (bool)Additive;
-            if(LowResolution is not null) template.LowResolution = (bool)LowResolution;
-            if(Rotation is not null) template.Rotation = (float)Rotation;
-            if(ColliderRadius is not null) template.ColliderRadius = (float)ColliderRadius;
-            if(CullDistance is not null) template.CullDistance = (int)CullDistance;
-            if(RotationCenter is not null) template.RotationCenter = (Vector2)RotationCenter;
-            if(PositionRotationSpeed is not null) template.PositionRotationSpeed = (float)PositionRotationSpeed;
-            if(VelocityRotationSpeed is not null) template.VelocityRotationSpeed = (float)VelocityRotationSpeed;
-            if(Friction is not null) template.Friction = (float)Friction;
+            if(Additive is not null) template.Additive = Additive;
+            if(LowResolution is not null) template.LowResolution = LowResolution;
+            if(Rotation is not null) template.Rotation = Rotation;
+            if(ColliderRadius is not null) template.ColliderRadius = ColliderRadius;
+            if(CullDistance is not null) template.CullDistance = CullDistance;
+            if(RotationCenter is not null) template.RotationCenter = RotationCenter;
+            if(PositionRotationSpeed is not null) template.PositionRotationSpeed = PositionRotationSpeed;
+            if(VelocityRotationSpeed is not null) template.VelocityRotationSpeed = VelocityRotationSpeed;
+            if(Friction is not null) template.Friction = Friction;
         }
 
         public BulletTemplate(
@@ -111,17 +111,17 @@ namespace Celeste.Mod.GooberHelper {
             if(acceleration is not null) Acceleration = (Vector2)acceleration;
             if(color is not null) Color = (Color)color;
             if(texture is not null) Texture = texture;
-            if(scale is not null) Scale = (float)scale;
+            if(scale is not null) Scale = (float)(double)scale;
             if(effect is not null) Effect = effect;
             if(additive is not null) Additive = (bool)additive;
             if(lowResolution is not null) LowResolution = (bool)lowResolution;
-            if(rotation is not null) Rotation = (float)rotation / 180f * MathF.PI;
-            if(colliderRadius is not null) ColliderRadius = (float)colliderRadius;
-            if(cullDistance is not null) CullDistance = (int)cullDistance;
+            if(rotation is not null) Rotation = (float)(double)rotation / 180f * MathF.PI;
+            if(colliderRadius is not null) ColliderRadius = (float)(double)colliderRadius;
+            if(cullDistance is not null) CullDistance = (int)(double)cullDistance;
             if(rotationCenter is not null) RotationCenter = (Vector2)rotationCenter;
-            if(positionRotationSpeed is not null) PositionRotationSpeed = (float)positionRotationSpeed;
-            if(velocityRotationSpeed is not null) VelocityRotationSpeed = (float)velocityRotationSpeed;
-            if(friction is not null) Friction = (float)friction;
+            if(positionRotationSpeed is not null) PositionRotationSpeed = (float)(double)positionRotationSpeed;
+            if(velocityRotationSpeed is not null) VelocityRotationSpeed = (float)(double)velocityRotationSpeed;
+            if(friction is not null) Friction = (float)(double)friction;
         }
 
         public static BulletTemplate operator+(BulletTemplate a, BulletTemplate b) {
@@ -143,10 +143,6 @@ namespace Celeste.Mod.GooberHelper.Entities {
             Velocity,
             PositionChange
         }
-
-        //render state
-        private static string renderState_Effect = "";
-        private static bool renderState_Additive = false;
 
         public Level level;
 
@@ -217,17 +213,17 @@ namespace Celeste.Mod.GooberHelper.Entities {
             if(acceleration is not null) Acceleration = (Vector2)acceleration;
             if(color is not null) Color = (Color)color;
             if(texture is not null) Texture = texture;
-            if(scale is not null) Scale = Convert.ToSingle(scale);
+            if(scale is not null) Scale = (float)(double)scale;
             if(effect is not null) Effect = effect;
             if(additive is not null) Additive = (bool)additive;
             if(lowResolution is not null) LowResolution = (bool)lowResolution;
-            if(rotation is not null) Rotation = (float)rotation / 180f * MathF.PI;
-            if(colliderRadius is not null) ColliderRadius = (float)colliderRadius;
-            if(cullDistance is not null) CullDistance = (int)cullDistance;
+            if(rotation is not null) Rotation = (float)(double)rotation / 180f * MathF.PI;
+            if(colliderRadius is not null) ColliderRadius = (float)(double)colliderRadius;
+            if(cullDistance is not null) CullDistance = (int)(double)cullDistance;
             if(rotationCenter is not null) RotationCenter = (Vector2)rotationCenter;
-            if(positionRotationSpeed is not null) PositionRotationSpeed = (float)positionRotationSpeed;
-            if(velocityRotationSpeed is not null) VelocityRotationSpeed = (float)velocityRotationSpeed;
-            if(friction is not null) Friction = (float)friction;
+            if(positionRotationSpeed is not null) PositionRotationSpeed = (float)(double)positionRotationSpeed;
+            if(velocityRotationSpeed is not null) VelocityRotationSpeed = (float)(double)velocityRotationSpeed;
+            if(friction is not null) Friction = (float)(double)friction;
         }
 
         public void InterpolateValue(string key, object to, float time = 1f, Ease.Easer? easer = null) {
@@ -339,7 +335,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             var effect = effectName != "" ? FrostHelperAPI.GetEffectOrNull.Invoke(effectName) : null;
             var matrix = camera.Matrix;
 
-            if(!lowResolution) 
+            if(!lowResolution)
                 matrix *= Matrix.CreateScale(6);
 
             Draw.SpriteBatch.Begin(
@@ -358,8 +354,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
                 effect.CurrentTechnique = effect.Techniques["Shader"];
             }
 
-            renderState_Additive = additive;
-            renderState_Effect = effectName;
+            HighResolutionBulletRenderer.RenderState_Additive = additive;
+            HighResolutionBulletRenderer.RenderState_Effect = effectName;
         }
 
         public static void EndRender(bool lowResolution) {
@@ -368,21 +364,24 @@ namespace Celeste.Mod.GooberHelper.Entities {
             if(lowResolution)
                 GameplayRenderer.Begin();
             else
-                HudRenderer.BeginRender();
+                HighResolutionBulletRenderer.BeginRender();
         }
 
         public override void Render() {
             if(Engine.Scene is not Level || (HighResolutionBulletRenderer.DontRender && !LowResolution))
                 return;
 
-            base.Render();
-
             //the high resolution bullets are all drawn together
             //in that situation, only change buffer stuff if the "render state" is different from the last render
-            if(LowResolution || renderState_Additive != Additive || renderState_Effect != Effect)
-                BeginRender(LowResolution, Effect, Additive); 
+            if(
+                LowResolution ||
+                HighResolutionBulletRenderer.RenderState_Additive != Additive ||
+                HighResolutionBulletRenderer.RenderState_Effect != Effect
+            ) BeginRender(LowResolution, Effect, Additive); 
 
             //actual rendering
+            base.Render();
+            
             GFX.Game[Texture].DrawCentered(this.ActualPosition, this.Color, this.Scale, this.Rotation);
             
             if(LowResolution)

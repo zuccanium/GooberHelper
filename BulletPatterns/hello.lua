@@ -94,21 +94,23 @@ function Run()
     
     -- print(zingle, zongle)
 
-    print(Generic(Engine.Scene.Tracker.GetEntities, GetType("Celeste.Player"))(Engine.Scene.Tracker)[0])
+    -- print(Generic(Engine.Scene.Tracker.GetEntities, GetType("Celeste.Player"))(Engine.Scene.Tracker)[0])
 
-    local bong = Shoot{
-        position = Vector2(20, -100),
-        velocity = Vector2(50, 0),
-        texture = "bullets/GooberHelper/arrow",
-        scale = 0.5,
-        color = Hsv(2, 1, 1)
-    }
+    -- for i = -10, 10, 1 do
+    --     local bong = Shoot{
+    --         position = Vector2(20 * i / math.abs(i), -100),
+    --         velocity = Vector2(12.5 * i, 0),
+    --         texture = "bullets/GooberHelper/arrow",
+    --         scale = 0.5,
+    --         color = Hsv(2, 1, 1),
+    --         positionRotationSpeed = i,
+    --         velocityRotationSpeed = i,
+    --         rotationCenter = Vector2(0, -100),
+    --         lowResolution = i % 2 == 0
+    --     }
+    -- end
 
-    bong.PositionRotationSpeed = 4
-    bong.VelocityRotationSpeed = 4
-    bong.RotationCenter = Vector2(0, -100)
-
-    coroutine.yield(100000000)
+    -- coroutine.yield(10000)
     
     -- coroutine.yield(PlaySyncedMusic("event:/Unowen_Music/bubble"))
     coroutine.yield(PlaySyncedMusic("event:/music/lvl3/oshiro_chase", 98))

@@ -7,6 +7,8 @@ using Monocle;
 using MonoMod.Cil;
 using MonoMod.Utils;
 
+#nullable enable
+
 namespace Celeste.Mod.GooberHelper.UI {
     public class HighResolutionBulletRenderer : Renderer {
         public static VirtualRenderTarget Buffer => Mod.UI.SubHudRenderer.Buffer;
@@ -84,7 +86,7 @@ namespace Celeste.Mod.GooberHelper.UI {
             }
         }
 
-        public static void BeginRender(BlendState blend = null, SamplerState sampler = null) {
+        public static void BeginRender(BlendState? blend = null, SamplerState? sampler = null) {
             Draw.SpriteBatch.Begin(
                 SpriteSortMode.Deferred,
                 blend ?? BlendState.AlphaBlend,
