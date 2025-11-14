@@ -12,6 +12,7 @@ using MonoMod.Utils;
 namespace Celeste.Mod.GooberHelper.UI {
     public class HighResolutionBulletRenderer : Renderer {
         public static VirtualRenderTarget Buffer => Mod.UI.SubHudRenderer.Buffer;
+        public static VirtualRenderTarget? FreakyBuffer;
 
         public static bool DrawToBuffer {
             get {
@@ -71,6 +72,28 @@ namespace Celeste.Mod.GooberHelper.UI {
 
             //dont let the gameplay renderer render high resolution bullets
             cursor.EmitDelegate(() => { DontRender = true; });
+
+            // if(cursor.TryGotoNextBestFit(MoveType.After, instr => instr.MatchCallvirt<BloomRenderer>("Apply"))) {
+            //     cursor.EmitDelegate(() => {
+            //         if(FreakyBuffer is null) 
+            //             FreakyBuffer = VirtualContent.CreateRenderTarget("freaky", 320, 180, false, true, 0);
+
+            //         if(FreakyBuffer is VirtualRenderTarget Buffer) {
+            //             Engine.Instance.GraphicsDevice.SetRenderTarget(Buffer);
+            //         }
+            //     });
+
+            //     if(cursor.TryGotoNextBestFit(MoveType.After, instr => instr.MatchCallvirt<Renderer>("Render"))) {
+            //         Console.WriteLine("ef");
+
+            //         cursor.EmitLdarg0();
+            //         cursor.EmitDelegate((Level level) => {
+            //             Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+            //             Draw.SpriteBatch.Draw(FreakyBuffer, Vector2.Zero, Color.White);
+            //             Draw.SpriteBatch.End();
+            //         });
+            //     }
+            // }
 
             if(cursor.TryGotoNext(MoveType.AfterLabel,
                 instr => instr.MatchLdarg0(),

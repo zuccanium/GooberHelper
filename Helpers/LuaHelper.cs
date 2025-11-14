@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
+using MonoMod.Utils;
 using NLua;
 using NLua.Exceptions;
 using System;
@@ -20,21 +21,25 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace Celeste.Mod.GooberHelper
 {
     public static class LuaHelper
     {
-        private static ILHook objectTranslatorThrowErrorHook;
+        private static ILHook? objectTranslatorThrowErrorHook;
         public static bool UserCodeIsRunning;
 
         public static void Load() {
-            MethodInfo objectTranslatorThrowError = typeof(ObjectTranslator).GetMethod("ThrowError", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo? objectTranslatorThrowError = typeof(ObjectTranslator).GetMethod("ThrowError", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if(objectTranslatorThrowError is null) throw new Exception("ef");
 
             objectTranslatorThrowErrorHook = new ILHook(objectTranslatorThrowError, modifyObjectTranslatorThrowError);
         }
 
         public static void Unload() {
-            objectTranslatorThrowErrorHook.Dispose();
+            objectTranslatorThrowErrorHook?.Dispose();
         }
 
         public static void modifyObjectTranslatorThrowError(ILContext il) {
@@ -64,9 +69,69 @@ namespace Celeste.Mod.GooberHelper
             }
         }
 
-        public static string GetFileContent(string path)
+        public static void PrintTable(object obj) {
+            if(obj is not LuaTable table) {
+                Console.WriteLine("not a table!");
+
+                return;
+            }
+
+            var str = "LuaTable\n".Color(Utils.SyntaxColors.Type);
+            var keyTablesToExpand = new Dictionary<string, LuaTable>();
+            var keyTableIndex = 0;
+            var indentStr = "  ";
+
+            void recur(LuaTable table, string indent) {
+                var enumerator = table.GetEnumerator();
+
+                while(enumerator.MoveNext()) {
+                    var key = enumerator.Key;
+                    var value = enumerator.Value;
+
+                    str += indent;
+
+                    if(key is LuaTable keyTable) {
+                        string name = $"LuaTable #{++keyTableIndex}".Color(Utils.SyntaxColors.Error);
+
+                        str += $"[{name}]: ";
+
+                        keyTablesToExpand[name] = keyTable;
+                    } else {
+                        str += Utils.FormatValue(key) + ": ";
+                    }
+
+                    if(value is LuaTable valueTable) {
+                        str += "\n";
+
+                        recur(valueTable, indent + indentStr);
+                    } else if(value is KeraLua.LuaFunction valueKeraLuaFunction){
+                        str += $"KeraLua.LuaFunction for {valueKeraLuaFunction.Method}\n".Color(Utils.SyntaxColors.Type);
+                    } else if(value is LuaFunction luaFunction) {
+                        str += $"LuaFunction {DynamicData.For(luaFunction).Get<KeraLua.LuaFunction>("function")?.Method}\n".Color(Utils.SyntaxColors.Type);
+                    } else {
+                        str += Utils.FormatValue(value) + "\n";
+                    }
+                }
+            }
+
+            recur(table, indentStr);
+
+            foreach(var pair in keyTablesToExpand) {
+                str += $"\n{pair.Key}: \n";
+                
+                recur(pair.Value, indentStr);
+            } 
+            
+            Console.WriteLine(str);
+        }
+
+        public static LuaTable CreateTable() =>
+            Everest.LuaLoader.Context.DoString("return {}").FirstOrDefault() as LuaTable
+                ?? throw new Exception("??? what the fuck why doesnt the table exist");
+
+        public static string? GetFileContent(string path)
         {
-            Stream stream = Everest.Content.Get(path)?.Stream;
+            Stream? stream = Everest.Content.Get(path)?.Stream;
 
             if (stream != null)
             {
@@ -117,8 +182,7 @@ namespace Celeste.Mod.GooberHelper
 
         public static LuaTable DictionaryToLuaTable(IDictionary<object, object> dict)
         {
-            Lua lua = Everest.LuaLoader.Context;
-            LuaTable table = lua.DoString("return {}").FirstOrDefault() as LuaTable;
+            LuaTable table = CreateTable();
 
             foreach (KeyValuePair<object, object> pair in dict)
             {
@@ -130,8 +194,7 @@ namespace Celeste.Mod.GooberHelper
 
         public static LuaTable ListToLuaTable(IList list)
         {
-            Lua lua = Everest.LuaLoader.Context;
-            LuaTable table = lua.DoString("return {}").FirstOrDefault() as LuaTable;
+            LuaTable table = CreateTable();
 
             int ptr = 1;
 
@@ -155,7 +218,7 @@ namespace Celeste.Mod.GooberHelper
 
                 if (results.Length == 1)
                 {
-                    object result = results.FirstOrDefault();
+                    object? result = results.FirstOrDefault();
 
                     return result ?? arguments;
                 }
@@ -170,18 +233,196 @@ namespace Celeste.Mod.GooberHelper
             }
         }
 
-        //everything after this is not stolen from luacutscenes
-        public static LuaFunction MakeGeneric(LuaTable outerTable, params Type[] types) {
-            if(
-                Utils.GetEnumeratorIndex(outerTable.Values.GetEnumerator(), 0) is not LuaTable innerTable ||
-                Utils.GetEnumeratorIndex(innerTable.Values.GetEnumerator(), 0) is not MethodInfo methodInfo
-            ) {
-                throw new Exception($"couldnt make the method generic (weird input)");
+        public static Everest.LuaLoader.CachedType GenericizeCachedType(Everest.LuaLoader.CachedType type, params Type[] types) {
+            var genericizedTypeMaybe = type.Type.MakeGenericType(types); //this Should always return the same value even if run twice with the same arguments
+
+            if(genericizedTypeMaybe is not Type genericizedType)
+                throw new Exception("??? how is the genericized type null (?)?");
+
+            Everest.LuaLoader.CachedType genericizedCachedType = type.Parent == null ?
+                new Everest.LuaLoader.CachedType(type.Namespace, genericizedType) :
+                new Everest.LuaLoader.CachedType(type.Parent, genericizedType);
+
+            return genericizedCachedType;
+        }
+
+        public static Type GetProxiedType(ProxyType proxyType)
+            => proxyType.UnderlyingSystemType;
+
+        //i wish i could just pass both of them in as params parameters to leverage unpacking but it is what it is
+        public static LuaTable GenericizeMethodOverloads(LuaTable typeArgumentsTable, params MethodInfo[] overloads) {            
+            var typeArgumentsValues = typeArgumentsTable.Values;
+            var typeArguments = new Type[typeArgumentsValues.Count]; 
+            var i = 0;
+
+            foreach(var type in typeArgumentsValues) {
+                typeArguments[i++] = (Type)type;
             }
 
-            var genericMethod = methodInfo.MakeGenericMethod(types);
+            var genericizedOverloads = new List<MethodInfo>();
+
+            foreach(var overload in overloads) {
+                if(!overload.IsGenericMethodDefinition)
+                    continue;
+
+                var overloadTypeArguments = overload.GetGenericArguments();
+
+                if(overloadTypeArguments.Length != typeArguments.Length)
+                    continue;
+
+                var genericizedOverload = overload.MakeGenericMethod(typeArguments);
+
+                genericizedOverloads.Add(genericizedOverload);
+                Console.WriteLine("added overload " + genericizedOverload);
+            }
+
+            if(genericizedOverloads.Count == 0)
+                throw new Exception("no generic overloads found!");
+
+            //create the method wrapper
+            var lua = Everest.LuaLoader.Context;
+
+            var translator = typeof(NLua.Lua)
+                .GetField("_translator", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .GetValue(lua)
+                ?? throw new Exception("translator is null");
+
+            var luaMethodWrapperType = typeof(NLua.Lua).Assembly
+                .GetTypes()
+                .Where(type => type.Name == "LuaMethodWrapper")
+                .First()
+                ?? throw new Exception("wrapper type is null");
+
+            var luaMethodWrapperInstance = luaMethodWrapperType
+                .GetConstructors()
+                .Where(constructor => constructor.GetParameters()[2].ParameterType == typeof(NLua.ProxyType))
+                .First()
+                .Invoke([translator, null, new ProxyType(genericizedOverloads.First().DeclaringType), genericizedOverloads.First()]) //the last parameter will be overwritten soon; it doesnt matter
+                ?? throw new Exception("wrapper instance is null");
+
+            //make it try to match the correct arguments like normal methods invoked from lua
+            luaMethodWrapperType
+                .GetField("_method", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .SetValue(luaMethodWrapperInstance, null);
             
-            return Everest.LuaLoader.Context.RegisterFunction("generic_method", genericMethod);
+            luaMethodWrapperType
+                .GetField("_members", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .SetValue(luaMethodWrapperInstance, genericizedOverloads.ToArray());
+
+            //grab the delegate lua actually uses to call methods
+            var invokeFunction = luaMethodWrapperType
+                .GetField("InvokeFunction", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .GetValue(luaMethodWrapperInstance)
+                as KeraLua.LuaFunction
+                ?? throw new Exception("wtf man");
+
+            var node = ListToLuaTable(genericizedOverloads);
+            var proxy = invokeFunction;
+
+            // Console.WriteLine(node);
+            // PrintTable(node);
+            // Console.WriteLine(proxy);
+
+            return ListToLuaTable(new List<object>() { node, proxy });
+        }
+        
+        public static KeraLua.LuaFunction CreateMethodWrapper(MethodInfo methodInfo) {
+            var lua = Everest.LuaLoader.Context;
+
+            var translator = typeof(NLua.Lua)
+                .GetField("_translator", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .GetValue(lua)
+                ?? throw new Exception("translator is null");
+
+            var luaMethodWrapperType = typeof(NLua.Lua).Assembly
+                .GetTypes()
+                .Where(type => type.Name == "LuaMethodWrapper")
+                .First()
+                ?? throw new Exception("wrapper type is null");
+
+            var luaMethodWrapperInstance = luaMethodWrapperType
+                .GetConstructors()
+                .Where(constructor => constructor.GetParameters()[2].ParameterType == typeof(NLua.ProxyType))
+                .First()
+                .Invoke([translator, null, new ProxyType(methodInfo.DeclaringType), methodInfo])
+                ?? throw new Exception("wrapper instance is null");
+
+            var invokeFunction = luaMethodWrapperType
+                .GetField("InvokeFunction", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .GetValue(luaMethodWrapperInstance)
+                as KeraLua.LuaFunction
+                ?? throw new Exception("wtf man");
+
+            return invokeFunction;
+        }
+
+        //everything after this is not stolen from luacutscenes
+        public static LuaTable MakeGeneric(LuaTable outerTable, params Type[] types) {
+            var enumerator = outerTable.GetEnumerator();
+            object? nodeKey = null;
+            object? nodeValue = null;
+
+            object? proxyKey = null;
+            object? proxyValue = null;
+
+            LuaTable newTable = CreateTable();
+
+            while(enumerator.MoveNext()) {
+                if(enumerator.Key is not LuaTable table) throw new Exception("iwejofweij ???");
+
+                var id = table["_id"];
+
+                switch(id) {
+                    case "node":
+                        nodeKey = enumerator.Key;
+                        nodeValue = enumerator.Value;
+                    break;
+
+                    case "proxy":
+                        proxyKey = enumerator.Key;
+                        proxyValue = enumerator.Value;
+                    break;
+
+                    default: throw new Exception("wjat the fuck");
+                };
+            }
+
+            Console.WriteLine(nodeKey);
+            Console.WriteLine(nodeValue);
+            Console.WriteLine(proxyKey);
+
+            if(nodeValue is LuaTable nodeTable) {
+                var newNodeTable = CreateTable();
+                var nodeEnumerator = nodeTable.GetEnumerator();
+
+                while(nodeEnumerator.MoveNext()) {
+                    if(nodeEnumerator.Value is not MethodInfo methodInfo) throw new Exception("what the hell why is it not a method??? ?      ?");
+
+                    var genericMethod = methodInfo.MakeGenericMethod(types);
+                    
+                    newNodeTable[nodeEnumerator.Key] = genericMethod;
+                }
+
+                newTable[nodeKey] = newNodeTable;
+                newTable[proxyKey] = proxyValue;
+
+                Console.WriteLine("c");
+            }
+
+            return newTable;
+
+
+            // if(Utils.GetEnumeratorIndex(outerTable.Values.GetEnumerator(), 0) is not LuaTable innerTable) {
+            //     throw new Exception($"couldnt make the method generic (weird input)");
+            // }
+
+            // if(Utils.GetEnumeratorIndex(innerTable.Values.GetEnumerator(), 0) is MethodInfo methodInfo) {
+
+            // }
+
+            // var genericMethod = methodInfo.MakeGenericMethod(types);
+            
+            // return Everest.LuaLoader.Context.RegisterFunction("generic_method", genericMethod);
         }
 
         public static Type GetCSharpType(string name) {
@@ -320,7 +561,7 @@ foreach(var type in interestingTypes) {
     foreach(var methodInfo in type.GetMethods(BindingFlags.Public | BindingFlags.Static)) {
         if(!operatorNameToLua.TryGetValue(methodInfo.Name, out var luaOperatorName)) continue;
 
-        str += $"---@operator {luaOperatorName}({(methodInfo.GetParameters().Length > 1 ? adaptToLua(methodInfo.GetParameters().ElementAtOrDefault(1).ParameterType) : "")}): {adaptToLua(methodInfo.ReturnType)}\n";
+        str += $"---@operator {luaOperatorName}({(methodInfo.GetParameters().Length > 1 ? adaptToLua(methodInfo.GetParameters().ElementAtOrDefault(1)!.ParameterType) : "")}): {adaptToLua(methodInfo.ReturnType)}\n";
     }
 
     str += $"local {fakeName} = {{}}\n";

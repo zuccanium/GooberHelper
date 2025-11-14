@@ -62,6 +62,41 @@ namespace Celeste.Mod.GooberHelper {
             }
         }
 
+        public static class SyntaxColors {
+            public static Color String = new Color(206, 145, 120);
+            public static Color Number = new Color(181, 206, 168);
+            public static Color Boolean = new Color(78, 148, 206);
+            public static Color Value = new Color(156, 220, 254);
+            public static Color Name = new Color(197, 134, 192);
+            public static Color Type = new Color(61, 201, 176);
+            public static Color Error = new Color(241, 76, 76);
+        };
+
+        public static string GetAnsiColorCode(Color color) => $"\x1b[38;2;{color.R};{color.G};{color.B}m";
+        public static string Color(this string str, Color color) => GetAnsiColorCode(color) + str + "\x1b[0m";
+
+        public static string FormatValue(object value) {
+            return value switch {
+                string =>
+                    $"\"{value}\"".Color(SyntaxColors.String),
+
+                char =>
+                    $"'{value}'".Color(SyntaxColors.String),
+
+                sbyte or short or int or long or byte or ushort or uint or ulong or Half or float or double or decimal =>
+                    value.ToString().Color(SyntaxColors.Number),
+
+                bool =>
+                    value.ToString().Color(SyntaxColors.Boolean),
+
+                Enum =>
+                    $"{value.GetType().Name}.{value}".Color(SyntaxColors.Type),
+
+                _ =>
+                    value.ToString().Color(SyntaxColors.Value),
+            };
+        }
+
         public static string NumberCaptureRegex = @"(?<num>(\d+(\.\d+)?))";
         private static Regex zingleRegex = new Regex(@$"\s\((?<num>{NumberCaptureRegex})\)$");
         private static Regex bingleRegex = new Regex(@$"\(copy( (?<num>{NumberCaptureRegex}))?\)$");

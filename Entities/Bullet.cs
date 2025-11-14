@@ -387,7 +387,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             var matrix = camera.Matrix;
 
             if(!lowResolution)
-                matrix *= Matrix.CreateScale(6);
+                matrix *= Matrix.CreateScale(320f / (ExtendedCameraDynamicsAPI.GetCameraDimensions?.Invoke(level).X ?? 320f) * 6f);
 
             Draw.SpriteBatch.Begin(
                 SpriteSortMode.Deferred,

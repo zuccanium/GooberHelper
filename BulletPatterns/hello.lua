@@ -85,7 +85,24 @@ function PanCamera()
 end
 
 function Run()
-    -- Generic(Engine.Scene.Tracker.GetEntities, GetType("Celeste.Player"))
+    PrintTable(getmetatable(Engine.Scene.Tracker.GetEntities))
+
+    -- print(Generic(require("#System.Collections.Generic.List`1"), GetType("Celeste.Player")))
+    print(Generic(Engine.Scene.Tracker.GetEntities, GetType("Celeste.Player"))(Engine.Scene.Tracker)[0])
+
+    coroutine.yield(100000)
+
+    Shoot{
+        position = Vector2(0, -100),
+        velocity = Vector2(0.01, 0),
+        texture = "bullets/GooberHelper/halo",
+        scale = 0.5,
+        color = Hsv(2, 1, 1),
+        spin = 360,
+        rotationMode = BulletRotationMode.Spin
+    }
+
+
 
     -- coroutine.yield(0.1)
 
@@ -94,7 +111,6 @@ function Run()
     
     -- print(zingle, zongle)
 
-    -- print(Generic(Engine.Scene.Tracker.GetEntities, GetType("Celeste.Player"))(Engine.Scene.Tracker)[0])
 
     for i = -10, 10, 1 do
         local bong = Shoot{
@@ -106,7 +122,6 @@ function Run()
             positionRotationSpeed = i,
             velocityRotationSpeed = i,
             rotationCenter = Vector2(0, -100),
-            lowResolution = i % 2 == 0,
             animationFrames = 13,
             animationSpeed = 60,
             rotationMode = BulletRotationMode.Spin,

@@ -34,4 +34,18 @@ namespace Celeste.Mod.GooberHelper.ModIntegration {
         public static bool Loaded = false;
         public static Func<int> GetJumpCount;
     }
+
+    [ModImportName("ExtendedCameraDynamics")]
+    public static class ExtendedCameraDynamicsAPI {
+        public static void Load() {
+            if(Loaded) return;
+
+            typeof(ExtendedCameraDynamicsAPI).ModInterop();
+
+            Loaded = true;
+        }
+
+        public static bool Loaded = false;
+        public static Func<Level, Vector2> GetCameraDimensions;
+    }
 }

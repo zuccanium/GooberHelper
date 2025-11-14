@@ -71,6 +71,7 @@ namespace Celeste.Mod.GooberHelper {
         public override void Load() {
             ModIntegration.FrostHelperAPI.Load();
             ModIntegration.ExtendedVariantModeAPI.Load();
+            ModIntegration.ExtendedCameraDynamicsAPI.Load();
 
             FluidSimulation.Load();
             AbstractTrigger<GooberPhysicsOptions>.Load();

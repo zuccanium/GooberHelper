@@ -52,10 +52,18 @@ end
 ---@param method table method to make generic
 ---@param ... Type type arguments
 _G.Generic = function(method, ...)
-    LuaHelper.MakeGeneric(method, ...)
+    local genericMethod = LuaHelper.MakeGeneric(method, ...)
 
-    --i swear it exists
-    return _G["generic_method"]
+    setmetatable(genericMethod, getmetatable(method))
+
+    return genericMethod
+
+    -- --i swear it exists
+    -- return _G["generic_method"]
+end
+
+_G.PrintTable = function(table)
+    LuaHelper.PrintTable(table)
 end
 
 ---@return Type
