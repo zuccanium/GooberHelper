@@ -30,5 +30,6 @@ namespace Celeste.Mod.GooberHelper.ModIntegration {
 
         public static bool Loaded = false;
         public static Func<int> GetJumpCount;
+        public static Action<int> SetJumpCount;
     }
 }

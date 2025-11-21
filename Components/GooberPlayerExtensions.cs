@@ -14,12 +14,20 @@ namespace Celeste.Mod.GooberHelper.Components {
         public Vector2 AwesomeRetentionDirection = Vector2.Zero;
         public bool AwesomeRetentionWasInWater = false;
         public Platform AwesomeRetentionPlatform;
+
+        public bool DashStickyRetentionExists = false;
+        public Vector2 DashStickyRetentionDirection = Vector2.Zero;
+        public Vector2 DashStickyRetentionSpeed;
+        
+        public Vector2 BeforeDashSpeedConserved = Vector2.Zero;
         
         public Vector2 BoostSpeedPreserved = Vector2.Zero;
         public Vector2 StarFlySpeedPreserved = Vector2.Zero;
         public Vector2 AttractSpeedPreserved = Vector2.Zero;
+        public Vector2 WallJumpSpeedPreserved = Vector2.Zero;
         
         public Vector2 PreservedDreamBlockSpeedMagnitude = Vector2.Zero;
+        public Vector2 DashWindBoost = Vector2.Zero;
 
         public int Counter = 0;
         public int LastPauseCounterValue = 0;

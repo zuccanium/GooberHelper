@@ -532,6 +532,7 @@ namespace Celeste.Mod.GooberHelper {
             HyperAndSuperSpeedPreservation,
             UpwardsJumpSpeedPreservationThreshold,
             DownwardsJumpSpeedPreservationThreshold,
+            BounceSpeedPreservation,
 
             GetClimbjumpSpeedInRetention,
             AdditiveVerticalJumpSpeed,
@@ -568,6 +569,7 @@ namespace Celeste.Mod.GooberHelper {
             RefillFreezeLength,
             RetentionLength,
 
+            ConserveBeforeDashSpeed,
             DreamBlockSpeedPreservation,
             SpringSpeedPreservation,
             ReboundSpeedPreservation,
@@ -589,8 +591,10 @@ namespace Celeste.Mod.GooberHelper {
             ClimbingSpeedPreservation,
             AllowClimbingInDashState,
             CoreBlockAllDirectionActivation,
+            AllowWindWhileDashing,
             LiftBoostAdditionHorizontal,
             LiftBoostAdditionVertical,
+            ReverseBackboosts,
 
             //visuals
             PlayerShaderMask,
@@ -628,7 +632,8 @@ namespace Celeste.Mod.GooberHelper {
         public enum AllDirectionHypersAndSupersValue {
             None,
             RequireGround,
-            WorkWithCoyoteTime
+            WorkWithCoyoteTime,
+            WorkWithCoyoteTimeAndDontRefill
         }
 
         public enum VerticalToHorizontalSpeedOnGroundJumpValue {
@@ -681,6 +686,20 @@ namespace Celeste.Mod.GooberHelper {
             On,
         }
 
+        public enum AllowWindWhileDashingValue {
+            None,
+            Velocity,
+            Speed,
+        }
+
+        public enum ExplodeLaunchSpeedPreservationValue {
+            None,
+            Horizontal,
+            Vertical,
+            Both,
+            Magnitude,
+        }
+
         //the order within categories is
         //- speed preservation
         //- new thing
@@ -704,6 +723,7 @@ namespace Celeste.Mod.GooberHelper {
                 new OptionData(Option.HyperAndSuperSpeedPreservation),
                 new OptionData(Option.UpwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Integer, -1) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
                 new OptionData(Option.DownwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Integer, -1) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
+                new OptionData(Option.BounceSpeedPreservation),
 
                 new OptionData(Option.GetClimbjumpSpeedInRetention),
                 new OptionData(Option.AdditiveVerticalJumpSpeed),
@@ -740,10 +760,11 @@ namespace Celeste.Mod.GooberHelper {
                 new OptionData(Option.RefillFreezeLength, OptionType.Float, 3) { Min = 0, Max = 10000, Step = 1, Suffix = "f", ExponentialIncrease = true },
                 new OptionData(Option.RetentionLength, OptionType.Float, 4) { Min = 0, Max = 10000, Step = 1, Suffix = "f", ExponentialIncrease = true },
                 
+                new OptionData(Option.ConserveBeforeDashSpeed),
                 new OptionData(Option.DreamBlockSpeedPreservation, typeof(DreamBlockSpeedPreservationValue), DreamBlockSpeedPreservationValue.None),
                 new OptionData(Option.SpringSpeedPreservation, typeof(SpringSpeedPreservationValue), SpringSpeedPreservationValue.None),
                 new OptionData(Option.ReboundSpeedPreservation),
-                new OptionData(Option.ExplodeLaunchSpeedPreservation),
+                new OptionData(Option.ExplodeLaunchSpeedPreservation, typeof(ExplodeLaunchSpeedPreservationValue), ExplodeLaunchSpeedPreservationValue.None),
                 new OptionData(Option.PickupSpeedInversion),
                 new OptionData(Option.BubbleSpeedPreservation),
                 new OptionData(Option.FeatherEndSpeedPreservation),
@@ -761,8 +782,10 @@ namespace Celeste.Mod.GooberHelper {
                 new OptionData(Option.ClimbingSpeedPreservation),
                 new OptionData(Option.AllowClimbingInDashState),
                 new OptionData(Option.CoreBlockAllDirectionActivation),
+                new OptionData(Option.AllowWindWhileDashing, typeof(AllowWindWhileDashingValue), AllowWindWhileDashingValue.None),
                 new OptionData(Option.LiftBoostAdditionHorizontal, OptionType.Float, 0) { Min = -10000, Max = 10000, Step = 5, Suffix = "px/s", ExponentialIncrease = true },
                 new OptionData(Option.LiftBoostAdditionVertical, OptionType.Float, 0) { Min = -10000, Max = 10000, Step = 5, Suffix = "px/s", ExponentialIncrease = true },
+                new OptionData(Option.ReverseBackboosts),
             ]},
             { "Visuals", [
                 new OptionData(Option.PlayerShaderMask, typeof(PlayerShaderMaskValue), PlayerShaderMaskValue.None),
