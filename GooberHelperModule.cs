@@ -1692,7 +1692,7 @@ namespace Celeste.Mod.GooberHelper {
 
             ILCursor afterSafeNormalizeCursor = cursor.Clone();
 
-            if(!cursor.TryGotoNextBestFit(MoveType.Before, 
+            if(!cursor.TryGotoNextBestFit(MoveType.Before, 0x20,
                 instr => instr.MatchLdloc0(),
                 instr => instr.MatchBrtrue(out _),
                 instr => instr.MatchLdarg0(),
