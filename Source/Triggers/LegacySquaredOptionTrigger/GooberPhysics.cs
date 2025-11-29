@@ -3,7 +3,7 @@ using Celeste.Mod.GooberHelper.Options;
 
 //i hate everything
 
-namespace Celeste.Mod.GooberHelper.Triggers {
+namespace Celeste.Mod.GooberHelper.Triggers.LegacySquaredOptionTrigger {
     [CustomEntity("GooberHelper/GooberPhysics")]
     public class GooberPhysics : Trigger {
         public bool CobwobSpeedInversionValue;

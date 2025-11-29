@@ -3,7 +3,7 @@ using Celeste.Mod.Entities;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Options;
 
-namespace Celeste.Mod.GooberHelper.Triggers {
+namespace Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers {
     [CustomEntity("GooberHelper/GooberPhysicsOptions")]
     [Tracked(false)]
     public class GooberPhysicsOptions : AbstractTrigger<GooberPhysicsOptions> {

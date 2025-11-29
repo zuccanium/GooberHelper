@@ -2,8 +2,7 @@ using Celeste.Mod.Entities;
 using System.Collections.Generic;
 using Celeste.Mod.GooberHelper.Attributes;
 
-namespace Celeste.Mod.GooberHelper.Triggers {
-
+namespace Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers {
     [CustomEntity("GooberHelper/RetentionFrames")]
     [Tracked(false)]
     public class RetentionFrames : AbstractTrigger<RetentionFrames> {

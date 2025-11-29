@@ -1,8 +1,7 @@
 using Celeste.Mod.Entities;
 using Celeste.Mod.GooberHelper.Attributes;
 
-namespace Celeste.Mod.GooberHelper.Triggers {
-
+namespace Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers {
     [CustomEntity("GooberHelper/GooberMiscellaneousOptions")]
     [Tracked(false)]
     public class GooberMiscellaneousOptions : AbstractTrigger<GooberMiscellaneousOptions> {

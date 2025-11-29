@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 
 namespace Celeste.Mod.GooberHelper.Entities {
-
     [CustomEntity("GooberHelper/Waterfall")]
     [TrackedAs(typeof(Water))]
     public class Waterfall : Water {

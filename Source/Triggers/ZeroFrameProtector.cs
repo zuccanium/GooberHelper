@@ -2,7 +2,6 @@ using Celeste.Mod.Entities;
 using System;
 
 namespace Celeste.Mod.GooberHelper.Triggers {
-
     [CustomEntity("GooberHelper/ZeroFrameProtector")]
     [Tracked(false)]
     public class ZeroFrameProtector : Trigger {

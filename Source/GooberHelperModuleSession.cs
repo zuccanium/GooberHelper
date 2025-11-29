@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Celeste.Mod.GooberHelper.Options;
-using Celeste.Mod.GooberHelper.Triggers;
+using Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers;
 
 namespace Celeste.Mod.GooberHelper {
     public class GooberHelperModuleSession : EverestModuleSession {

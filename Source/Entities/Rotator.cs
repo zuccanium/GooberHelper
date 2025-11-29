@@ -10,7 +10,6 @@ using System;
 #pragma warning disable CS0618 // Type or member is obsolete
 
 namespace Celeste.Mod.GooberHelper.Entities {
-
     [CustomEntity("GooberHelper/Rotator")]
     public class Rotator : Entity {
         private MTexture sprite = GFX.Game["objects/door/lockdoor12"];
