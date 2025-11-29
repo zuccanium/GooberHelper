@@ -5,7 +5,7 @@ using Celeste.Mod.GooberHelper.Options;
 
 //deprecated
 
-namespace Celeste.Mod.GooberHelper.Triggers {
+namespace Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers {
     //this should absolutely go into the trigger class
     //however the trigger class takes a generic argument and i really dont want to deal with any weird results from doing that
     //sorry
@@ -22,6 +22,7 @@ namespace Celeste.Mod.GooberHelper.Triggers {
             this.ID = ID;
         }
     }
+
     public abstract class AbstractTrigger<T> : Trigger where T : Trigger {
         public Dictionary<Option, float> SettingValues = [];
         private bool revertOnLeave = false;
