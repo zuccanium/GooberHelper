@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Celeste.Mod.GooberHelper.Options;
 
 namespace Celeste.Mod.GooberHelper.UI {
     public class OuiGooberHelperOptions : Oui {

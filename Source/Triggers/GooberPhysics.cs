@@ -1,4 +1,5 @@
 using Celeste.Mod.Entities;
+using Celeste.Mod.GooberHelper.Options;
 
 //i hate everything
 
