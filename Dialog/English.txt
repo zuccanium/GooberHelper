@@ -34,48 +34,49 @@
     menu_gooberhelper_import_profile_success=success!
     menu_gooberhelper_import_create_profile_success=success! imported and created profile "name"
 
-# ENUMS
-    gooberhelper_enum_None=None
-    gooberhelper_enum_All=All
-
-    gooberhelper_enum_GroundJumps=Ground Jumps
-
-    gooberhelper_enum_RequireGround=Ground
-    gooberhelper_enum_WorkWithCoyoteTimeAndDontRefill=Coyote
-    gooberhelper_enum_WorkWithCoyoteTime=Coyote And Refill
-
-    gooberhelper_enum_OnlyCardinal=Only Cardinal
-
-    gooberhelper_enum_RequireSpeed=Invert Speed
-    gooberhelper_enum_WorkWithRetention=Invert Retention
-
-    gooberhelper_enum_Cover=Cover
-    gooberhelper_enum_HairOnly=Hair Only
-
-    gooberhelper_enum_FakeRCB=Fake RCB
-    gooberhelper_enum_Preserve=Preserve
-    gooberhelper_enum_Invert=Invert
-
-    gooberhelper_enum_DashSpeed=Dash Speed
-
-    gooberhelper_enum_Magnitude=Magnitude
-    gooberhelper_enum_Vertical=Vertical
-    gooberhelper_enum_Horizontal=Horizontal
-    gooberhelper_enum_Both=Both
-
-    gooberhelper_enum_Legacy=Legacy
-    gooberhelper_enum_On=On
-
-    gooberhelper_enum_SkipIntro=Skip Intro
-    gooberhelper_enum_KeepIntro=Keep Intro
-
-    gooberhelper_enum_WhileHoldingUp=While Holding Up
-    gooberhelper_enum_Always=Always
-
-    gooberhelper_enum_Speed=Speed
-    gooberhelper_enum_Velocity=Velocity
 
 # OPTIONS
+    # ENUM VALUES (maybe change this to fit the normal path?)
+        gooberhelper_enum_None=None
+        gooberhelper_enum_All=All
+
+        gooberhelper_enum_GroundJumps=Ground Jumps
+
+        gooberhelper_enum_RequireGround=Ground
+        gooberhelper_enum_WorkWithCoyoteTimeAndDontRefill=Coyote
+        gooberhelper_enum_WorkWithCoyoteTime=Coyote And Refill
+
+        gooberhelper_enum_OnlyCardinal=Only Cardinal
+
+        gooberhelper_enum_RequireSpeed=Invert Speed
+        gooberhelper_enum_WorkWithRetention=Invert Retention
+
+        gooberhelper_enum_Cover=Cover
+        gooberhelper_enum_HairOnly=Hair Only
+
+        gooberhelper_enum_FakeRCB=Fake RCB
+        gooberhelper_enum_Preserve=Preserve
+        gooberhelper_enum_Invert=Invert
+
+        gooberhelper_enum_DashSpeed=Dash Speed
+
+        gooberhelper_enum_Magnitude=Magnitude
+        gooberhelper_enum_Vertical=Vertical
+        gooberhelper_enum_Horizontal=Horizontal
+        gooberhelper_enum_Both=Both
+
+        gooberhelper_enum_Legacy=Legacy
+        gooberhelper_enum_On=On
+
+        gooberhelper_enum_SkipIntro=Skip Intro
+        gooberhelper_enum_KeepIntro=Keep Intro
+
+        gooberhelper_enum_WhileHoldingUp=While Holding Up
+        gooberhelper_enum_Always=Always
+
+        gooberhelper_enum_Speed=Speed
+        gooberhelper_enum_Velocity=Velocity
+
     # TITLES
         # PHYSICS
             # JUMPING
