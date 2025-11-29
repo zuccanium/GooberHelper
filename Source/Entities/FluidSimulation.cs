@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
-using Celeste.Mod.GooberHelper.ModIntegration;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
+using Celeste.Mod.GooberHelper.ModImports;
 
 //absolutely atrocious code
 //dont reference for anything
@@ -108,14 +108,14 @@ namespace Celeste.Mod.GooberHelper.Entities {
 			foreach(var str in data.Attr("dyeColor", "00ffff,ffffff,ff44ff|0.5").Split('|')[0].Split(","))
 				dyeColors.Add(Calc.HexToColor(str));
 
-			DisplayShader          = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/display");
-			AdvectionShader        = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/advection");
-			BaseVelocityShader     = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/baseVelocity");
-			JacobiShader           = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/jacobi");
-			DivergenceCurlShader   = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/divergenceCurl");
-			GradientShader         = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/gradient");
-			DiffuseShader          = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/diffuse");
-			VorticityShader        = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/vorticity");
+			DisplayShader          = FrostHelper.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/display");
+			AdvectionShader        = FrostHelper.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/advection");
+			BaseVelocityShader     = FrostHelper.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/baseVelocity");
+			JacobiShader           = FrostHelper.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/jacobi");
+			DivergenceCurlShader   = FrostHelper.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/divergenceCurl");
+			GradientShader         = FrostHelper.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/gradient");
+			DiffuseShader          = FrostHelper.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/diffuse");
+			VorticityShader        = FrostHelper.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/vorticity");
 
 			AttemptAddSet();
 

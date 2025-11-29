@@ -1,4 +1,5 @@
 using Celeste.Mod.Entities;
+using Celeste.Mod.GooberHelper.ModImports;
 using System;
 using System.Collections.Generic;
 
@@ -14,7 +15,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
                 if(typeName == "")
                     continue;
 
-                var type = ModIntegration.FrostHelperAPI.EntityNameToType(typeName);
+                var type = FrostHelper.EntityNameToType?.Invoke(typeName);
 
                 if(type == null)
                     continue;

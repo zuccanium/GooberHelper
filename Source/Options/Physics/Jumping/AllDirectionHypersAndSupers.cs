@@ -1,6 +1,7 @@
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Helpers;
+using Celeste.Mod.GooberHelper.ModImports;
 using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
@@ -56,7 +57,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
             if(allDirectionHypersAndSupersValue == AllDirectionHypersAndSupersValue.None)
                 return false;
             
-            var extvarsJumpCount = ModIntegration.ExtendedVariantModeAPI.GetJumpCount?.Invoke() ?? 0;
+            var extvarsJumpCount = ExtendedVariantMode.GetJumpCount?.Invoke() ?? 0;
             
             //inverse of original conditions
             if(!player.CanUnDuck || !Input.Jump.Pressed)
@@ -86,7 +87,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
                 player.RefillDash();
 
             if(!groundedCondition && coyoteCondition && player.jumpGraceTimer <= 0f)
-                ModIntegration.ExtendedVariantModeAPI.SetJumpCount?.Invoke(extvarsJumpCount - 1);
+                ExtendedVariantMode.SetJumpCount?.Invoke(extvarsJumpCount - 1);
 
             return true;
         }

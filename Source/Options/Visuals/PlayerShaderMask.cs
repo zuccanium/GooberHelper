@@ -1,5 +1,6 @@
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
+using Celeste.Mod.GooberHelper.ModImports;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Celeste.Mod.GooberHelper.Options.Visuals {
@@ -71,9 +72,9 @@ namespace Celeste.Mod.GooberHelper.Options.Visuals {
         }
 
         private static void doPlayerMaskStuffBefore(Vector4 color, bool keepOutlines = false) {
-            var playerMaskEffect = ModIntegration.FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/PlayerShaderMask/playerMask");
+            var playerMaskEffect = FrostHelper.GetEffectOrNull?.Invoke("GooberHelper/PlayerShaderMask/playerMask");
 
-            if((Engine.Scene as Level) == null)
+            if(playerMaskEffect == null || (Engine.Scene as Level) == null)
                 return;
 
             GameplayRenderer.End();

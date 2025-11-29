@@ -1,6 +1,7 @@
 using System;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
+using Celeste.Mod.GooberHelper.ModImports;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Celeste.Mod.GooberHelper.Options.Visuals {
@@ -32,7 +33,7 @@ namespace Celeste.Mod.GooberHelper.Options.Visuals {
                 if(!GetOptionBool(Option.TheoNuclearReactor))
                     return;
 
-                var nuclearReactorEffect = ModIntegration.FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/NuclearReactor/nuclearReactor");
+                var nuclearReactorEffect = FrostHelper.GetEffectOrNull?.Invoke("GooberHelper/NuclearReactor/nuclearReactor");
                 
                 if(nuclearReactorEffect == null || Engine.Scene is not Level)
                     return;
