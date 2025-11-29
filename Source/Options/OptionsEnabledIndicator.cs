@@ -1,12 +1,11 @@
 using Celeste.Mod.GooberHelper.Attributes;
-using MonoMod.Cil;
 
-namespace Celeste.Mod.GooberHelper.Entities {
+namespace Celeste.Mod.GooberHelper.Options {
     [Tracked(false)]
-    public class GooberIconThing : Entity {
+    public class OptionsEnabledIndicator : Entity {
         private MTexture icon = GFX.Gui["GooberHelper/indicator"];
 
-        public GooberIconThing() {
+        public OptionsEnabledIndicator() {
             Tag = Tags.HUD | Tags.Global;
             Depth = -1000;
         }
@@ -20,8 +19,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
             => Everest.Events.Level.OnLoadLevel -= addToScene;
 
         private static void addToScene(Level level, Player.IntroTypes playerIntro, bool isFromLoader) {
-            if(level.Tracker.GetEntity<GooberIconThing>() is null)
-                level.Add(new GooberIconThing());
+            if(level.Tracker.GetEntity<OptionsEnabledIndicator>() is null)
+                level.Add(new OptionsEnabledIndicator());
         }
 
         public override void Render() {

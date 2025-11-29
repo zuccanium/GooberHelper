@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Celeste.Mod.GooberHelper {
+namespace Celeste.Mod.GooberHelper.Options {
     //who up reworking they helper
     public static class OptionsManager {
         public static readonly Color DefaultColor = Color.White;

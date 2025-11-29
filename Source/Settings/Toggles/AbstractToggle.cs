@@ -1,10 +1,10 @@
 using System.Reflection;
 
-namespace Celeste.Mod.GooberHelper.Settings.Infrastructure.Modes {
-    public abstract class SettingToggle : Setting {
+namespace Celeste.Mod.GooberHelper.Settings.Toggles {
+    public abstract class AbstractToggle : AbstractSetting {
         public PropertyInfo SettingProperty;
 
-        public SettingToggle()
+        public AbstractToggle()
             => SettingProperty = typeof(GooberHelperModuleSettings).GetProperty(GetType().Name);
 
         public virtual void OnValueChange(bool value)

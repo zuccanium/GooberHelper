@@ -3,7 +3,7 @@ using Celeste.Editor;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 
-namespace Celeste.Mod.GooberHelper.Settings.DebugMapPhysics {
+namespace Celeste.Mod.GooberHelper.Settings.Toggles.DebugMapPhysics {
     public static class LevelTemplateHooks {
         [OnHook]
         private static void patch_LevelTemplate_RenderContents(On.Celeste.Editor.LevelTemplate.orig_RenderContents orig, LevelTemplate self, Camera camera, List<LevelTemplate> allLevels) {

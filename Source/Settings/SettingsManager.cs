@@ -4,7 +4,7 @@ using System.Reflection;
 using Celeste.Mod.GooberHelper.Attributes;
 using FMOD.Studio;
 
-namespace Celeste.Mod.GooberHelper.Settings.Infrastructure {
+namespace Celeste.Mod.GooberHelper.Settings {
     public static class SettingsManager {
         private static Dictionary<string, Type> settingClasses = [];
 
@@ -26,7 +26,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Infrastructure {
                     continue;
                 
                 if(settingClasses.TryGetValue(member.Name, out var type)) {
-                    var instance = Activator.CreateInstance(type) as Setting;
+                    var instance = Activator.CreateInstance(type) as AbstractSetting;
 
                     instance.CreateEntry(menu, inGame);
                 }

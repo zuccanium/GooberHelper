@@ -1,10 +1,9 @@
 using Celeste.Mod.GooberHelper.Attributes;
-using Celeste.Mod.GooberHelper.Settings.Infrastructure.Modes;
 using Celeste.Mod.GooberHelper.UI;
 
-namespace Celeste.Mod.GooberHelper.Settings {
+namespace Celeste.Mod.GooberHelper.Settings.Toggles {
     [GooberHelperSetting]
-    public class ShowOptionsInGame : SettingToggle {
+    public class ShowOptionsInGame : AbstractToggle {
         [OnLoad]
         public static void Load() {
             Everest.Events.Level.OnCreatePauseMenuButtons += onCreatePauseMenuButtons;

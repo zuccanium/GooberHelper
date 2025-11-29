@@ -1,10 +1,9 @@
 using Celeste.Mod.GooberHelper.Attributes;
-using Celeste.Mod.GooberHelper.Settings.Infrastructure.Modes;
 using Celeste.Mod.GooberHelper.UI;
 
-namespace Celeste.Mod.GooberHelper.Settings.DebugMapPhysics {
+namespace Celeste.Mod.GooberHelper.Settings.Toggles.DebugMapPhysics {
     [GooberHelperSetting]
-    public class DebugMapPhysics : SettingToggle {
+    public class DebugMapPhysics : AbstractToggle {
         private ExplodingDescription description;
 
         public override void OnValueChange(bool value) {

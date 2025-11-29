@@ -1,12 +1,10 @@
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
-using Celeste.Mod.GooberHelper.Settings.Infrastructure;
-using Celeste.Mod.GooberHelper.Settings.Infrastructure.Modes;
 using MonoMod.Cil;
 
-namespace Celeste.Mod.GooberHelper.Settings {
+namespace Celeste.Mod.GooberHelper.Settings.Toggles {
     [GooberHelperSetting]
-    public class FastMenuing : SettingToggle {
+    public class FastMenuing : AbstractToggle {
         [OnLoad]
         public static void Load() {
             Everest.Events.Input.OnInitialize += UpdateFastMenuing;

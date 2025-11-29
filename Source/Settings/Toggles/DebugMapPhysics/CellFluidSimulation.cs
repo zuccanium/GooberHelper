@@ -1,8 +1,6 @@
 using System;
-using Microsoft.Xna.Framework;
-using Monocle;
 
-namespace Celeste.Mod.GooberHelper.Settings.DebugMapPhysics {
+namespace Celeste.Mod.GooberHelper.Settings.Toggles.DebugMapPhysics {
     //REFERENCED CODE FROM https://github.com/jongallant/LiquidSimulator/blob/master/Assets/Scripts/LiquidSimulator.cs A LOT
     //THANK YOU
     public class CellFluidSimulation {

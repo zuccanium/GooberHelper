@@ -1,11 +1,11 @@
-﻿global using static Celeste.Mod.GooberHelper.OptionsManager;
+﻿global using static Celeste.Mod.GooberHelper.Options.OptionsManager;
 global using Microsoft.Xna.Framework;
 global using Monocle;
 
 using System;
 using Celeste.Mod.GooberHelper.Attributes;
 using FMOD.Studio;
-using Celeste.Mod.GooberHelper.Settings.Infrastructure;
+using Celeste.Mod.GooberHelper.Settings;
 
 namespace Celeste.Mod.GooberHelper {
     public class GooberHelperModule : EverestModule {

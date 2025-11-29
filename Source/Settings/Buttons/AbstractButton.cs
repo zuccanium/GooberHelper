@@ -1,10 +1,10 @@
 using System.Reflection;
 
-namespace Celeste.Mod.GooberHelper.Settings.Infrastructure.Modes {
-    public abstract class SettingButton : Setting {
+namespace Celeste.Mod.GooberHelper.Settings.Buttons {
+    public abstract class AbstractButton : AbstractSetting {
         public PropertyInfo SettingProperty;
 
-        public SettingButton()
+        public AbstractButton()
             => SettingProperty = typeof(GooberHelperModuleSettings).GetProperty(GetType().Name);
 
         public virtual void OnPressed() {}
