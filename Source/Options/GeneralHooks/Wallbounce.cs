@@ -1,6 +1,7 @@
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 using Celeste.Mod.GooberHelper.Options.Physics.Jumping;
+using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
@@ -14,7 +15,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             cursor.EmitLdarg0();
             cursor.EmitDelegate(setOriginalSpeed);
 
-            if(cursor.TryGotoNext(MoveType.AfterLabel,
+            if(cursor.TryGotoNextBestFit(MoveType.AfterLabel,
                 instr => instr.MatchLdarg0(),
                 instr => instr.MatchLdfld<Player>("Speed"),
                 instr => instr.MatchLdarg0(),

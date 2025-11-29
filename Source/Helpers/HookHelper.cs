@@ -54,8 +54,6 @@ namespace Celeste.Mod.GooberHelper.Helpers {
         private static bool debug;
         private static string originalILString;
 
-        private static Dictionary<string, object> queuedState;
-
         public static void Begin(ILCursor cursor, string taskName, bool debug = false) {
             HookHelper.cursor = cursor;
             HookHelper.taskName = taskName;
@@ -79,7 +77,7 @@ namespace Celeste.Mod.GooberHelper.Helpers {
 
             if(debug) {
                 Utils.Log("FINISHED");
-                Console.WriteLine(Utils.CreateDiff(originalILString, cursor.Context.ToString()));
+                Utils.Log(Utils.CreateDiff(originalILString, cursor.Context.ToString()));
                 Utils.Log($"======= ENDING HOOK THING =======");
             }
             

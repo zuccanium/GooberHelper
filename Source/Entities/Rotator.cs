@@ -4,6 +4,11 @@ using System;
 //half deprecated
 //why would anyone use this
 
+//SHUT UPPPPP
+//i dont want get close enough to this *first entity i created* to fix the issue
+//nobody is using it anyway
+#pragma warning disable CS0618 // Type or member is obsolete
+
 namespace Celeste.Mod.GooberHelper.Entities {
 
     [CustomEntity("GooberHelper/Rotator")]

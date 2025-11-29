@@ -12,8 +12,6 @@ namespace Celeste.Mod.GooberHelper.Options.General {
             public readonly Color Color = new(1f, 1f, 1f, 0.8f);
             public readonly float Stroke = 2f;
 
-            private static Dictionary<string, FastReflectionHelper.FastInvoker> optionGetters;
-
             public GooberOptionsList() {
                 Tag = Tags.HUD | Tags.Global;
                 Depth = 10000;

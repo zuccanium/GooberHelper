@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Celeste.Mod.GooberHelper {
     public static partial class Utils {
@@ -20,6 +21,25 @@ namespace Celeste.Mod.GooberHelper {
         private static int logColorCycle = 0;
 
 #if DEBUG
+        public static void Log(DefaultInterpolatedStringHandler str) {
+            var stringifiedStr = str.ToString();
+
+            Console.WriteLine(
+                stringifiedStr
+                    .PadRight((int)MathF.Ceiling((float)stringifiedStr.Length / Console.WindowWidth) * Console.WindowWidth, ' ')
+                    .Color(
+                        GetAnsiColorCode(Calc.HsvToColor(
+                            new System.Diagnostics.StackTrace().FrameCount * 0.8236f % 1,
+                            1,
+                            1
+                        )),
+                        logColorCycle++ % 2 == 0
+                            ? LogBackgroundColor1
+                            : LogBackgroundColor2
+                    )
+            );
+        }
+
         public static void Log(string str)
             => Console.WriteLine(
                 str
@@ -36,6 +56,9 @@ namespace Celeste.Mod.GooberHelper {
                     )
             );
 #else
+        public static void Log(DefaultInterpolatedStringHandler str)
+            => Logger.Verbose("GooberHelper", str);
+
         public static void Log(string str)
             => Logger.Verbose("GooberHelper", str);
 #endif

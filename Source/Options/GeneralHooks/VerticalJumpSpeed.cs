@@ -58,8 +58,6 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             if(isSuperJump && player.Ducking)
                 player.Speed *= new Vector2(1.25f, 0.5f);
 
-            Utils.Log($"down: {doDownwardsStuff}");
-
             //gaslighting my own mod
             //did you know that gaslighting was invented by john gas?
             if(doDownwardsStuff)
@@ -101,20 +99,22 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
                 instr => instr.MatchCallOrCallvirt(out _) //math.min
             )) {
                 cursor.EmitLdarg0();
-                cursor.EmitDelegate((float value, Player player) => {
-                    if(GetOptionValue(Option.DownwardsJumpSpeedPreservationThreshold) == (int)VerticalJumpSpeedPreservationHybridValue.None)
-                        return value;
-
-                    var varJumpSpeed = player.varJumpSpeed;
-
-                    return varJumpSpeed > 0 && !player.onGround
-                        ? varJumpSpeed
-                        : value;
-                });
+                cursor.EmitDelegate(overrideVarJumpSpeed);
             }
         }
         
         private static void setOriginalSpeed(Player player)
             => originalSpeed = player.GetConservedSpeed();
+
+        private static float overrideVarJumpSpeed(float value, Player player) {
+            if(GetOptionValue(Option.DownwardsJumpSpeedPreservationThreshold) == (int)VerticalJumpSpeedPreservationHybridValue.None)
+                return value;
+
+            var varJumpSpeed = player.varJumpSpeed;
+
+            return varJumpSpeed > 0 && !player.onGround
+                ? varJumpSpeed
+                : value;
+        }
     }
 }
