@@ -3,7 +3,7 @@ using Celeste.Mod.GooberHelper.Attributes;
 using Microsoft.Xna.Framework.Graphics;
 using MonoMod.ModInterop;
 
-namespace Celeste.Mod.GooberHelper.ModIntegration {
+namespace Celeste.Mod.GooberHelper {
     [ModImportName("FrostHelper")]
     public static class FrostHelperAPI {
         [OnLoad]

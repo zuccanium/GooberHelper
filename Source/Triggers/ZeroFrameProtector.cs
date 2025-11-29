@@ -1,6 +1,7 @@
 using Celeste.Mod.Entities;
 using System;
 
+//this might want to be an entity instead? idk its invisible and it does something when you enter it so it looks pretty trigger-shaped to me
 namespace Celeste.Mod.GooberHelper.Triggers {
     [CustomEntity("GooberHelper/ZeroFrameProtector")]
     [Tracked(false)]
