@@ -34,7 +34,6 @@
     menu_gooberhelper_import_profile_success=success!
     menu_gooberhelper_import_create_profile_success=success! imported and created profile "name"
 
-
 # OPTIONS
     # ENUM VALUES (maybe change this to fit the normal path?)
         gooberhelper_enum_None=None
