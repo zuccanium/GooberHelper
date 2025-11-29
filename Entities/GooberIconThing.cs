@@ -1,28 +1,37 @@
-using Monocle;
-using Microsoft.Xna.Framework;
-using Celeste.Mod.Entities;
-using System;
-using System.Reflection;
-using System.Linq;
-using static Celeste.Mod.GooberHelper.OptionsManager;
+using Celeste.Mod.GooberHelper.Attributes;
+using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Entities {
     [Tracked(false)]
     public class GooberIconThing : Entity {
-        MTexture icon;
+        private MTexture icon = GFX.Gui["GooberHelper/indicator"];
 
         public GooberIconThing() {
-            base.Tag = Tags.HUD | Tags.Global;
-            base.Depth = -1000;
+            Tag = Tags.HUD | Tags.Global;
+            Depth = -1000;
+        }
 
-            icon = GFX.Gui["ourple"];
+        [OnLoad]
+        public static void Load()
+            => Everest.Events.Level.OnLoadLevel += addToScene;
+
+        [OnUnload]
+        public static void Unload()
+            => Everest.Events.Level.OnLoadLevel -= addToScene;
+
+        private static void addToScene(Level level, Player.IntroTypes playerIntro, bool isFromLoader) {
+            if(level.Tracker.GetEntity<GooberIconThing>() is null)
+                level.Add(new GooberIconThing());
         }
 
         public override void Render() {
-            float x = 0f;
+            var x = 0f;
 
-            if(GetUserEnabledEvilOption()) { icon.Draw(new Vector2(x, 1080 - 32), Vector2.Zero, UserDefinedEvilColor); x += 32f; }
-            if(GetUserEnabledCoolOption()) { icon.Draw(new Vector2(x, 1080 - 32), Vector2.Zero, UserDefinedCoolColor); }
+            if(GetUserEnabledEvilOption())
+                icon.Draw(new Vector2(x++ * 32, 1080 - 32), Vector2.Zero, UserDefinedEvilColor);
+
+            if(GetUserEnabledCoolOption())
+                icon.Draw(new Vector2(x++ * 32, 1080 - 32), Vector2.Zero, UserDefinedCoolColor);
         }
     }
 }

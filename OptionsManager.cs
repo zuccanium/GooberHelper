@@ -1,24 +1,18 @@
 using System;
-using System.Buffers.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.Xna.Framework;
-using Monocle;
-using static Celeste.Mod.GooberHelper.GooberHelperModule;
 
 namespace Celeste.Mod.GooberHelper {
-
     //who up reworking they helper
     public static class OptionsManager {
-        public static Color DefaultColor = Color.White;
-        public static Color MapDefinedColor = Color.DeepSkyBlue;
-        public static Color UserDefinedEvilColor = new Color(0.5f,0.5f,1f,0.2f);
-        public static Color UserDefinedCoolColor = new Color(1f,0.5f,0f,0.2f);
+        public static readonly Color DefaultColor = Color.White;
+        public static readonly Color MapDefinedColor = Color.DeepSkyBlue;
+        public static readonly Color UserDefinedEvilColor = new(0.5f,0.5f,1f,0.2f);
+        public static readonly Color UserDefinedCoolColor = new(1f,0.5f,0f,0.2f);
 
         public class OptionData {
             public Option Id;
@@ -36,38 +30,39 @@ namespace Celeste.Mod.GooberHelper {
             public float EnumMax;
 
             public OptionData(Option option, OptionType type = OptionType.Boolean, float defaultValue = 0) {
-                this.Id = option;
-                this.Name = Enum.GetName(typeof(Option), option);
-                this.Type = type;
-                this.DefaultValue = defaultValue;
+                Id = option;
+                Name = Enum.GetName(typeof(Option), option);
+                Type = type;
+                DefaultValue = defaultValue;
             }
 
             public OptionData(Option option, Type enumType, OptionType type, float defaultValue) {
-                this.Id = option;
-                this.Name = Enum.GetName(typeof(Option), option);
-                this.Type = type;
-                this.EnumType = enumType;
-                this.DefaultValue = defaultValue;
-                this.EnumMax = Enum.GetValues(enumType).Length;
+                Id = option;
+                Name = Enum.GetName(typeof(Option), option);
+                Type = type;
+                EnumType = enumType;
+                DefaultValue = defaultValue;
+                EnumMax = Enum.GetValues(enumType).Length;
             }
 
             public OptionData(Option option, Type enumType, Enum defaultValue) {
-                this.Id = option;
-                this.Name = Enum.GetName(typeof(Option), option);
-                this.EnumType = enumType;
-                this.Type = OptionType.Enum;
-                this.DefaultValue = Convert.ToSingle(defaultValue);
-                this.EnumMax = Enum.GetValues(enumType).Length - 1;
+                Id = option;
+                Name = Enum.GetName(typeof(Option), option);
+                EnumType = enumType;
+                Type = OptionType.Enum;
+                DefaultValue = Convert.ToSingle(defaultValue);
+                EnumMax = Enum.GetValues(enumType).Length - 1;
             }
 
-            public string GetDialogName() {
-                return Dialog.Clean($"gooberhelper_option_{this.Name}");
-            }
+            public string GetDialogName()
+                => Dialog.Clean($"gooberhelper_option_{Name}");
 
             public string GetDialogDescription() {
-                string id = $"gooberhelper_option_description_{this.Name}";
+                var id = $"gooberhelper_option_description_{this.Name}";
 
-                return Dialog.Has(id) ? Dialog.Clean(id) : "";
+                return Dialog.Has(id)
+                    ? Dialog.Clean(id)
+                    : "";
             }
         }
 
@@ -75,11 +70,13 @@ namespace Celeste.Mod.GooberHelper {
             public string Name;
             public Dictionary<Option, float> UserDefinedOptions;
 
+            //this is required for modsettings to work
+            //it will throw "Cannot dynamically create an instance of type '[this one]'. Reason: No parameterless constructor defined"
             public OptionsProfile() {}
 
             public OptionsProfile(string name, Dictionary<Option, float> userDefinedOptions) {
-                this.Name = name;
-                this.UserDefinedOptions = userDefinedOptions;
+                Name = name;
+                UserDefinedOptions = userDefinedOptions;
             }
 
             public static void Create(string name) {
@@ -88,7 +85,7 @@ namespace Celeste.Mod.GooberHelper {
             }
 
             public static OptionsProfile CreateFromImport() {
-                OptionsProfile deserializedProfile = Deserialize(TextInput.GetClipboardText());
+                var deserializedProfile = Deserialize(TextInput.GetClipboardText());
 
                 deserializedProfile.Name = Utils.PreventNameCollision(deserializedProfile.Name, GooberHelperModule.Settings.OptionsProfiles);
 
@@ -98,13 +95,11 @@ namespace Celeste.Mod.GooberHelper {
                 return deserializedProfile;
             }
 
-            public static void Load(string name) {
-                GooberHelperModule.Settings.UserDefinedOptions = GooberHelperModule.Settings.OptionsProfiles[name].UserDefinedOptions.ToDictionary();
-            }
+            public static void Load(string name)
+                => GooberHelperModule.Settings.UserDefinedOptions = GooberHelperModule.Settings.OptionsProfiles[name].UserDefinedOptions.ToDictionary();
 
-            public static void Save(string name) {
-                GooberHelperModule.Settings.OptionsProfiles[name].UserDefinedOptions = GooberHelperModule.Settings.UserDefinedOptions.ToDictionary();
-            }
+            public static void Save(string name)
+                => GooberHelperModule.Settings.OptionsProfiles[name].UserDefinedOptions = GooberHelperModule.Settings.UserDefinedOptions.ToDictionary();
 
             public static void Rename(string from, string to) {
                 if(from == to) return;
@@ -118,8 +113,8 @@ namespace Celeste.Mod.GooberHelper {
             }
 
             public static OptionsProfile Duplicate(string name, out int insertionIndex) {
-                OptionsProfile duplicate = new OptionsProfile(
-                    name: Utils.CreateCopyName(name, GooberHelperModule.Settings.OptionsProfiles, out string lastNameCollision),
+                var duplicate = new OptionsProfile(
+                    name: Utils.CreateCopyName(name, GooberHelperModule.Settings.OptionsProfiles, out var lastNameCollision),
                     userDefinedOptions: GooberHelperModule.Settings.OptionsProfiles[name].UserDefinedOptions.ToDictionary()
                 );
 
@@ -129,16 +124,13 @@ namespace Celeste.Mod.GooberHelper {
                 GooberHelperModule.Settings.OptionsProfileOrder.Insert(insertionIndex, duplicate.Name);
 
                 return duplicate;
-
-                //* barely ever
             }
 
-            public static void Export(string name) {
-                TextInput.SetClipboardText(GooberHelperModule.Settings.OptionsProfiles[name].Serialize());
-            }
+            public static void Export(string name)
+                => TextInput.SetClipboardText(GooberHelperModule.Settings.OptionsProfiles[name].Serialize());
 
             public static OptionsProfile Import(string name) {
-                OptionsProfile deserializedProfile = Deserialize(TextInput.GetClipboardText());
+                var deserializedProfile = Deserialize(TextInput.GetClipboardText());
 
                 GooberHelperModule.Settings.OptionsProfiles[name].UserDefinedOptions = deserializedProfile.UserDefinedOptions;
 
@@ -151,15 +143,14 @@ namespace Celeste.Mod.GooberHelper {
             }
 
             //this oop stuff is getting ridiculous
-            public static bool GetExists(string name) {
-                return GooberHelperModule.Settings.OptionsProfiles.ContainsKey(name);
-            }
+            public static bool GetExists(string name)
+                => GooberHelperModule.Settings.OptionsProfiles.ContainsKey(name);
 
             public string Serialize() {
                 List<byte> data = [];
-                byte[] nameBytes = Encoding.UTF8.GetBytes(Name);
+                var nameBytes = Encoding.UTF8.GetBytes(Name);
 
-                for(int i = 0; i < nameBytes.Length; i++) {
+                for(var i = 0; i < nameBytes.Length; i++) {
                     data.Add(nameBytes[i]);
                 }
 
@@ -168,8 +159,8 @@ namespace Celeste.Mod.GooberHelper {
                 //i shouldve just used a binary writer for this but it works and i dont want to redo it
                 //i didnt know those existed when writing this lmao
                 foreach(var pair in UserDefinedOptions) {
-                    byte[] keyBytes = BitConverter.GetBytes((ushort)pair.Key);
-                    byte[] valueBytes = BitConverter.GetBytes(pair.Value);
+                    var keyBytes = BitConverter.GetBytes((ushort)pair.Key);
+                    var valueBytes = BitConverter.GetBytes(pair.Value);
                     
                     data.Add(keyBytes[0]);
                     data.Add(keyBytes[1]);
@@ -204,7 +195,7 @@ namespace Celeste.Mod.GooberHelper {
                     }
                 }
 
-                int stringLength = Array.IndexOf(data, (byte)0);
+                var stringLength = Array.IndexOf(data, (byte)0);
 
                 if(stringLength == -1) {
                     throw new Exception("couldnt find the null termination of the options profile's name");
@@ -212,9 +203,9 @@ namespace Celeste.Mod.GooberHelper {
 
                 profile.Name = Encoding.UTF8.GetString(data, 0, stringLength);
 
-                for(int i = stringLength + 1; i < data.Length; i += 6) {
-                    Option key = (Option)BitConverter.ToUInt16(data, i);
-                    float value = BitConverter.ToSingle(data, i + 2);
+                for(var i = stringLength + 1; i < data.Length; i += 6) {
+                    var key = (Option)BitConverter.ToUInt16(data, i);
+                    var value = BitConverter.ToSingle(data, i + 2);
 
                     profile.UserDefinedOptions[key] = value;
                 }
@@ -229,44 +220,42 @@ namespace Celeste.Mod.GooberHelper {
             public bool ResetAll;
             public EntityID ID;
 
-            public static Regex ParsingRegex = new Regex(@"(?<key>[A-Z|a-z]+)($|:(\s+)?(?<value>[-\w\.]+))");
+            public static readonly Regex ParsingRegex = new(@"(?<key>[A-Z|a-z]+)($|:(\s+)?(?<value>[-\w\.]+))");
 
             public OptionChanges() {}
 
             public OptionChanges(EntityData data) {
-                this.ID = new EntityID(data.Level.Name, data.ID);
+                ID = new EntityID(data.Level.Name, data.ID);
 
-                this.Enable = ParseOptionsString(data.Attr("enable"));
-                this.Disable = ParseOptionsString(data.Attr("disable"));
-                this.ResetAll = data.Bool("resetAll");
+                Enable = ParseOptionsString(data.Attr("enable"));
+                Disable = ParseOptionsString(data.Attr("disable"));
+                ResetAll = data.Bool("resetAll");
             }
 
             public static Dictionary<Option, float> ParseOptionsString(string str) {
-                Dictionary<Option, float> options = new();
+                var options = new Dictionary<Option, float>();
 
                 if(str.Length == 0) return options;
 
-                foreach(string assignment in str.Split(",")) {
-                    Match match = ParsingRegex.Match(assignment);
+                foreach(var assignment in str.Split(",")) {
+                    var match = ParsingRegex.Match(assignment);
 
                     if(match.Success) {
-                        if(!match.Groups.TryGetValue("key", out Group keyGroup)) {
+                        if(!match.Groups.TryGetValue("key", out var keyGroup))
                             Logger.Warn("GooberHelper", $"Weird assignment \"{assignment}\"");
-                        }
 
-                        if(!Enum.TryParse(keyGroup.Value, false, out Option option)) {
+                        if(!Enum.TryParse(keyGroup.Value, false, out Option option))
                             Logger.Warn("GooberHelper", $"Failed to parse {keyGroup.Value} as an option name!");
-                        }
 
                         float value = 1;
 
-                        if(match.Groups.TryGetValue("value", out Group valueGroup) && valueGroup.Success) {
-                            string valueString = valueGroup.Value;
+                        if(match.Groups.TryGetValue("value", out var valueGroup) && valueGroup.Success) {
+                            var valueString = valueGroup.Value;
 
-                            if(float.TryParse(valueString, out float floatValue)) {
+                            if(float.TryParse(valueString, out var floatValue)) {
                                 value = floatValue;
                             } else if(Options[option].EnumType != null) {
-                                if(Enum.TryParse(Options[option].EnumType, valueString, true, out object enumValue)) {
+                                if(Enum.TryParse(Options[option].EnumType, valueString, true, out var enumValue)) {
                                     value = (int)enumValue;
                                 } else {
                                     Logger.Warn("GooberHelper", $"Failed to parse {valueString} as an option enum value!");
@@ -285,39 +274,20 @@ namespace Celeste.Mod.GooberHelper {
                 if(ResetAll) {
                     ResetAll(OptionSetter.Map);
                 } else {
-                    foreach(var pair in Disable) {
+                    foreach(var pair in Disable)
                         ResetOptionValue(pair.Key, OptionSetter.Map);
-                    }
                 }
 
-                foreach(var pair in Enable) {
+                foreach(var pair in Enable)
                     SetOptionValue(pair.Key, pair.Value, OptionSetter.Map);
-                }
             }
 
             public static void UpdateStack() {
                 GooberHelperModule.Session.MapDefinedOptions.Clear();
 
-                // Console.WriteLine("updating stack");
-
-                foreach(var changes in GooberHelperModule.Session.Stack) {
+                foreach(var changes in GooberHelperModule.Session.Stack)
                     changes.Apply();
-                }
             }
-
-            // public static OptionChanges GetEntityOptionChanges(EntityData data) {
-            //     EntityID id = new(data.Level.Name, data.ID);
-
-            //     if(GooberHelperModule.Session.EntityOptionChanges.TryGetValue(id, out OptionChanges value)) {
-            //         return value;
-            //     } else {
-            //         OptionChanges changes = new OptionChanges(data);
-
-            //         GooberHelperModule.Session.EntityOptionChanges[id] = changes;
-
-            //         return changes;
-            //     }
-            // }
         }
 
         public enum OptionSetter {
@@ -334,69 +304,75 @@ namespace Celeste.Mod.GooberHelper {
             Enum
         }
 
-        public static float GetOptionValue(Option option) {
-            return 
-                GooberHelperModule.Settings.UserDefinedOptions.TryGetValue(option, out float userValue) ? userValue :
-                GooberHelperModule.Session?.MapDefinedOptions.TryGetValue(option, out float mapValue) == true ? mapValue :
-                Options[option].DefaultValue;
-        }
+        public static float GetOptionValue(Option option)
+            => GooberHelperModule.Settings.UserDefinedOptions.TryGetValue(option, out var userValue)
+                ? userValue
+            
+            : GooberHelperModule.Session?.MapDefinedOptions.TryGetValue(option, out var mapValue) == true
+                ? mapValue
+            
+            : Options[option].DefaultValue;
 
         //i would just reference GetOptionValue here but that would be a few extra instructions and im really cautious about performance stuff
         //the compiler would probably inline it but whatever
-        public static bool GetOptionBool(Option option) {
-            return
-                GooberHelperModule.Settings.UserDefinedOptions.TryGetValue(option, out float userValue) ? userValue >= 1 :
-                GooberHelperModule.Session?.MapDefinedOptions.TryGetValue(option, out float mapValue) == true ? mapValue >= 1 :
-                Options[option].DefaultValue == 1;
-        }
+        public static bool GetOptionBool(Option option)
+            => GooberHelperModule.Settings.UserDefinedOptions.TryGetValue(option, out var userValue)
+                ? userValue >= 1
+
+            : GooberHelperModule.Session?.MapDefinedOptions.TryGetValue(option, out var mapValue) == true
+                ? mapValue >= 1
+
+            : Options[option].DefaultValue == 1;
 
         //stupid dumb scuffed c# code
-        //this method is dumb dont use it
-        public static T GetOptionEnum<T>(Option option) where T : Enum {
-            return (T)Enum.ToObject(typeof(T),
-                GooberHelperModule.Settings.UserDefinedOptions.TryGetValue(option, out float userValue) ? userValue :
-                GooberHelperModule.Session?.MapDefinedOptions.TryGetValue(option, out float mapValue) == true ? mapValue :
-                Options[option].DefaultValue);
-        }
+        public static T GetOptionEnum<T>(Option option) where T : Enum
+            => (T)Enum.ToObject(typeof(T), (int)GetOptionValue(option));
 
         public static string GetOptionEnumName(Option option) {
-            Type type = Options[option].EnumType;
-
-            float value = MathF.Floor(Math.Max(GetOptionValue(option), -Options[option].EnumMax));
+            var type = Options[option].EnumType;
+            var value = MathF.Floor(Math.Max(GetOptionValue(option), -Options[option].EnumMax));
 
             return Dialog.Clean($"gooberhelper_enum_{type.GetEnumName((int)(value > Options[option].Max ? 0 : value))}");
         }
 
-        public static OptionSetter GetOptionSetter(Option option) {
-            return
-                GooberHelperModule.Settings.UserDefinedOptions.ContainsKey(option) ? OptionSetter.User :
-                GooberHelperModule.Session?.MapDefinedOptions.ContainsKey(option) == true ? OptionSetter.Map :
-                OptionSetter.None;
-        }
+        public static OptionSetter GetOptionSetter(Option option)
+            => GooberHelperModule.Settings.UserDefinedOptions.ContainsKey(option)
+                ? OptionSetter.User
 
-        public static Color GetOptionColor(Option option) {
-            OptionSetter optionSetter = GetOptionSetter(option);
+            : GooberHelperModule.Session?.MapDefinedOptions.ContainsKey(option) == true
+                ? OptionSetter.Map
 
-            return 
-                optionSetter == OptionSetter.User ? (option == Option.GoldenBlocksAlwaysLoad ? UserDefinedCoolColor : UserDefinedEvilColor) :
-                optionSetter == OptionSetter.Map ? MapDefinedColor :
-                DefaultColor;
-        }
+            : OptionSetter.None;
 
-        public static float GetOptionMapDefinedValueOrDefault(Option option) {
-            return GooberHelperModule.Session?.MapDefinedOptions.TryGetValue(option, out float value) == true ? value : Options[option].DefaultValue;
-        }
+        public static Color GetOptionColor(Option option)
+            => GetOptionSetter(option) switch {
+                OptionSetter.User => option == Option.GoldenBlocksAlwaysLoad
+                    ? UserDefinedCoolColor
+                    : UserDefinedEvilColor,
+                OptionSetter.Map => MapDefinedColor,
+                _ => DefaultColor
+            };
+
+        public static float GetOptionMapDefinedValueOrDefault(Option option)
+            => GooberHelperModule.Session?.MapDefinedOptions.TryGetValue(option, out var value) == true
+                ? value
+                : Options[option].DefaultValue;
 
         public static string GetEnabledOptionsString() {
-            string str = "";
+            var str = "";
 
-            foreach(KeyValuePair<Option, OptionData> pair in Options) {
-                if(GetOptionSetter(pair.Key) != OptionSetter.None) {
-                    str += $"{pair.Value.GetDialogName()}: {(
-                        pair.Value.Type == OptionType.Boolean ? GetOptionBool(pair.Key).ToString() :
-                        pair.Value.Type == OptionType.Enum || (pair.Value.EnumType != null && GetOptionValue(pair.Key) < 0) ? GetOptionEnumName(pair.Key).ToString() :
-                        GetOptionValue(pair.Key).ToString() + pair.Value.Suffix)}\n";
-                }
+            foreach(var pair in Options) {
+                if(GetOptionSetter(pair.Key) == OptionSetter.None)
+                    continue;
+
+                str += $"{pair.Value.GetDialogName()}: {(
+                    pair.Value.Type == OptionType.Boolean
+                        ? GetOptionBool(pair.Key).ToString()
+
+                    : pair.Value.Type == OptionType.Enum || (pair.Value.EnumType != null && GetOptionValue(pair.Key) < 0)
+                        ? GetOptionEnumName(pair.Key).ToString()
+
+                    : GetOptionValue(pair.Key).ToString() + pair.Value.Suffix)}\n";
             }
 
             return str;
@@ -405,7 +381,9 @@ namespace Celeste.Mod.GooberHelper {
         public static bool SetOptionValue(Option option, float value, OptionSetter setter) {
             if(setter == OptionSetter.User) {
                 GooberHelperModule.Settings.UserDefinedOptions[option] = value;
-                float neutralValue = GooberHelperModule.Session?.MapDefinedOptions.TryGetValue(option, out float v) == true ? v : Options[option].DefaultValue;
+                var neutralValue = GooberHelperModule.Session?.MapDefinedOptions.TryGetValue(option, out var v) == true
+                    ? v
+                    : Options[option].DefaultValue;
 
                 if(value == neutralValue) {
                     GooberHelperModule.Settings.UserDefinedOptions.Remove(option);
@@ -434,96 +412,188 @@ namespace Celeste.Mod.GooberHelper {
         }
 
         public static void ResetCategory(string category, OptionSetter setter) {
-            if(setter == OptionSetter.User) {
-                foreach(OptionData optionData in Categories[category]) {
-                    GooberHelperModule.Settings.UserDefinedOptions.Remove(optionData.Id);
-                }
-            }
+            if(setter != OptionSetter.User)
+                return;
+
+            foreach(var optionData in Categories[category])
+                GooberHelperModule.Settings.UserDefinedOptions.Remove(optionData.Id);
         }
 
         public static Color GetCategoryColor(string category) {
-            Color color = DefaultColor;
+            var color = DefaultColor;
 
-            if(!Categories.ContainsKey(category)) return color;
+            if(!Categories.TryGetValue(category, out var categoryOptions))
+                return color;
 
-            foreach(OptionData optionData in Categories[category]) {
+            foreach(var optionData in categoryOptions) {
                 if(GooberHelperModule.Settings.UserDefinedOptions.ContainsKey(optionData.Id)) {
-                    if(optionData.Id != Option.GoldenBlocksAlwaysLoad) return UserDefinedEvilColor;
+                    if(optionData.Id != Option.GoldenBlocksAlwaysLoad)
+                        return UserDefinedEvilColor;
 
                     color = UserDefinedCoolColor;
                 }
 
-                if(GooberHelperModule.Session?.MapDefinedOptions.ContainsKey(optionData.Id) == true && color == DefaultColor) color = MapDefinedColor;
+                if(GooberHelperModule.Session?.MapDefinedOptions.ContainsKey(optionData.Id) == true && color == DefaultColor)
+                    color = MapDefinedColor;
             }
 
             return color;
         }
 
         public static void ResetAll(OptionSetter setter) {
-            if(setter == OptionSetter.User) {
+            if(setter == OptionSetter.User)
                 GooberHelperModule.Settings.UserDefinedOptions.Clear();
-            }
         }
 
-        public static bool GetUserEnabledEvilOption() {
-            return GooberHelperModule.Settings.UserDefinedOptions.Any(a =>
+        public static bool GetUserEnabledEvilOption()
+            => GooberHelperModule.Settings.UserDefinedOptions.Any(a =>
                 Options[a.Key].Category != "Visuals" &&
                 a.Key != Option.GoldenBlocksAlwaysLoad &&
                 a.Key != Option.ShowActiveOptions
             );
-        }
 
-        public static bool GetUserEnabledCoolOption() {
-            return GooberHelperModule.Settings.UserDefinedOptions.TryGetValue(Option.GoldenBlocksAlwaysLoad, out float value) && value == 1;
-        }
+        public static bool GetUserEnabledCoolOption()
+            => GooberHelperModule.Settings.UserDefinedOptions.TryGetValue(Option.GoldenBlocksAlwaysLoad, out var value) && value == 1;
 
-        public static Color GetGlobalColor() {
-            // Vector3 color = new Vector3();
-            // float count = 0;
-
-            // if(GetUserEnabledEvilOption()) {
-            //     color += UserDefinedEvilColor.ToVector3();
-
-            //     count++;
-            // }
-
-            // if(GetUserEnabledCoolOption()) {
-            //     color += UserDefinedCoolColor.ToVector3();
-
-            //     count++;
-            // }
-
-            // if(GooberHelperModule.Session.MapDefinedOptions.Count > 0) {
-            //     color += MapDefinedColor.ToVector3();
-
-            //     count++;
-            // }
-
-            // if(count == 0) return DefaultColor;
-
-            // return new Color(color/count);
+        public static Color GetGlobalColor()
+            => GetUserEnabledEvilOption()
+                ? UserDefinedEvilColor
             
-            return 
-                GetUserEnabledEvilOption() ? UserDefinedEvilColor :
-                GetUserEnabledCoolOption() ? UserDefinedCoolColor :
-                GooberHelperModule.Session?.MapDefinedOptions.Count > 0 ? MapDefinedColor :
-                DefaultColor;
+            : GetUserEnabledCoolOption()
+                ? UserDefinedCoolColor
+
+            : GooberHelperModule.Session?.MapDefinedOptions.Count > 0
+                ? MapDefinedColor
+
+            : DefaultColor;
+        
+        public static bool TryParseOptionValue(Option option, string value, out float result, out List<string> possibleEnumKeys) {
+            possibleEnumKeys = [];
+
+            var optionData = Options[option];
+            var enumType = optionData.EnumType;
+            var underlyingEnumType = Enum.GetUnderlyingType(enumType);
+
+            if(float.TryParse(value, out var floatValue)) {
+                if(Enum.GetName(optionData.EnumType, Convert.ChangeType(floatValue, underlyingEnumType)) is string enumKeyFromFloat)
+                    possibleEnumKeys.Add(enumKeyFromFloat);
+
+                result = floatValue;
+                
+                return true;
+            }
+
+            if(Enum.TryParse(enumType, value, ignoreCase: true, out var parsedEnumValue)) {
+                possibleEnumKeys.Add(Enum.GetName(enumType, parsedEnumValue));
+                result = Convert.ToSingle(parsedEnumValue);
+
+                return true;
+            }
+
+            foreach(var name in Enum.GetNames(enumType)) {
+                var dialogName = Dialog.Clean($"gooberhelper_enum_{name}");
+
+                if(
+                    dialogName.Contains(value, StringComparison.InvariantCultureIgnoreCase) ||
+                    value.Contains(dialogName, StringComparison.InvariantCultureIgnoreCase) ||
+
+                    name.Contains(value, StringComparison.InvariantCultureIgnoreCase) ||
+                    value.Contains(name, StringComparison.InvariantCultureIgnoreCase)
+                ) {
+                    possibleEnumKeys.Add(name);
+                }
+            }
+
+            if(possibleEnumKeys.FirstOrDefault() is string enumKey) {
+                result = Convert.ToSingle(Enum.Parse(enumType, enumKey));
+
+                return true;
+            }
+
+            result = 0f;
+
+            return false;
         }
 
-        // [Command("goob", "")]
-        // public static void CmdGoob() {
-        //     Engine.Commands.Log("Session.MapDefinedOptions:");
-        //     foreach(var pair in GooberHelperModule.Session.MapDefinedOptions) {
-        //         Engine.Commands.Log($"- {pair.Key}: {pair.Value}");
-        //     }
+        public static void ResetOptionValueFromString(string optionNameString, OptionSetter setter) {
+            if(!Enum.TryParse<Option>(optionNameString, true, out var option)) {
+                Engine.Commands.Log($"[GooberHelper] {optionNameString} is not a valid option!");
 
-        //     Engine.Commands.Log("Settings.UserDefinedOptions:");
-        //     foreach(var pair in GooberHelperModule.Settings.UserDefinedOptions) {
-        //         Engine.Commands.Log($"- {pair.Key}: {pair.Value}");
-        //     }
-        // }
+                return;
+            }
 
-        //maybe sort these chronologically?
+            ResetOptionValue(option, setter);
+        }
+
+        public static void SetOptionValueFromStrings(string optionNameString, string optionValueString, OptionSetter setter) {
+            if(!Enum.TryParse<Option>(optionNameString, true, out var option)) {
+                Engine.Commands.Log($"[GooberHelper] {optionNameString} is not a valid option!");
+
+                return;
+            }
+
+            if(optionNameString is null) {
+                Engine.Commands.Log($"[GooberHelper] please provide an argument for the option name");
+
+                return;
+            }
+
+            if(optionValueString is null) {
+                Engine.Commands.Log($"[GooberHelper] please provide an argument for the option value");
+
+                return;
+            }
+
+            var optionEnum = Options[option].EnumType;
+
+            void logEnumKeys() {
+                var builder = new StringBuilder($"[GooberHelper] the valid enum keys for {option} are\n");
+
+                foreach(var value in Enum.GetValues(optionEnum))
+                    builder.Append($"- {value} ({Convert.ToSingle(value)})\n");
+
+                builder.Length--;
+
+                Engine.Commands.Log(builder);
+            }
+            
+            if(TryParseOptionValue(option, optionValueString, out var parsedOptionValue, out var possibleEnumKeys)) {
+                if(possibleEnumKeys.Count > 1) {
+                    Engine.Commands.Log($"[GooberHelper] found ambiguity between {Utils.JoinList(possibleEnumKeys)} when trying to parse {optionValueString}!!!");
+                    
+                    logEnumKeys();
+                }
+                
+                SetOptionValue(option, parsedOptionValue, setter);
+
+                Engine.Commands.Log($"[GooberHelper] set {option} to {parsedOptionValue}" + (possibleEnumKeys.Count > 0 ? $" ({possibleEnumKeys.First()})" : ""));
+            } else {
+                Engine.Commands.Log($"[GooberHelper] couldnt parse {optionValueString}!!!");
+                    
+                logEnumKeys();
+            }
+        }
+        
+        //setters
+        [Command("set_gooberhelper_option_map", "sets a gooberhelper option value on the map level (session)")]
+        public static void CmdSetGooberhelperOptionMap(string optionNameString, string optionValueString)
+            => SetOptionValueFromStrings(optionNameString, optionValueString, OptionSetter.Map);
+
+        //holy ugly
+        [Command("set_gooberhelper_option_user", "sets a gooberhelper option value on the user level (settings)")]
+        public static void CmdSetGooberhelperOptionUser(string optionNameString, string optionValueString)
+            => SetOptionValueFromStrings(optionNameString, optionValueString, OptionSetter.User);
+
+        //resetters
+        [Command("reset_gooberhelper_option_map", "resets a gooberhelper option value on the map level (session)")]
+        public static void CmdResetGooberhelperOptionMap(string optionNameString)
+            => ResetOptionValueFromString(optionNameString, OptionSetter.Map);
+
+        //the comments are only for separation
+        [Command("reset_gooberhelper_option_user", "resets a gooberhelper option value on the user level (settings)")]
+        public static void CmdResetGooberhelperOptionUser(string optionNameString)
+            => ResetOptionValueFromString(optionNameString, OptionSetter.User);
+
         public enum Option {
             //jumping
             JumpInversion,
@@ -532,7 +602,7 @@ namespace Celeste.Mod.GooberHelper {
             HyperAndSuperSpeedPreservation,
             UpwardsJumpSpeedPreservationThreshold,
             DownwardsJumpSpeedPreservationThreshold,
-            BounceSpeedPreservation,
+            BounceHelperBounceSpeedPreservation,
 
             GetClimbjumpSpeedInRetention,
             AdditiveVerticalJumpSpeed,
@@ -553,6 +623,7 @@ namespace Celeste.Mod.GooberHelper {
 
             DashesDontResetSpeed,
             KeepDashAttackOnCollision,
+            DownDemoDashing,
 
             //moving
             CobwobSpeedInversion,
@@ -584,6 +655,7 @@ namespace Celeste.Mod.GooberHelper {
             RemoveNormalEnd,
             LenientStunning,
             HoldablesInheritSpeedWhenThrown,
+            FastFallHitboxSquish,
 
             AllowCrouchedHoldableGrabbing,
             AllowUpwardsClimbGrabbing,
@@ -592,8 +664,9 @@ namespace Celeste.Mod.GooberHelper {
             AllowClimbingInDashState,
             CoreBlockAllDirectionActivation,
             AllowWindWhileDashing,
-            LiftBoostAdditionHorizontal,
-            LiftBoostAdditionVertical,
+            LiftboostAdditionHorizontal,
+            LiftboostAdditionVertical,
+            AdvantageousLiftBoost,
             ReverseBackboosts,
 
             //visuals
@@ -632,8 +705,8 @@ namespace Celeste.Mod.GooberHelper {
         public enum AllDirectionHypersAndSupersValue {
             None,
             RequireGround,
-            WorkWithCoyoteTime,
-            WorkWithCoyoteTimeAndDontRefill
+            WorkWithCoyoteTimeAndDontRefill,
+            WorkWithCoyoteTime
         }
 
         public enum VerticalToHorizontalSpeedOnGroundJumpValue {
@@ -700,6 +773,12 @@ namespace Celeste.Mod.GooberHelper {
             Magnitude,
         }
 
+        public enum AllowUpwardsClimbGrabbingValue {
+            None,
+            WhileHoldingUp,
+            Always
+        }
+
         //the order within categories is
         //- speed preservation
         //- new thing
@@ -711,7 +790,7 @@ namespace Celeste.Mod.GooberHelper {
         //preservation = it preserves speed
         //inversion -> it preserves speed AND the player can decide which direction to go 
 
-        public static Dictionary<string, List<OptionData>> Categories = new() {
+        public static readonly Dictionary<string, List<OptionData>> Categories = new() {
             { "Jumping", [
                 //goodbye buhbu 💗 i will love you forever
                 // new OptionData(Option.buhbu, OptionType.Float, 0) { min = 0, max = 10, growthFactor = 10, suffix = " frames" },
@@ -723,7 +802,7 @@ namespace Celeste.Mod.GooberHelper {
                 new OptionData(Option.HyperAndSuperSpeedPreservation),
                 new OptionData(Option.UpwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Integer, -1) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
                 new OptionData(Option.DownwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Integer, -1) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
-                new OptionData(Option.BounceSpeedPreservation),
+                new OptionData(Option.BounceHelperBounceSpeedPreservation),
 
                 new OptionData(Option.GetClimbjumpSpeedInRetention),
                 new OptionData(Option.AdditiveVerticalJumpSpeed),
@@ -744,6 +823,7 @@ namespace Celeste.Mod.GooberHelper {
                 
                 new OptionData(Option.DashesDontResetSpeed, typeof(DashesDontResetSpeedValue), DashesDontResetSpeedValue.None),
                 new OptionData(Option.KeepDashAttackOnCollision),
+                new OptionData(Option.DownDemoDashing),
             ]},
             { "Moving", [
                 new OptionData(Option.CobwobSpeedInversion, typeof(CobwobSpeedInversionValue), CobwobSpeedInversionValue.None),
@@ -775,16 +855,18 @@ namespace Celeste.Mod.GooberHelper {
                 new OptionData(Option.RemoveNormalEnd),
                 new OptionData(Option.LenientStunning),
                 new OptionData(Option.HoldablesInheritSpeedWhenThrown),
+                new OptionData(Option.FastFallHitboxSquish, OptionType.Float, 0) { Min = 0, Max = 100, Step = 5, Suffix = "%" },
 
                 new OptionData(Option.AllowCrouchedHoldableGrabbing),
-                new OptionData(Option.AllowUpwardsClimbGrabbing),
+                new OptionData(Option.AllowUpwardsClimbGrabbing, typeof(AllowUpwardsClimbGrabbingValue), AllowUpwardsClimbGrabbingValue.None),
                 new OptionData(Option.AllowCrouchedClimbGrabbing),
                 new OptionData(Option.ClimbingSpeedPreservation),
                 new OptionData(Option.AllowClimbingInDashState),
                 new OptionData(Option.CoreBlockAllDirectionActivation),
                 new OptionData(Option.AllowWindWhileDashing, typeof(AllowWindWhileDashingValue), AllowWindWhileDashingValue.None),
-                new OptionData(Option.LiftBoostAdditionHorizontal, OptionType.Float, 0) { Min = -10000, Max = 10000, Step = 5, Suffix = "px/s", ExponentialIncrease = true },
-                new OptionData(Option.LiftBoostAdditionVertical, OptionType.Float, 0) { Min = -10000, Max = 10000, Step = 5, Suffix = "px/s", ExponentialIncrease = true },
+                new OptionData(Option.LiftboostAdditionHorizontal, OptionType.Float, 0) { Min = -10000, Max = 10000, Step = 5, Suffix = "px/s", ExponentialIncrease = true },
+                new OptionData(Option.LiftboostAdditionVertical, OptionType.Float, 0) { Min = -10000, Max = 10000, Step = 5, Suffix = "px/s", ExponentialIncrease = true },
+                new OptionData(Option.AdvantageousLiftBoost),
                 new OptionData(Option.ReverseBackboosts),
             ]},
             { "Visuals", [
@@ -804,10 +886,10 @@ namespace Celeste.Mod.GooberHelper {
         };
 
         private static Dictionary<Option, OptionData> createOptionsFromCategories() {
-            Dictionary<Option, OptionData> dict = [];
+            var dict = new Dictionary<Option, OptionData>();
 
-            foreach(KeyValuePair<string, List<OptionData>> pair in Categories) {
-                foreach(OptionData option in pair.Value) {
+            foreach(var pair in Categories) {
+                foreach(var option in pair.Value) {
                     dict[option.Id] = option;
 
                     option.Category = pair.Key;
@@ -817,6 +899,6 @@ namespace Celeste.Mod.GooberHelper {
             return dict;
         }
 
-        public static Dictionary<Option, OptionData> Options = createOptionsFromCategories();
+        public static readonly Dictionary<Option, OptionData> Options = createOptionsFromCategories();
     }
 }

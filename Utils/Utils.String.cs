@@ -1,8 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
-using Celeste.Mod.GooberHelper.Components;
-using Microsoft.Xna.Framework;
-using static Celeste.Mod.GooberHelper.OptionsManager;
 
 namespace Celeste.Mod.GooberHelper {
     public static partial class Utils {
@@ -54,33 +53,75 @@ namespace Celeste.Mod.GooberHelper {
             return newName;
         }
 
-        public static Vector2 GetConservedSpeed(this Player self) {
-            var c = GooberPlayerExtensions.Instance;
-            var conserveBeforeDashSpeed = GetOptionBool(Option.ConserveBeforeDashSpeed) && self.StateMachine.State == 2;
+        public static string JoinList(IEnumerable<string> strings, string conjunction = "and") {
+            var count = strings.Count();
 
-            return new Vector2(
-                SignedAbsMax(
-                    self.Speed.X,
-                    self.wallSpeedRetentionTimer > 0f
-                        ? self.wallSpeedRetained
-                        : 0f,
-                    conserveBeforeDashSpeed
-                        ? self.beforeDashSpeed.X
-                        : 0f,
-                    conserveBeforeDashSpeed && c.DashStickyRetentionExists
-                        ? c.DashStickyRetentionSpeed.X
-                        : 0f
-                ),
-                SignedAbsMax(
-                    self.Speed.Y,
-                    conserveBeforeDashSpeed
-                        ? self.beforeDashSpeed.Y
-                        : 0f,
-                    conserveBeforeDashSpeed && c.DashStickyRetentionExists
-                        ? c.DashStickyRetentionSpeed.Y
-                        : 0f
-                )
-            );
+            if(count == 1)
+                return strings.First();
+            
+            if(count == 2)
+                return $"{strings.First()} {conjunction} {strings.ElementAt(1)}";
+
+            var builder = new StringBuilder();
+            var enumerator = strings.GetEnumerator();
+
+            for(var i = 0; i < count - 1; i++) {
+                enumerator.MoveNext();
+
+                builder.Append(enumerator.Current);
+                builder.Append(", ");
+            }
+
+            enumerator.MoveNext();
+
+            builder.Append(conjunction + " ");
+            builder.Append(enumerator.Current);
+
+            return builder.ToString();
+        }
+
+        public static string CreateDiff(string original, string changed) {
+            var netural = AnsiReset + "  ";
+            var positive = GetAnsiColorCode(new Color(0, 255, 0)) + "+ ";
+            var negative = GetAnsiColorCode(new Color(255, 0, 0)) + "- ";
+
+            var builder = new StringBuilder();
+
+            var originalLines = original.Split('\n');
+            var changedLines = changed.Split('\n');
+
+            var originalLineIndex = 0;
+            var changedLineIndex = 0;
+
+            while(originalLineIndex < originalLines.Length || changedLineIndex < changedLines.Length) {
+                for(var changedOffset = 0; changedOffset < 20; changedOffset++) {
+                    for(var originalOffset = 0; originalOffset < 20; originalOffset++) {
+                        var originalLine = originalLines.ElementAtOrDefault(originalLineIndex + originalOffset);
+                        var changedLine = changedLines.ElementAtOrDefault(changedLineIndex + changedOffset);
+                        
+                        if(originalLine != changedLine)
+                            continue;
+                        
+                        for(var i = 0; i < originalOffset; i++)
+                            builder.Append(negative + originalLines.ElementAtOrDefault(originalLineIndex + i) + "\n");
+                            
+                        for(var i = 0; i < changedOffset; i++)
+                            builder.Append(positive + changedLines.ElementAtOrDefault(changedLineIndex + i) + "\n");
+                        
+                        builder.Append(netural + originalLines.ElementAtOrDefault(originalLineIndex + originalOffset) + "\n");
+                    
+                        originalLineIndex += originalOffset + 1;
+                        changedLineIndex += changedOffset + 1;
+                    
+                        goto getOut;    
+                    }
+                }
+                
+                //cursed
+                getOut:;
+            }
+
+            return builder.ToString();
         }
     }
 }

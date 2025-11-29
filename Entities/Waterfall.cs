@@ -1,48 +1,44 @@
-using Monocle;
-using Microsoft.Xna.Framework;
 using Celeste.Mod.Entities;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
+using Celeste.Mod.GooberHelper.Attributes.Hooks;
 
 namespace Celeste.Mod.GooberHelper.Entities {
 
     [CustomEntity("GooberHelper/Waterfall")]
     [TrackedAs(typeof(Water))]
     public class Waterfall : Water {
-
         private MTexture splashTexture = GFX.Game["objs/waterfall/GooberHelper/fade"];
         private MTexture noiseTexture;
-        public bool nonCollidable = false;
 
-        bool playerInside = false;
-        float speed = 200f;
+        private bool nonCollidable = false;
 
-        List<Vector4> splashes = new List<Vector4>();
+        private bool playerInside = false;
+        private float speed = 200f;
+
+        List<Vector4> splashes = [];
 
         public Waterfall(EntityData data, Vector2 offset) : base(data.Position + offset, false, false, data.Width, data.Height) {
-            this.Depth = -9999;
+            nonCollidable = data.Bool("nonCollidable", false);
+            Depth = -9999;
 
-            this.nonCollidable = data.Bool("nonCollidable", false);
-
-            // Collider = new Hitbox(16f, 16f, -8f, -8f);
             Add(new PlayerCollider(onPlayer, null, Collider));
         }
 
-        public override void Added(Scene scene)
-        {
-            for(int i = 0; i < this.Width / 2; i++) {
-                float angle = Random.Shared.NextAngle();
+        public override void Added(Scene scene) {
+            for(var i = 0; i < Width / 2; i++) {
+                var angle = Random.Shared.NextAngle();
 
-                this.splashes.Add(new Vector4((float)i * 2f, (float)Math.Cos(angle), (float)Math.Sin(angle), Random.Shared.NextFloat()));
+                splashes.Add(new Vector4(i * 2f, MathF.Cos(angle), MathF.Sin(angle), Random.Shared.NextFloat()));
             }
 
             base.Added(scene);
         }
 
         private void onPlayer(Player player) {
-            if(this.nonCollidable) return;
+            if(nonCollidable)
+                return;
 
             player.MoveV(speed * Engine.DeltaTime);
         }
@@ -50,61 +46,72 @@ namespace Celeste.Mod.GooberHelper.Entities {
         public override void Update() {
             base.Update();
 
-            if(this.nonCollidable) return;
+            if(nonCollidable)
+                return;
 
-            if(!base.CollideCheck<Player>() && playerInside) {
-                Engine.Scene.Tracker.GetEntity<Player>().Speed.Y += speed;
-            }
+            var player = CollideFirst<Player>();
 
+            if(player is null && playerInside)
+                player.Speed.Y += speed;
 
-            playerInside = base.CollideCheck<Player>();
+            playerInside = player is not null;
         }
 
         public override void Render() {
             base.Render();
 
-            int scroll = 128 - ((int)(Scene.TimeActive * 96) % 128);
-            int scrollOverlay = 128 - ((int)(Scene.TimeActive * 192) % 128);
+            var scroll = 128 - ((int)(Scene.TimeActive * 96) % 128);
+            var scrollOverlay = 128 - ((int)(Scene.TimeActive * 192) % 128);
 
-            int padding = 3;
+            var padding = 3;
 
-            for(int i = 0; i < Math.Ceiling(this.Height/128) + 1; i++) {
-                noiseTexture = new MTexture(GFX.Game["objs/waterfall/GooberHelper/noiseOverlay"], null, new Rectangle(0, scrollOverlay - i * 128, 128, (int)this.Height + padding), new Vector2(0, 0), 128, (int)this.Height + padding);
+            for(var i = 0; i < Math.Ceiling(Height/128) + 1; i++) {
+                noiseTexture = new MTexture(GFX.Game["objs/waterfall/GooberHelper/noiseOverlay"], null, new Rectangle(0, scrollOverlay - i * 128, 128, (int)Height + padding), new Vector2(0, 0), 128, (int)Height + padding);
 
-                for(int j = 0; j < Math.Ceiling(this.Width/128); j++) {
-                    if(j == Math.Floor(this.Width/128)) {
-                        noiseTexture = new MTexture(GFX.Game["objs/waterfall/GooberHelper/noiseOverlay"], null, new Rectangle(0, scrollOverlay - i * 128, (int)this.Width % 128, (int)this.Height + padding), new Vector2(0, 0), (int)this.Width % 128, (int)this.Height + padding);
-                    }
+                for(var j = 0; j < Math.Ceiling(Width/128); j++) {
+                    if(j == Math.Floor(Width/128))
+                        noiseTexture = new MTexture(GFX.Game["objs/waterfall/GooberHelper/noiseOverlay"], null, new Rectangle(0, scrollOverlay - i * 128, (int)Width % 128, (int)Height + padding), new Vector2(0, 0), (int)Width % 128, (int)Height + padding);
 
-                    noiseTexture.DrawJustified(base.Position + new Vector2(j * 128, i * 128 - (i > 0 ? scrollOverlay : 0)), Vector2.Zero);
+                    noiseTexture.DrawJustified(Position + new Vector2(j * 128, i * 128 - (i > 0 ? scrollOverlay : 0)), Vector2.Zero);
                 }
             }
 
-            foreach(Vector4 splash in splashes) {
-                Vector2 basePos = base.Position + new Vector2(splash.X, base.Height);
-                float len = 1.5f;
-                float fac = (base.Scene.TimeActive * 4f + splash.W * len) % len;
+            foreach(var splash in splashes) {
+                var basePos = Position + new Vector2(splash.X, Height);
+                var len = 1.5f;
+                var fac = (Scene.TimeActive * 4f + splash.W * len) % len;
 
-                Vector2 offset = new Vector2(splash.Y, splash.Z) * 32 * fac;
+                var offset = new Vector2(splash.Y, splash.Z) * 32 * fac;
 
-                float a = (len-fac) * 0.5f;
+                var a = (len - fac) * 0.5f;
 
                 splashTexture.DrawCentered(basePos + offset, new Color(a,a,a,a), 0.75f);
             }
         }
 
-        // public class Splash {
-        //     public Vector2 Position;
-        //     public float Angle;
+        //todo: REFACTOR THESE TO NOT EXIST; just make the entity noncollidable through the base class
+        [OnHook]
+        private static bool patch_Player_SwimCheck(On.Celeste.Player.orig_SwimCheck orig, Player self) {
+            if(self.CollideAll<Water>().Any(water => water is Waterfall && (water as Waterfall).nonCollidable))
+                return false;
+            
+            return orig(self);
+        }
 
-        //     public Splash(Vector2 position, float angle, float time) {
-        //         this.Position = position;
-        //         this.Angle = angle;
-        //     }
+        [OnHook]
+        private static bool patch_Player_SwimCheck(On.Celeste.Player.orig_SwimJumpCheck orig, Player self) {
+            if(self.CollideAll<Water>().Any(water => water is Waterfall && (water as Waterfall).nonCollidable))
+                return false;
+            
+            return orig(self);
+        }
 
-        //     public void Draw() {
-
-        //     }
-        // }
+        [OnHook]
+        private static bool patch_Player_UnderwaterMusicCheck(On.Celeste.Player.orig_UnderwaterMusicCheck orig, Player self) {
+            if(self.CollideAll<Water>().Any(water => water is Waterfall && (water as Waterfall).nonCollidable))
+                return false;
+            
+            return orig(self);
+        }
     }
 }

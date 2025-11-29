@@ -1,12 +1,15 @@
 using System;
+using Celeste.Mod.GooberHelper.Attributes;
 using Microsoft.Xna.Framework.Graphics;
 using MonoMod.ModInterop;
 
 namespace Celeste.Mod.GooberHelper.ModIntegration {
     [ModImportName("FrostHelper")]
     public static class FrostHelperAPI {
+        [OnLoad]
         public static void Load() {
-            if(Loaded) return;
+            if(Loaded)
+                return;
 
             typeof(FrostHelperAPI).ModInterop();
 
@@ -20,8 +23,10 @@ namespace Celeste.Mod.GooberHelper.ModIntegration {
 
     [ModImportName("ExtendedVariantMode")]
     public static class ExtendedVariantModeAPI {
+        [OnLoad]
         public static void Load() {
-            if(Loaded) return;
+            if(Loaded)
+                return;
 
             typeof(ExtendedVariantModeAPI).ModInterop();
 

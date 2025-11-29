@@ -1,11 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Celeste.Mod.GooberHelper.Helpers;
-using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
-using MonoMod.Utils;
 
 #nullable enable
 
@@ -19,10 +14,10 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
         public OnHookAttribute(Type declaringType, string methodName)
             => Targets = [(declaringType, methodName)];
 
-        public override void ApplyHooks(MethodInfo method) {
+        protected override void ApplyHooks(MethodInfo method) {
             foreach(var target in ResolvedTargets) {
                 Utils.Log($"applying {method} to target {target}...");
-
+                
                 AppliedHooks.Add(new Hook(target, method));
             }
         }

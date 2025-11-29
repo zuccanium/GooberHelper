@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Celeste.Mod.GooberHelper.Helpers;
-using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
 
@@ -16,14 +15,7 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
     
         //i could definitely just split this part but Qhatever
         public (Type DeclaringType, string MethodName)[] Targets = [];
-        public List<MethodInfo> ResolvedTargets = [];
-    
-        public static MethodInfo MaybeGetStateMachineTarget(MethodInfo method) {
-            if(method.GetStateMachineTarget() is MethodInfo stateMachineTarget)
-                return stateMachineTarget;
-
-            return method;
-        }
+        public List<MethodBase> ResolvedTargets = [];
     
         public static Type? GetType(string[] components, int startIndex, out int endIndex) {
             Utils.Log($"getting type with kinda signature {string.Join("_", components[startIndex..])}...");
@@ -55,26 +47,40 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
             return current;
         }
 
-        public static MethodInfo? GetMethod(Type declaringType, string[] components, int startIndex) {
+        public MethodBase? GetMethod(Type declaringType, string[] components, int startIndex) {
             Utils.Log($"getting method from type {declaringType} with kinda signature {string.Join("_", components[startIndex..])}...");
+            
+            var index = startIndex;
 
-            var name = components[startIndex];
+            var isProperty = false;
+
+            if(components[index] == "get" || components[index] == "set") {
+                index++;
+
+                isProperty = true;
+            }
+
+            var name = (isProperty ? components[index - 1] + "_" : null) + components[index];
             var orig_name = $"orig_{name}";
 
-            var methods = Array.Empty<MethodInfo>();
-        
-            var origAndNormalMethods = declaringType.GetMethods(Utils.BindingFlagsAll)
-                .Where(method => method.Name == name || method.Name == orig_name);
-        
-            var normalMethods = origAndNormalMethods
-                .Where(method => method.Name == name);
+            var methods = Array.Empty<MethodBase>();
 
-            methods = origAndNormalMethods.Count() == normalMethods.Count()
-                ? [..normalMethods]
-                : [..origAndNormalMethods.Where(method => method.Name == orig_name)];
+            if(components[index] == "ctor") {
+                methods = declaringType.GetConstructors(Utils.BindingFlagsAll);
+            } else {
+                var origAndNormalMethods = declaringType.GetMethods(Utils.BindingFlagsAll)
+                    .Where(method => method.Name == name || method.Name == orig_name);
+            
+                var normalMethods = origAndNormalMethods
+                    .Where(method => method.Name == name);
+
+                methods = origAndNormalMethods.Count() == normalMethods.Count()
+                    ? [..normalMethods]
+                    : [..origAndNormalMethods.Where(method => method.Name == orig_name)];
+            }
 
             if (methods.Length == 1)
-                return MaybeGetStateMachineTarget(methods[0]);
+                return TransformMethod(methods[0]);
 
             foreach(var method in methods) {
                 Utils.Log($"checking method {method} for compatibility with {string.Join("_", components[startIndex..])}...");
@@ -84,12 +90,12 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
 
                 for(var i = 0; i < parameters.Length; i++) {
                     var parameter = parameters[i];
-                    var component = components.ElementAtOrDefault(i + startIndex + 1);
+                    var component = components.ElementAtOrDefault(i + index + 1);
 
                     if(component is null)
                         continue;
 
-                    if(!parameter.ParameterType.Name.Contains(component)) {
+                    if(!parameter.ParameterType.Name.Contains(component, StringComparison.OrdinalIgnoreCase)) {
                         failed = true;
 
                         break;
@@ -99,7 +105,7 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
                 if(failed)
                     continue;
             
-                return MaybeGetStateMachineTarget(method);
+                return TransformMethod(method);
             }
         
             return null;
@@ -118,7 +124,7 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
 
             Utils.Log($"found {type} to be the type");
         
-            if(GetMethod(type, components, endIndex) is not MethodInfo method) {
+            if(GetMethod(type, components, endIndex) is not MethodBase method) {
                 Logger.Error("GooberHelper", $"couldnt resolve target method of hooking method {methodName}");
 
                 return;
@@ -131,7 +137,7 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
 
         public void ResolveTargets() {
             foreach(var target in Targets) {
-                if(GetMethod(target.DeclaringType, target.MethodName.Split("_"), 0) is not MethodInfo method) {
+                if(GetMethod(target.DeclaringType, target.MethodName.Split("_"), 0) is not MethodBase method) {
                     Logger.Error("GooberHelper", $"couldnt resolve target method of target {$"({target.DeclaringType}, {target.MethodName})"}");
 
                     return;
@@ -141,7 +147,9 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
             }
         }
 
-        public virtual void ApplyHooks(MethodInfo method) {}
+        protected virtual void ApplyHooks(MethodInfo method) {}
+        protected virtual MethodBase TransformMethod(MethodBase method)
+            => method;
 
         [OnLoad]
         public static void Load() {
@@ -180,22 +188,3 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
         }
     }
 }
-
-//js script to make more stupid ass constructors 
-/*
-let str = "";
-
-for(let i = 1; i < 16; i++) {
-    let params = new Array(i)
-        .fill(0)
-        .map((a, i) => `Type declaringType${i + 1}, string methodName${i + 1}`)
-        .join(", ");
-
-    let body = new Array(i)
-        .fill(0)
-        .map((a, i) => `(declaringType${i + 1}, methodName${i + 1})`)
-        .join(", ");
-    
-    str += `public BaseHookAttribute(${params}) => Targets = [${body}];\n`
-}
-*/

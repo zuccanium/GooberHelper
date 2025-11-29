@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Celeste.Mod.Entities;
-using Microsoft.Xna.Framework;
-using Monocle;
-using static Celeste.Mod.GooberHelper.OptionsManager;
+using Celeste.Mod.GooberHelper.Attributes;
 
-namespace Celeste.Mod.GooberHelper.Entities {
-
+namespace Celeste.Mod.GooberHelper.Triggers {
     [CustomEntity("GooberHelper/GooberPhysicsOptions")]
     [Tracked(false)]
     public class GooberPhysicsOptions : AbstractTrigger<GooberPhysicsOptions> {
@@ -53,13 +49,35 @@ namespace Celeste.Mod.GooberHelper.Entities {
             {"BadelineBossSpeedReversing", "BadelineBossSpeedPreservation"},
         }) {
             //backwards compatibility!!!!
-            this.SettingValues[Option.UpwardsJumpSpeedPreservationThreshold] = data.Bool("verticalDashSpeedPreservation") ? 240f : Options[Option.UpwardsJumpSpeedPreservationThreshold].DefaultValue;
-            if(data.Bool("cobwobSpeedInversion") && data.Bool("allowRetentionReverse")) this.SettingValues[Option.CobwobSpeedInversion] = (float)CobwobSpeedInversionValue.WorkWithRetention;
-            if(data.Bool("jumpInversion") && data.Bool("allowClimbJumpInversion")) this.SettingValues[Option.JumpInversion] = (float)JumpInversionValue.All;
-            if(data.Bool("allDirectionHypersAndSupers") && data.Bool("allDirectionHypersAndSupersWorkWithCoyoteTime")) this.SettingValues[Option.AllDirectionHypersAndSupers] = (float)AllDirectionHypersAndSupersValue.WorkWithCoyoteTime;
-            if(data.Bool("wallJumpSpeedInversion")) this.SettingValues[Option.WalljumpSpeedPreservation] = (float)WalljumpSpeedPreservationValue.Invert;
-            if(data.Bool("customFeathers")) this.SettingValues[Option.CustomFeathers] = (float)CustomFeathersValue.SkipIntro;
-            if(data.Bool("springSpeedPreservation")) this.SettingValues[Option.SpringSpeedPreservation] = (float)SpringSpeedPreservationValue.Invert;
+            SettingValues[Option.UpwardsJumpSpeedPreservationThreshold] = data.Bool("verticalDashSpeedPreservation")
+                ? 240f
+                : OptionsManager.Options[Option.UpwardsJumpSpeedPreservationThreshold].DefaultValue;
+            
+            if(data.Bool("cobwobSpeedInversion") && data.Bool("allowRetentionReverse"))
+                SettingValues[Option.CobwobSpeedInversion] = (float)CobwobSpeedInversionValue.WorkWithRetention;
+            
+            if(data.Bool("jumpInversion") && data.Bool("allowClimbJumpInversion"))
+                SettingValues[Option.JumpInversion] = (float)JumpInversionValue.All;
+            
+            if(data.Bool("allDirectionHypersAndSupers") && data.Bool("allDirectionHypersAndSupersWorkWithCoyoteTime"))
+                SettingValues[Option.AllDirectionHypersAndSupers] = (float)AllDirectionHypersAndSupersValue.WorkWithCoyoteTime;
+            
+            if(data.Bool("wallJumpSpeedInversion"))
+                SettingValues[Option.WalljumpSpeedPreservation] = (float)WalljumpSpeedPreservationValue.Invert;
+            
+            if(data.Bool("customFeathers"))
+                SettingValues[Option.CustomFeathers] = (float)CustomFeathersValue.SkipIntro;
+            
+            if(data.Bool("springSpeedPreservation"))
+                SettingValues[Option.SpringSpeedPreservation] = (float)SpringSpeedPreservationValue.Invert;
         }
+
+        [OnLoad]
+        public static new void Load()
+            => AbstractTrigger<GooberPhysicsOptions>.Load();
+
+        [OnUnload]
+        public static new void Unload()
+            => AbstractTrigger<GooberPhysicsOptions>.Unload();
     }
 }

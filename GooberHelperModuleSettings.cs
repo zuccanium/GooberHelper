@@ -1,67 +1,29 @@
 using System.Collections.Generic;
-using System.Linq;
-using Celeste.Mod.GooberHelper.UI;
 using Microsoft.Xna.Framework.Input;
 
 namespace Celeste.Mod.GooberHelper {
     public class GooberHelperModuleSettings : EverestModuleSettings {
         [SettingIgnore]
-        public Dictionary<OptionsManager.Option, float> UserDefinedOptions { get; set; } = new Dictionary<OptionsManager.Option, float>();
+        public Dictionary<Option, float> UserDefinedOptions { get; set; } = [];
 
         [SettingIgnore]
-        public Dictionary<string, OptionsManager.OptionsProfile> OptionsProfiles { get; set; } = new Dictionary<string, OptionsManager.OptionsProfile>();
+        public Dictionary<string, OptionsProfile> OptionsProfiles { get; set; } = [];
 
         [SettingIgnore]
-        public List<string> OptionsProfileOrder { get; set; } = new List<string>();
-
-        private bool fastMenuing = false;
-
+        public List<string> OptionsProfileOrder { get; set; } = [];
 
         //actual settings
-        [SettingName("GooberHelper_ShowOptionsInGame")]
         public bool ShowOptionsInGame { get; set; } = false;
-
         public bool DebugMapPhysics { get; set; } = false;
+        public bool FastMenuing { get; set; } = false;
 
-        public void CreateDebugMapPhysicsEntry(TextMenu menu, bool inGame) {
-            TextMenu.OnOff debugMapPhysics;
-
-            menu.Add(debugMapPhysics = new TextMenu.OnOff(
-                Dialog.Clean("GooberHelper_DebugMapPhysics"),
-                DebugMapPhysics
-            ));
-
-            debugMapPhysics.AddExplodingDescription(menu, Dialog.Clean("GooberHelper_DebugMapPhysics_description"));
-
-            var explodingDescription = menu.items[^1] as ExplodingDescription;
-
-            debugMapPhysics.OnValueChange += value => {
-                if(value)
-                    explodingDescription.Explode();
-                else
-                    explodingDescription.Unexplode();
-            };
-        }
-
-        [SettingName("GooberHelper_FastMenuing")]
-        public bool FastMenuing {
-            get => fastMenuing;
-            set {
-                fastMenuing = value;
-
-                GooberHelperModule.UpdateFastMenuing();
-            }
-        }
-
-        public bool GooberHelperOptionsButton { get; set; } = false;
-        public void CreateGooberHelperOptionsButtonEntry(TextMenu menu, bool inGame) =>
-            menu.Add(OuiGooberHelperOptions.CreateOptionsButton(menu, inGame, inGame));
-
-        public bool ResetAllOptionsButton { get; set; } = false;
-        public void CreateResetAllOptionsButtonEntry(TextMenu menu, bool inGame) =>
-            menu.Add(new TextMenu.Button(Dialog.Clean("menu_gooberhelper_reset_all_options")).Pressed(() => {
-                OptionsManager.ResetAll(OptionsManager.OptionSetter.User);
-            }));
+        //buttons
+        //theyre not public because i dont want them to be stored in the mod settings
+        //theyre not private because my ide will get mad at me for having private members with PascalCase names
+        //first ever use of protected
+        //awesome
+        protected object GooberHelperOptionsButton;
+        protected object ResetAllOptionsButton;
 
         //binds (the single one)
         [DefaultButtonBinding(Buttons.LeftTrigger, Keys.Tab)]

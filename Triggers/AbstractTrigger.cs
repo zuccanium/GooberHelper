@@ -1,14 +1,13 @@
-using Monocle;
-using Microsoft.Xna.Framework;
-using Celeste.Mod.Entities;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using static Celeste.Mod.GooberHelper.OptionsManager;
 
+//deprecated
 
-namespace Celeste.Mod.GooberHelper.Entities {
+namespace Celeste.Mod.GooberHelper.Triggers {
+    //this should absolutely go into the trigger class
+    //however the trigger class takes a generic argument and i really dont want to deal with any weird results from doing that
+    //sorry
     public class StackItem {
         public Dictionary<Option, float> SettingValues;
         public string Type;
@@ -22,9 +21,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
             this.ID = ID;
         }
     }
-
     public abstract class AbstractTrigger<T> : Trigger where T : Trigger {
-        public Dictionary<Option, float> SettingValues = new Dictionary<Option, float>();
+        public Dictionary<Option, float> SettingValues = [];
         private bool revertOnLeave = false;
         private bool revertOnDeath = false;
         private StackItem stackItem;
@@ -42,74 +40,52 @@ namespace Celeste.Mod.GooberHelper.Entities {
         }
 
         public AbstractTrigger(EntityData data, Vector2 offset, OptionType type, List<string> optionNames, Dictionary<string, string> optionNameOverrides) : base(data, offset) {
-            if(this.revertOnDeath) {
-                Stack.RemoveAll(a => a == this.stackItem);
+            if(revertOnDeath) {
+                Stack.RemoveAll(a => a == stackItem);
 
-                this.UpdateStack();
+                UpdateStack();
             }
 
             id = data.ID;
 
-            foreach(StackItem item in Stack.Where(a => a.ID == this.id)) {
-                this.stackItem = item;
-            }
+            foreach(var item in Stack.Where(a => a.ID == id))
+                stackItem = item;
 
-            // Console.WriteLine("-----");
-
-            // foreach(var i in stack) {
-            //     Console.WriteLine(string.Join(Environment.NewLine, i.SettingValues));
-            //     Console.WriteLine("");
-            // }
-
-            // foreach(var i in Stack) {
-            //     foreach(var key in i.SettingValues.Keys) {
-            //         object result = i.SettingValues[key];
-
-            //         bool isInt = int.TryParse(i.SettingValues[key].ToString(), out int intResult);
-            //         bool isBool = bool.TryParse(i.SettingValues[key].ToString(), out bool booleanResult);
-                    
-            //         if(isInt) result = intResult;
-            //         if(isBool) result = booleanResult;
-
-            //         i.SettingValues[key] = result;
-            //     }
-            // }
-
-            foreach(string optionName in optionNames) {
-                if(Enum.TryParse(optionNameOverrides.TryGetValue(optionName, out string actualOptionName) ? actualOptionName : optionName, out Option option)) {
+            foreach(var optionName in optionNames) {
+                if(Enum.TryParse(optionNameOverrides.TryGetValue(optionName, out var actualOptionName) ? actualOptionName : optionName, out Option option)) {
                     var id = optionName[..1].ToLower() + optionName[1..];
 
-                    SettingValues[option] = type == OptionType.Float ? data.Int(id, (int)Options[option].DefaultValue) : (data.Bool(id, false) ? 1 : 0);
+                    SettingValues[option] = type == OptionType.Float ? data.Int(id, (int)OptionsManager.Options[option].DefaultValue) : (data.Bool(id, false) ? 1 : 0);
                 } else {
                     HandleWeirdOption(optionName);
                 }
             }
 
-            this.revertOnDeath = data.Bool("revertOnDeath", false);
-            this.revertOnLeave = data.Bool("revertOnLeave", false);
+            revertOnDeath = data.Bool("revertOnDeath", false);
+            revertOnLeave = data.Bool("revertOnLeave", false);
 
-            this.flag = data.Attr("flag", "");
-            this.notFlag = data.Attr("notFlag", "");
+            flag = data.Attr("flag", "");
+            notFlag = data.Attr("notFlag", "");
         }
 
         public virtual void HandleWeirdOption(string optionName) {}
 
-        public static void Load() {
-            On.Celeste.Player.Die += modPlayerDie;
-        }
+        //i would just use the normal hooking method but these need to be called from the inheriting classes to respect the type argument
+        //GRAHHHH i hate backwards compatibility code
+        public static void Load()
+            => On.Celeste.Player.Die += modPlayerDie;
 
-        public static void Unload() {
-            On.Celeste.Player.Die -= modPlayerDie;
-        }
+        public static void Unload()
+            => On.Celeste.Player.Die -= modPlayerDie;
 
         public override void Removed(Scene scene)
         {
             base.Removed(scene);
             
-            if(this.revertOnDeath) {
-                Stack.RemoveAll(a => a == this.stackItem);
+            if(revertOnDeath) {
+                Stack.RemoveAll(a => a == stackItem);
 
-                this.UpdateStack();
+                UpdateStack();
             }
         }
 
@@ -117,20 +93,17 @@ namespace Celeste.Mod.GooberHelper.Entities {
         {
             base.SceneEnd(scene);
 
-            if(this.revertOnDeath) {
-                Stack.RemoveAll(a => a == this.stackItem);
+            if(revertOnDeath) {
+                Stack.RemoveAll(a => a == stackItem);
 
-                this.UpdateStack();
+                UpdateStack();
             }
         }
 
-        public static PlayerDeadBody modPlayerDie(On.Celeste.Player.orig_Die orig, Player self, Vector2 direction, bool evenIfInvincible, bool registerDeathInStats) {
+        private static PlayerDeadBody modPlayerDie(On.Celeste.Player.orig_Die orig, Player self, Vector2 direction, bool evenIfInvincible, bool registerDeathInStats) {
             foreach(AbstractTrigger<T> item in Engine.Scene.Tracker.GetEntities<T>()) {
-                // Console.WriteLine(typeof(T).Name);
-                
-                if(item.revertOnDeath) {
+                if(item.revertOnDeath)
                     Stack.RemoveAll(a => a == item.stackItem);
-                }
 
                 item.UpdateStack();
             }
@@ -140,24 +113,21 @@ namespace Celeste.Mod.GooberHelper.Entities {
 
         public void UpdateStack() {
             if(Stack.Count == 0) {
-                foreach(var item in this.SettingValues) {
+                foreach(var item in this.SettingValues)
                     ResetOptionValue(item.Key, OptionSetter.Map);
-                }
             } else {
-                foreach(var item in Stack.Last().SettingValues) {
+                foreach(var item in Stack.Last().SettingValues)
                     SetOptionValue(item.Key, item.Value, OptionSetter.Map);
-                }
             }
         }
 
         public override void OnLeave(Player player) {
             base.OnLeave(player);
 
-            // if((this.revertOnLeave && !player.Dead) || (this.revertOnDeath && player.Dead)) {
-            if(this.revertOnLeave && !player.Dead) {
+            if(revertOnLeave && !player.Dead) {
                 Stack.RemoveAll(a => a == this.stackItem);
 
-                this.UpdateStack();
+                UpdateStack();
             }
         }
 
@@ -165,21 +135,18 @@ namespace Celeste.Mod.GooberHelper.Entities {
             base.OnEnter(player);
 
             if(!(
-                (this.flag    != "" &&  (Engine.Scene as Level).Session.GetFlag(this.flag))   || (this.flag == "") &&
-                (this.notFlag != "" && !(Engine.Scene as Level).Session.GetFlag(this.notFlag) || this.notFlag == "")
+                (flag    != "" &&  (Engine.Scene as Level).Session.GetFlag(flag))   || (flag == "") &&
+                (notFlag != "" && !(Engine.Scene as Level).Session.GetFlag(notFlag) || notFlag == "")
             )) return;
 
-            if(this.stackItem == null) this.stackItem = new StackItem(this.SettingValues, typeof(T).Name, this.id);
+            stackItem ??= new StackItem(SettingValues, typeof(T).Name, id);
 
-            if(!this.revertOnLeave && !this.revertOnDeath) {
+            if(!revertOnLeave && !revertOnDeath)
                 Stack.Clear();
 
-                // Console.WriteLine("able to clear stack");
-            }
+            Stack.Add(stackItem);
 
-            Stack.Add(this.stackItem);
-
-            this.UpdateStack();
+            UpdateStack();
         }
     }
 }

@@ -2,24 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Monocle;
-using static Celeste.Mod.GooberHelper.OptionsManager;
 
 namespace Celeste.Mod.GooberHelper.UI {
     public class OuiGooberHelperOptions : Oui {
         public class NumericSliderOptions : IEnumerable<KeyValuePair<float, string>> {
             private OptionData optionData;
 
-            public NumericSliderOptions(OptionData optionData) {
-                this.optionData = optionData;
-            }
+            public NumericSliderOptions(OptionData optionData)
+                => this.optionData = optionData;
 
             public IEnumerator<KeyValuePair<float, string>> GetSideEnumerator(int dir, float start) {
-                float n = start;
-                float mag = optionData.Step;
+                var n = start;
+                var mag = optionData.Step;
 
-                for(int i = 0; n <= Math.Abs(dir == 1 ? optionData.Max : optionData.Min); i++) {
+                for(var i = 0; n <= Math.Abs(dir == 1 ? optionData.Max : optionData.Min); i++) {
                     if(n != 0 || dir == 1) //dont have a -0
                         yield return new KeyValuePair<float, string>(n * dir, (n * dir).ToString() + optionData.Suffix);
 
@@ -40,21 +36,9 @@ namespace Celeste.Mod.GooberHelper.UI {
             }
 
             public IEnumerator<KeyValuePair<float, string>> GetEnumerator() {
-                // int counter = 0;
-
-                // for(float i = min; i < max; i += (int)Math.Max(Math.Floor(i / 10) * growthFactor, 1)) {
-                //     yield return new KeyValuePair<float, string>(i, i.ToString() + suffix);
-
-                //     if(i == defaultValue) DefaultIndex = counter;
-
-                //     counter++;
-                // }
-
-                if(optionData.EnumType != null) {
-                    for(int i = -1; i >= -optionData.EnumMax; i--) {
+                if(optionData.EnumType != null)
+                    for(var i = -1; i >= -optionData.EnumMax; i--)
                         yield return new KeyValuePair<float, string>(i, Dialog.Clean($"gooberhelper_enum_{optionData.EnumType.GetEnumName(i)}"));
-                    }
-                }
 
                 var leftEnumerator = GetSideEnumerator(-1, 0);
                 var rightEnumerator = GetSideEnumerator(1, 0);
@@ -62,25 +46,15 @@ namespace Celeste.Mod.GooberHelper.UI {
                 //enumerate the left side
                 List<KeyValuePair<float, string>> left = [];
 
-                while(leftEnumerator.MoveNext()) {
+                while(leftEnumerator.MoveNext())
                     left.Add(leftEnumerator.Current);
-                }
 
-                for(var i = left.Count - 1; i >= 0; i--) {
+                for(var i = left.Count - 1; i >= 0; i--)
                     yield return left[i];
-                }
 
                 //enumerate the right side
-                while(rightEnumerator.MoveNext()) {
+                while(rightEnumerator.MoveNext())
                     yield return rightEnumerator.Current;
-                }
-
-                // yield return new KeyValuePair<float, string>(
-                //     optionData.Max,
-                //     optionData.MaxLabel != null ? 
-                //         Dialog.Clean($"gooberhelper_enum_{optionData.MaxLabel}") :
-                //         optionData.Max.ToString() + optionData.Suffix
-                // );
 
                 yield break;
             }
@@ -106,7 +80,7 @@ namespace Celeste.Mod.GooberHelper.UI {
             }
 
             public IEnumerator<KeyValuePair<float, string>> GetEnumerator() {
-                int i = 0;
+                var i = 0;
                 
                 while(Enum.IsDefined(EnumType, i)) {
                     yield return new KeyValuePair<float, string>(i, Dialog.Clean($"gooberhelper_enum_{EnumType.GetEnumName(i)}"));
@@ -117,9 +91,8 @@ namespace Celeste.Mod.GooberHelper.UI {
                 yield break;
             }
 
-            IEnumerator IEnumerable.GetEnumerator() {
-                return GetEnumerator();
-            }
+            IEnumerator IEnumerable.GetEnumerator()
+                => GetEnumerator();
         }
 
         private TextMenu menu = null;
@@ -155,16 +128,17 @@ namespace Celeste.Mod.GooberHelper.UI {
             OuiGooberHelperOptions.backgroundMenu = backgroundMenu;
             OuiGooberHelperOptions.inGame = inGame;
 
-            TextMenuExt.ButtonExt button = new TextMenuExt.ButtonExt(Dialog.Clean("menu_gooberhelper_options"));
+            var button = new TextMenuExt.ButtonExt(Dialog.Clean("menu_gooberhelper_options"));
 
             //dont display information about session options
             //this should probably go somewhere else but it works here
-            if(!inGame) GooberHelperModule.Instance._Session = null;
+            if(!inGame)
+                GooberHelperModule.Instance._Session = null;
 
             button.TextColor = GetGlobalColor();
             
             button.OnPressed = () => {
-                TextMenu options = CreateMenu(fromPause);
+                var options = CreateMenu(fromPause);
 
                 backgroundMenu.Scene.Add(options);
             };
@@ -172,30 +146,29 @@ namespace Celeste.Mod.GooberHelper.UI {
             return button;
         }
 
-        private static void createOnPauseAction(TextMenu menu) {
-            menu.OnPause = () => {
+        private static void createOnPauseAction(TextMenu menu)
+            => menu.OnPause = () => {
                 menu.Close();
-                
+
                 GooberHelperModule.Instance.SaveSettings();
 
                 (Engine.Scene as Level).Paused = false;
                 (Engine.Scene as Level).AllowHudHide = wasAllowingHudHide;
                 (Engine.Scene as Level).unpauseTimer = 0.15f;
-                
+
                 Audio.Play(SFX.ui_main_button_back);
             };
-        }
 
         private static TextMenuExt.ButtonExt addCategoryButton(string categoryName, TextMenu menu) {
-            TextMenuExt.ButtonExt button = new TextMenuExt.ButtonExt(Dialog.Clean($"menu_gooberhelper_category_{categoryName}"));
+            var button = new TextMenuExt.ButtonExt(Dialog.Clean($"menu_gooberhelper_category_{categoryName}"));
 
             button.TextColor = GetCategoryColor(categoryName);
             
             button.OnPressed = () => {
-                int returnIndex = menu.IndexOf(button);
+                var returnIndex = menu.IndexOf(button);
                 menu.RemoveSelf();
 
-                TextMenu categoryMenu = createCategoryMenu(categoryName); //this
+                var categoryMenu = createCategoryMenu(categoryName); //this
 
                 categoryMenu.OnESC = categoryMenu.OnCancel = () => {
                     categoryMenu.CloseAndRun(null, () => {
@@ -226,26 +199,39 @@ namespace Celeste.Mod.GooberHelper.UI {
         }
 
         private static TextMenuExt.EnumerableSlider<float> addOptionSlider(OptionData optionData, TextMenu menu) {
-            float startValue = GetOptionValue(optionData.Id);
+            var startValue = GetOptionValue(optionData.Id);
 
             //do this but for enums
-            if(optionData.Type == OptionType.Boolean) startValue = startValue >= 1 ? 1 : 0;
-            if(optionData.Type == OptionType.Enum) startValue = startValue > optionData.EnumMax ? 0 : MathF.Floor(Math.Max(startValue, 0));
+            if(optionData.Type == OptionType.Boolean)
+                startValue = startValue >= 1
+                    ? 1
+                    : 0;
+            
+            if(optionData.Type == OptionType.Enum)
+                startValue = startValue > optionData.EnumMax
+                    ? 0
+                    : MathF.Floor(Math.Max(startValue, 0));
 
             var optionSlider = new TextMenuExt.EnumerableSlider<float>(
                 label: optionData.GetDialogName(),
                 options:
-                    optionData.Type == OptionType.Boolean ? BooleanSliderOptions :
-                    optionData.Type == OptionType.Enum ? new EnumSliderOptions(optionData.EnumType) :
-                    new NumericSliderOptions(optionData),
+                    optionData.Type == OptionType.Boolean
+                        ? BooleanSliderOptions
+                    
+                    : optionData.Type == OptionType.Enum
+                        ? new EnumSliderOptions(optionData.EnumType)
+
+                    : new NumericSliderOptions(optionData),
                 startValue
             );
 
             menu.Add(optionSlider);
             optionSliders[optionSlider] = optionData.Id;
 
-            string description = optionData.GetDialogDescription();
-            if(description != "") optionSlider.AddDescription(menu, description);
+            var description = optionData.GetDialogDescription();
+
+            if(description != "")
+                optionSlider.AddDescription(menu, description);
             
             if(optionSlider.Values[optionSlider.Index].Item2 != startValue) {
                 updateOptionSlider(optionSlider);
@@ -273,15 +259,13 @@ namespace Celeste.Mod.GooberHelper.UI {
         }
 
         private static void updateOptionSlider(TextMenuExt.EnumerableSlider<float> optionSlider) {
-            Option option = optionSliders[optionSlider];
-            float newValue = GetOptionValue(option);
+            var option = optionSliders[optionSlider];
+            var newValue = GetOptionValue(option);
 
             optionSlider.UnselectedColor = GetOptionColor(option);
 
-            if(Options[option].Type == OptionType.Boolean) {
+            if(OptionsManager.Options[option].Type == OptionType.Boolean) {
                 if(newValue < 0 || newValue > 1) { //qhat the fuck this isnt a boolean
-                    // if(optionSlider.Values.First().Item1 != "INVALID") optionSlider.Values.Insert(0, new Tuple<string, float>("INVALID", int.MinValue));
-
                     optionSlider.Index = optionSlider.PreviousIndex = newValue >= 1 ? 1 : 0;
 
                     return;
@@ -289,16 +273,16 @@ namespace Celeste.Mod.GooberHelper.UI {
             }
 
             if(optionSlider.Values.Last().Item2 < newValue) {
-                optionSlider.Add(newValue.ToString() + Options[option].Suffix, newValue, true);
+                optionSlider.Add(newValue.ToString() + OptionsManager.Options[option].Suffix, newValue, true);
 
                 return;
             }
 
-            int min = 0;
-            int max = optionSlider.Values.Count - 1;
+            var min = 0;
+            var max = optionSlider.Values.Count - 1;
 
             while(min <= max) {
-                int mid = (int)Math.Floor((min + max)/2f);
+                var mid = (int)Math.Floor((min + max)/2f);
 
                 if(optionSlider.Values[mid].Item2 > newValue) {
                     max = mid - 1;
@@ -311,34 +295,25 @@ namespace Celeste.Mod.GooberHelper.UI {
                 }
             }
 
-            optionSlider.Values.Insert(min, new Tuple<string, float>(newValue.ToString() + Options[option].Suffix, newValue));
+            optionSlider.Values.Insert(min, new Tuple<string, float>(newValue.ToString() + OptionsManager.Options[option].Suffix, newValue));
 
             optionSlider.Index = optionSlider.PreviousIndex = min;
-
-            // for(int i = 0; i < optionSlider.Values.Count; i++) {
-            //     var sliderOption = optionSlider.Values[i];
-
-            //     if(sliderOption.Item2 == newValue) {
-            //         optionSlider.Index = i;
-            //     }
-            // }
         }
 
         private static TextMenu createCategoryMenu(string categoryName) {
-            TextMenu menu = new();
+            var menu = new TextMenu();
 
             optionSliders.Clear();
             categoryButtons.Clear();
 
             menu.Add(new TextMenu.Header(Dialog.Clean($"menu_gooberhelper_category_{categoryName}")));
 
-            foreach(OptionData optionData in Categories[categoryName]) {
-                TextMenuExt.EnumerableSlider<float> menuItem = addOptionSlider(optionData, menu);
-            }
+            foreach(var optionData in Categories[categoryName])
+                addOptionSlider(optionData, menu);
 
             menu.Add(new TextMenu.SubHeader(""));
 
-            TextMenu.Button resetAllButton = new TextMenu.Button(Dialog.Clean("menu_gooberhelper_reset_all_options"));
+            var resetAllButton = new TextMenu.Button(Dialog.Clean("menu_gooberhelper_reset_all_options"));
                 menu.Add(resetAllButton);
 
                 resetAllButton.AddDescription(menu, Dialog.Clean("menu_gooberhelper_reset_all_options_description"));
@@ -346,9 +321,8 @@ namespace Celeste.Mod.GooberHelper.UI {
                 resetAllButton.OnPressed = () => {
                     ResetCategory(categoryName, OptionSetter.User);
 
-                    foreach(var pair in optionSliders) {
+                    foreach(var pair in optionSliders)
                         updateOptionSlider(pair.Key);
-                    }
                 };
 
             menu.MoveSelection(1);
@@ -411,7 +385,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                         Utils.OpenTextInputField(finish, null, "Rename the options profile");
                     break;
                     case (int)OptionsProfileAction.Duplicate:
-                        OptionsProfile duplicate = OptionsProfile.Duplicate(name, out int insertionIndex);
+                        var duplicate = OptionsProfile.Duplicate(name, out var insertionIndex);
 
                         createOptionsProfileButton(duplicate.Name, menu, optionsProfileStartIndex + insertionIndex * 2);
 
@@ -480,17 +454,15 @@ namespace Celeste.Mod.GooberHelper.UI {
         }
 
         private static void updateMenu() {
-            foreach(var pair in categoryButtons) {
+            foreach(var pair in categoryButtons)
                 pair.Value.TextColor = GetCategoryColor(pair.Key);
-            }
 
-            foreach(var pair in optionSliders) {
+            foreach(var pair in optionSliders)
                 updateOptionSlider(pair.Key);
-            }
         }
 
         public static TextMenu CreateMenu(bool fromPause = false, int startIndex = 3) { //2 because title and input field modal thing
-            TextMenu menu = new();
+            var menu = new TextMenu();
 
             backgroundMenu.Visible = false;
             backgroundMenu.Active = false;
@@ -507,7 +479,6 @@ namespace Celeste.Mod.GooberHelper.UI {
             Utils.CreateTextInputField(menu);
 
             combo = new TextMenuCombo(1f, 2) { Container = menu };
-            // TextMenu.Header combo = new TextMenu.Header("bbb") { Container = menu };
             comboModal = new TextMenuExt.Modal(combo, 120, 1000) { BorderThickness = 0 };
 
             menu.Add(comboModal);
@@ -545,7 +516,7 @@ namespace Celeste.Mod.GooberHelper.UI {
 
             menu.Add(new TextMenu.Header(Dialog.Clean("menu_gooberhelper_title")));
 
-            TextMenu.Button resetAllButton = new TextMenu.Button(Dialog.Clean("menu_gooberhelper_reset_all_options"));
+            var resetAllButton = new TextMenu.Button(Dialog.Clean("menu_gooberhelper_reset_all_options"));
                 menu.Add(resetAllButton);
 
                 resetAllButton.AddDescription(menu, Dialog.Clean("menu_gooberhelper_reset_all_options_description"));
@@ -577,19 +548,19 @@ namespace Celeste.Mod.GooberHelper.UI {
 
 
             menu.Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_general")));
-                addOptionSlider(Options[Option.ShowActiveOptions], menu); //should this not be reset along with the others??
+                addOptionSlider(OptionsManager.Options[Option.ShowActiveOptions], menu); //should this not be reset along with the others??
 
 
             menu.Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_profiles")));
             
             
-            TextMenu.Button createButton = new TextMenu.Button(Dialog.Clean("menu_gooberhelper_create_profile"));
+            var createButton = new TextMenu.Button(Dialog.Clean("menu_gooberhelper_create_profile"));
                 menu.Add(createButton);
 
                 createButton.ConfirmSfx = null;
                 createButton.OnPressed = () => {
-                    Action<string> finish = (name) => {
-                        if(OptionsProfile.GetExists(name)) {
+                    static void finish(string name) {
+                        if (OptionsProfile.GetExists(name)) {
                             OptionsProfile.Save(name);
 
                             return;
@@ -602,14 +573,14 @@ namespace Celeste.Mod.GooberHelper.UI {
                         queuedOptionsProfileName = name;
 
                         Audio.Play(SFX.ui_main_rename_entry_accept);
-                    };
+                    }
 
                     Utils.OpenTextInputField(finish, null, "Name the profile");
 
                     Audio.Play(SFX.ui_main_savefile_rename_start);
                 };
 
-            TextMenu.Button importButton = new TextMenu.Button(Dialog.Clean("menu_gooberhelper_import_create_profile"));
+            var importButton = new TextMenu.Button(Dialog.Clean("menu_gooberhelper_import_create_profile"));
                 menu.Add(importButton);
                 importButton.AddDescription(menu, Dialog.Clean("menu_gooberhelper_import_create_profile_description"));
 
@@ -641,9 +612,8 @@ namespace Celeste.Mod.GooberHelper.UI {
             //     }
             // }
 
-            foreach(var optionProfileName in GooberHelperModule.Settings.OptionsProfileOrder) {
+            foreach(var optionProfileName in GooberHelperModule.Settings.OptionsProfileOrder)
                 createOptionsProfileButton(optionProfileName, menu);
-            }
 
             menu.Selection = startIndex;
 
@@ -658,17 +628,17 @@ namespace Celeste.Mod.GooberHelper.UI {
         }
 
         public override IEnumerator Enter(Oui from) {
-            this.menu = CreateMenu();
-            this.Visible = true;
-            this.menu.Focused = true;
+            menu = CreateMenu();
+            Visible = true;
+            menu.Focused = true;
 
             yield break;
         }
 
         public override IEnumerator Leave(Oui from) {
-            this.Visible = false;
-            this.menu.RemoveSelf();
-            this.menu = null;
+            Visible = false;
+            menu.RemoveSelf();
+            menu = null;
 
             yield break;
         }

@@ -23,9 +23,10 @@ local options = {
     "JumpInversion: [None|GroundJumps|All]",
     "WalljumpSpeedPreservation: [None|FakeRCB|Preserve|Invert]",
     "WallbounceSpeedPreservation",
-    "HyperAndSuperSpeedPreservation: [DashSpeed|None|number]",
+    "HyperAndSuperSpeedPreservation",
     "UpwardsJumpSpeedPreservationThreshold: [DashSpeed|None|number]",
-    "DownwardsJumpSpeedPreservationThreshold",
+    "DownwardsJumpSpeedPreservationThreshold: [DashSpeed|None|number]",
+    "BounceHelperBounceSpeedPreservation",
 
     "GetClimbjumpSpeedInRetention",
     "AdditiveVerticalJumpSpeed",
@@ -46,6 +47,7 @@ local options = {
 
     "DashesDontResetSpeed: [None|Legacy|On]",
     "KeepDashAttackOnCollision",
+    "DownDemoDashing",
 
     categoryHeader("Moving"),
     "CobwobSpeedInversion: [None|RequireSpeed|WorkWithRetention]",
@@ -62,10 +64,11 @@ local options = {
     "RefillFreezeLength: [number]",
     "RetentionLength: [number]",
 
+    "ConserveBeforeDashSpeed",
     "DreamBlockSpeedPreservation: [None|Horizontal|Vertical|Both|Magnitude]",
     "SpringSpeedPreservation: [None|Preserve|Invert]",
     "ReboundSpeedPreservation",
-    "ExplodeLaunchSpeedPreservation",
+    "ExplodeLaunchSpeedPreservation: [None|Horizontal|Vertical|Both|Magnitude]",
     "PickupSpeedInversion",
     "BubbleSpeedPreservation",
     "FeatherEndSpeedPreservation",
@@ -78,38 +81,39 @@ local options = {
     "HoldablesInheritSpeedWhenThrown",
 
     "AllowCrouchedHoldableGrabbing",
-    "AllowUpwardsClimbGrabbing",
+    "AllowUpwardsClimbGrabbing: [None|WhileHoldingUp|Always]",
     "AllowCrouchedClimbGrabbing",
     "ClimbingSpeedPreservation",
     "AllowClimbingInDashState",
     "CoreBlockAllDirectionActivation",
-    "LiftBoostAdditionHorizontal: [number]",
-    "LiftBoostAdditionVertical: [number]",
+    "AllowWindWhileDashing",
+    "LiftboostAdditionHorizontal: [number]",
+    "LiftboostAdditionVertical: [number]",
+    "AdvantageousLiftboost",
+    "ReverseBackboosts",
 
-    categoryHeader("Visual"),
+    categoryHeader("Visuals"),
     "PlayerShaderMask: [None|Cover|HairOnly]",
     "TheoNuclearReactor",
-    
+
     categoryHeader("Miscellaneous"),
     "AlwaysExplodeSpinners",
     "GoldenBlocksAlwaysLoad",
     "RefillFreezeGameSuspension",
     "BufferDelayVisualization",
     "Ant",
-    
+
     categoryHeader("General"),
     "ShowActiveOptions",
 }
 
 local disableOptions = {};
-local numberFieldStartIndices = {};
-local enumFields = {};
 local isOption = {};
 local isDisableOption = {};
 
 local specialInputFields = {};
 
-for index, value in ipairs(options) do
+for _, value in ipairs(options) do
     local disableOptionName = value;
 
     if value:sub(-1, -1) == "]" then
@@ -144,25 +148,6 @@ for index, value in ipairs(options) do
     table.insert(disableOptions, disableOptionName);
     isDisableOption[disableOptionName] = true;
 end
-
--- function dump(obj, indent)
---     indent = indent or ""
---     if type(obj) == "table" then
---         for k, v in pairs(obj) do
---             if type(v) == "table" and v ~= obj then -- Avoid infinite recursion for self-referencing tables
---                 print(indent .. tostring(k) .. ":")
---                 dump(v, indent .. "  ")
---             else
---                 print(indent .. tostring(k) .. ": " .. tostring(v))
---             end
---         end
---     else
---         print(indent .. tostring(obj))
---     end
--- end
-
--- dump(isOption);
--- dump(specialInputFields);
 
 local function createOptionsField(fieldOptions, validator)
     return {
@@ -229,10 +214,6 @@ trigger.fieldInformation = {
     },
 }
 
--- trigger.triggerText = function(room, tuh) 
---     return string.gsub(string.gsub(tuh.enable, "[ %-] ", ""), ",", "\n");
--- end
-
 trigger.fieldOrder = {
     "x",
     "y",
@@ -248,98 +229,3 @@ trigger.fieldOrder = {
 }
 
 return trigger
-
--- local displayOptionsList = {};
--- local realOptionsList = {};
--- local isRealOption = {};
--- local numberFieldStartIndices = {};
-
--- local function generateOptions(data)
---     local function recur(obj, prefix)
---         if type(obj[1]) == "table" then
---             for index, value in ipairs(obj) do
---                 local display = prefix .. value.name .. ":";
-
---                 table.insert(displayOptionsList, #displayOptionsList + 1, display);
-
---                 recur(value.content, prefix .. "  ");
---             end
---         else
---             table.sort(obj)
-            
---             for index, value in ipairs(obj) do
---                 local display = prefix .. "- " .. value;
-
---                 table.insert(displayOptionsList, #displayOptionsList + 1, display);
---                 table.insert(realOptionsList, #realOptionsList + 1, display);
---                 isRealOption[display] = true;
-
---                 if string.sub(value, -8, -1) == "[number]" then
---                     numberFieldStartIndices[string.sub(display, 2, 10)] = string.len(display) - 8;
---                 end
---             end
---         end
---     end
-
---     recur(data, "");
--- end
-
--- generateOptions(options);
-
--- local function print(data) for key, value in pairs(data) do print(tostring(key) .. ": ".. tostring(value)) end end
-
-            -- valueTransformer = function(input)
-            --     local buh = require("ui.windows.selection_context_window");
-
-            --     if buh == nil then
-            --         print("nillll");
-
-            --         return;
-            --     end
-
-            --     Buh = buh;
-
-            --     for index, value in pairs(buh) do
-            --        print(tostring(index) .. ": ".. tostring(value)); 
-            --     end
-                
-            --     return input;
-            -- end,
-
-            -- enable = {
-    --     fieldType = "list",
-    --     elementDefault = "zingle",
-    --     elementSeparator = " ",
-    --     elementOptions = {
-    --         fieldType = "list",
-    --         elementDefault = "-",
-    --         elementSeparator = ":",
-    --         minimumElements = 1,
-    --         maximumElements = 2,
-    --         elementOptions = {
-    --             fieldType = "string",
-    --             options = options
-    --         }
-    --     }
-    -- },
-    -- enable = {
-    --     fieldType = "list",
-    --     elementDefault = realOptionsList[1],
-    --     elementSeparator = ",",
-    --     elementOptions = {
-    --         fieldType = "string",
-    --         options = displayOptionsList,
-    --         -- valueTransformer = function(input) return GooberHelperGeneratedOptions.optionValueMap[input] or "nil" end,
-    --         -- displayTransformer = function(input) return GooberHelperGeneratedOptions.optionDisplayMap[input] or "nil" end,
-    --         displayTransformer = function(input) print(input); return input; end,
-    --         validator = function(input)
-    --             local start = numberFieldStartIndices[string.sub(input, 2, 10)];
-
-    --             if start ~= nil then
-    --                 return tonumber(string.sub(input, start, -1)) ~= nil
-    --             end
-
-    --             return isRealOption[input] == true
-    --         end
-    --     }
-    -- },

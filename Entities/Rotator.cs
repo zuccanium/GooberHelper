@@ -1,7 +1,8 @@
-using Monocle;
-using Microsoft.Xna.Framework;
 using Celeste.Mod.Entities;
 using System;
+
+//half deprecated
+//why would anyone use this
 
 namespace Celeste.Mod.GooberHelper.Entities {
 
@@ -32,11 +33,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
             Add(new PlayerCollider(onPlayer, null, Collider));
         }
 
-        private float playerSpeedToRadiansPerSecond(float playerSpeed, float radius) {
-            // (acos(-(((playerSpeed * Engine.DeltaTime) ^ 2) / (2 * radius ^ 2)) + 1)) / Engine.DeltaTime
-
-            return (float)Math.Acos(-(Math.Pow(playerSpeed * Engine.DeltaTime, 2) / (2 * Math.Pow(radius, 2))) + 1) / Engine.DeltaTime;
-        }
+        private static float playerSpeedToRadiansPerSecond(float playerSpeed, float radius)
+            => (float)Math.Acos(-(Math.Pow(playerSpeed * Engine.DeltaTime, 2) / (2 * Math.Pow(radius, 2))) + 1) / Engine.DeltaTime;
 
         private void playerCatch(Player player) {
             isHeld = true;
@@ -47,12 +45,14 @@ namespace Celeste.Mod.GooberHelper.Entities {
             player.Speed = Vector2.Zero;
 
             rotationDir = Math.Sign(player.Position.X - Position.X);
-            if(rotationDir == 0) rotationDir = 1;
+            
+            if(rotationDir == 0)
+                rotationDir = 1;
+            
             rotationSpeed = playerSpeedToRadiansPerSecond(playerSpeed.Length(), radius);
 
-            if(timeRate != 1) {
-                Engine.TimeRate = timeRate;
-            }
+            if(timeRate != 1)
+                Engine.TimeRate = timeRate; //go away
         }
 
         private void playerUpdate(Player player) {
@@ -69,9 +69,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
             grabCooldown = cooldown;
             isHeld = false;
 
-            if(timeRate != 1) {
-                Engine.TimeRate = 1;
-            }
+            if(timeRate != 1)
+                Engine.TimeRate = 1; //i dont care 😭
 
             player.StateMachine.State = 0;
             player.Speed = Vector2.Normalize(new Vector2(1,0).Rotate(previousRotation + rotationDir * (float)Math.PI / 2)) * playerSpeed.Length();
@@ -81,9 +80,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
         }
 
         private void onPlayer(Player player) {
-            if(Input.GrabCheck && grabCooldown <= 0.0f && !isHeld) {
+            if(Input.GrabCheck && grabCooldown <= 0.0f && !isHeld)
                 playerCatch(player);
-            }
         }
 
         public override void Update() {
@@ -93,10 +91,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
                 playerUpdate(Engine.Scene.Tracker.GetEntity<Player>());
             }
             
-
-            if(grabCooldown > 0.0f) {
+            if(grabCooldown > 0.0f)
                 grabCooldown -= Engine.DeltaTime;
-            }
         }
 
         public override void Render() {

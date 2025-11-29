@@ -1,14 +1,12 @@
-using Monocle;
-using Microsoft.Xna.Framework;
 using Celeste.Mod.Entities;
 using System;
 
-namespace Celeste.Mod.GooberHelper.Entities {
+namespace Celeste.Mod.GooberHelper.Triggers {
 
     [CustomEntity("GooberHelper/ZeroFrameProtector")]
     [Tracked(false)]
     public class ZeroFrameProtector : Trigger {
-        private enum Mode {
+        public enum Mode {
             Left,
             Right,
             Up,
@@ -28,7 +26,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             flag = data.Attr("flag", "");
             notFlag = data.Attr("notFlag", "");
 
-            actualHitbox = new Hitbox(this.Width, this.Height);
+            actualHitbox = new Hitbox(Width, Height);
 
             Collider.Position -= Vector2.One;
             Collider.Height += 2;
@@ -44,10 +42,12 @@ namespace Celeste.Mod.GooberHelper.Entities {
         public override void DebugRender(Camera camera) {            
             base.DebugRender(camera);
 
-            Collider collider = this.Collider;
-            this.Collider = this.actualHitbox;
-            Draw.HollowRect(this.Collider, Color.Red * (disabled ? 0.5f : 1f));
-            this.Collider = collider;
+            var collider = Collider;
+            Collider = actualHitbox;
+
+            Draw.HollowRect(Collider, Color.Red * (disabled ? 0.5f : 1f));
+
+            Collider = collider;
         }
 
         public override void OnStay(Player player) {
@@ -55,33 +55,42 @@ namespace Celeste.Mod.GooberHelper.Entities {
 
             if(disabled) return;
 
-            if(flag != "" && !player.level.Session.GetFlag(flag)) return;
-            if(notFlag != "" && player.level.Session.GetFlag(flag)) return;
-            Collider playerCollider = player.Collider;
+            if(flag != "" && !player.level.Session.GetFlag(flag))
+                return;
+
+            if(notFlag != "" && player.level.Session.GetFlag(flag))
+                return;
+
+            var playerCollider = player.Collider;
             player.Collider = player.hurtbox;
 
-            float left = Left - player.Right + 1;
-            float right = Right - player.Left - 1;
-            float top = Top - player.Bottom + 1;
-            float bottom = Bottom - player.Top - 1;
+            var left = Left - player.Right + 1;
+            var right = Right - player.Left - 1;
+            var top = Top - player.Bottom + 1;
+            var bottom = Bottom - player.Top - 1;
 
-            bool leftEntry = lastPlayerPosition.X + player.Collider.Width <= this.Left;
-            bool rightEntry = lastPlayerPosition.X >= this.Right;
-            bool topEntry = lastPlayerPosition.Y - player.Collider.Height <= this.Top;
-            bool bottomEntry = lastPlayerPosition.Y >= this.Bottom;
+            var leftEntry = lastPlayerPosition.X + player.Collider.Width <= Left;
+            var rightEntry = lastPlayerPosition.X >= Right;
+            var topEntry = lastPlayerPosition.Y - player.Collider.Height <= Top;
+            var bottomEntry = lastPlayerPosition.Y >= Bottom;
 
-            bool collides = player.CollideCheck(this);
+            var collides = player.CollideCheck(this);
 
             player.Collider = playerCollider;
 
             if(!collides) return;
 
+            if(mode == Mode.Left && leftEntry)
+                player.MoveH(left);
 
-            //dont worry about it
-            if     (mode == Mode.Left  && leftEntry)   player.MoveH(left);
-            else if(mode == Mode.Right && rightEntry)  player.MoveH(right);
-            else if(mode == Mode.Up    && topEntry)    player.MoveV(top);
-            else if(mode == Mode.Down  && bottomEntry) player.MoveV(bottom);
+            else if(mode == Mode.Right && rightEntry)
+                player.MoveH(right);
+            
+            else if(mode == Mode.Up && topEntry)
+                player.MoveV(top);
+            
+            else if(mode == Mode.Down && bottomEntry)
+                player.MoveV(bottom);
 
             disabled = true;
         }

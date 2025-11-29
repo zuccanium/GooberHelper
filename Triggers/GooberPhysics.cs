@@ -1,11 +1,8 @@
-using Monocle;
-using Microsoft.Xna.Framework;
 using Celeste.Mod.Entities;
-using System;
-using static Celeste.Mod.GooberHelper.OptionsManager;
 
-namespace Celeste.Mod.GooberHelper.Entities {
+//i hate everything
 
+namespace Celeste.Mod.GooberHelper.Triggers {
     [CustomEntity("GooberHelper/GooberPhysics")]
     public class GooberPhysics : Trigger {
         public bool CobwobSpeedInversionValue;
@@ -102,7 +99,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             SetOptionValue(Option.ShowActiveOptions, ShowActiveSettings ? 1 : 0, OptionSetter.Map);
 
             //backwards compatibility!!!!
-            SetOptionValue(Option.UpwardsJumpSpeedPreservationThreshold, VerticalDashSpeedPreservationValue ? 240 : Options[Option.UpwardsJumpSpeedPreservationThreshold].DefaultValue, OptionSetter.Map);
+            SetOptionValue(Option.UpwardsJumpSpeedPreservationThreshold, VerticalDashSpeedPreservationValue ? 240 : OptionsManager.Options[Option.UpwardsJumpSpeedPreservationThreshold].DefaultValue, OptionSetter.Map);
         }
     }
 }

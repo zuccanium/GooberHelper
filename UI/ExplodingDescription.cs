@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Monocle;
 
 namespace Celeste.Mod.GooberHelper.UI {
     public static class TextMenuItemExtensions {
@@ -13,7 +11,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                 HeightExtra = 0f
             };
 
-            List<TextMenu.Item> items = containingMenu.Items;
+            var items = containingMenu.Items;
 
             if(items.Contains(option)) {
                 containingMenu.Insert(items.IndexOf(option) + 1, descriptionText);
@@ -31,14 +29,15 @@ namespace Celeste.Mod.GooberHelper.UI {
         }
     }
     public class ExplodingDescription : TextMenuExt.EaseInSubHeaderExt {
-        private const float Gravity = 400f;
-        private const float Cooling = 0.95f;
-        private const float SizeMultiplier = 0.6f;
-        private static Color HotColor1 = new Color(1f, 0f, 0f); 
-        private static Color HotOutlineColor1 = new Color(0.5f, 0f, 0f); 
+        public static readonly float Gravity = 400f;
+        public static readonly float Cooling = 0.95f;
+        public static readonly float SizeMultiplier = 0.6f;
+        
+        public static Color HotColor1 = new(1f, 0f, 0f); 
+        public static Color HotOutlineColor1 = new(0.5f, 0f, 0f); 
 
-        private static Color HotColor2 = new Color(1f, 0.7f, 0f); 
-        private static Color HotOutlineColor2 = new Color(1f, 1f, 1f); 
+        public static Color HotColor2 = new(1f, 0.7f, 0f); 
+        public static Color HotOutlineColor2 = new(1f, 1f, 1f); 
 
         private class Chunk {
             public string Text;
@@ -92,7 +91,7 @@ namespace Celeste.Mod.GooberHelper.UI {
         private Vector2 position;
         private Coroutine unexplodeCoroutineInstance;
 
-        private static HashSet<char> evilCharacters = new HashSet<char>([' ', '\n']); 
+        private static HashSet<char> evilCharacters = new([' ', '\n']); 
 
         public ExplodingDescription(string title, bool initiallyVisible, TextMenu containingMenu, string icon = null) : base(title, initiallyVisible, containingMenu, icon) {}
 
@@ -103,20 +102,20 @@ namespace Celeste.Mod.GooberHelper.UI {
             chunks = new List<Chunk>(Title.Length);
             
             //copied from the decomp; i would never write such terrible code surely
-            Vector2 textPosition = position + ((Container.InnerContent == TextMenu.InnerContentMode.TwoColumn && !AlwaysCenter) ? 
-                new Vector2(0f, MathHelper.Max(0f, -16f + HeightExtra)) :
-                new Vector2(Container.Width * 0.5f, MathHelper.Max(0f, -16f + HeightExtra)));
+            var textPosition = position + ((Container.InnerContent == TextMenu.InnerContentMode.TwoColumn && !AlwaysCenter)
+                ? new Vector2(0f, MathHelper.Max(0f, -16f + HeightExtra))
+                : new Vector2(Container.Width * 0.5f, MathHelper.Max(0f, -16f + HeightExtra)));
             
             textPosition.Y -= 0.5f * ActiveFont.HeightOf(Title) * SizeMultiplier;
 
-            Vector2 originalTextPosition = textPosition + Vector2.Zero; //dont just copy the pointer
-            Vector2 chunkPosition = textPosition + Vector2.Zero;
+            var originalTextPosition = textPosition + Vector2.Zero; //dont just copy the pointer
+            var chunkPosition = textPosition + Vector2.Zero;
 
-            string chunkText = "";
+            var chunkText = "";
 
-            for(int i = 0; i < Title.Length; i++) {
-                char character = Title[i];
-                bool endSegment = Random.Shared.NextFloat() < 0.4f || i == Title.Length - 1;
+            for(var i = 0; i < Title.Length; i++) {
+                var character = Title[i];
+                var endSegment = Random.Shared.NextFloat() < 0.4f || i == Title.Length - 1;
 
                 chunkText += character;
 
@@ -135,7 +134,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                 }
 
                 if(endSegment) {
-                    Vector2 size = ActiveFont.Measure(chunkText) * SizeMultiplier;
+                    var size = ActiveFont.Measure(chunkText) * SizeMultiplier;
                     
                     chunks.Add(new Chunk(
                         text: chunkText,
@@ -155,12 +154,12 @@ namespace Celeste.Mod.GooberHelper.UI {
         public IEnumerator UnexplodeCoroutine() {
             retracting = true;
 
-            float retractTimer = 0.3f;
+            var retractTimer = 0.3f;
             
             while(retractTimer > 0) {
                 retractTimer -= Engine.DeltaTime;
 
-                foreach(Chunk chunk in chunks) {
+                foreach(var chunk in chunks) {
                     chunk.Position = Vector2.Lerp(chunk.Position, chunk.OriginalPosition, 0.3f);
                     chunk.Temperature = MathHelper.Lerp(chunk.Temperature, 0, 0.3f);
                 }
@@ -173,7 +172,8 @@ namespace Celeste.Mod.GooberHelper.UI {
         }
 
         public void Unexplode() {
-            if(!exploded) return;
+            if(!exploded)
+                return;
 
             unexplodeCoroutineInstance = new Coroutine(UnexplodeCoroutine(), true);
 
@@ -188,11 +188,11 @@ namespace Celeste.Mod.GooberHelper.UI {
         public override void Update() {
             base.Update();
 
-            if(!exploded || retracting) return;
+            if(!exploded || retracting)
+                return;
 
-            foreach(Chunk chunk in chunks) {
+            foreach(var chunk in chunks)
                 chunk.Update();
-            }
         }
 
         public override void Render(Vector2 position, bool highlighted) {
@@ -204,7 +204,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                 return;
             }
 
-            float alpha = Container.Alpha * Alpha;
+            var alpha = Container.Alpha * Alpha;
 
             foreach(var chunk in chunks) {
                 ActiveFont.DrawOutline(

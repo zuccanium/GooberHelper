@@ -1,16 +1,16 @@
-using Monocle;
-using Microsoft.Xna.Framework;
 using Celeste.Mod.Entities;
 using System;
 using System.Collections.Generic;
-using MonoMod.Utils;
 using System.Collections;
+using Celeste.Mod.GooberHelper.Attributes.Hooks;
 
 //this code is just a modified version of the decompiled vanilla flingbird code
 //i dont know why i didnt just inherit from the flingbird class or something better than this
 //idk this was a really long time ago
-//i would refactor this but there are maps (at least night bird) that use this and i reallllly dont want to possibly break stuff
+//i would refactor this but theres one map that takes advantage of really weird intractions and i reallllly dont want to break it
 //sorry modding people
+
+//this file will likely stay the code equivalent of a baked-bean brownie that was infused with mold after sitting in a large bowl for three years while being recorded with a camera that will eventually be used for a timelapse video
 
 namespace Celeste.Mod.GooberHelper.Entities {
 
@@ -58,6 +58,13 @@ namespace Celeste.Mod.GooberHelper.Entities {
 		{
 			this.entityData = data;
 		}
+
+		[OnHook]
+		private static void patch_Player_ctor(On.Celeste.Player.orig_ctor orig, Player self, Vector2 position, PlayerSpriteMode spriteMode) {
+            orig(self, position, spriteMode);
+
+            CustomStateId = self.StateMachine.AddState("GooberFlingBird", CustomStateUpdate, null, null, null);
+        }
 
 		// Token: 0x06000EBE RID: 3774 RVA: 0x00037B98 File Offset: 0x00035D98
 		public override void Awake(Scene scene)

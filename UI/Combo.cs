@@ -1,6 +1,4 @@
 using System;
-using Microsoft.Xna.Framework;
-using Monocle;
 
 namespace Celeste.Mod.GooberHelper.UI {
     public class TextMenuCombo : TextMenu.Item {
@@ -10,9 +8,11 @@ namespace Celeste.Mod.GooberHelper.UI {
         public int Minimum;
         private float rainbowValue = 0;
 
+        public static Action IncreaseCombo;
+
         public TextMenuCombo(float expirationTime = 2, int minimum = 1) : base() {
-            this.ExpirationTime = expirationTime;
-            this.Minimum = minimum;
+            ExpirationTime = expirationTime;
+            Minimum = minimum;
         }
 
         public override void Update() {
@@ -23,7 +23,7 @@ namespace Celeste.Mod.GooberHelper.UI {
             TimeSinceLastIncrease += Engine.DeltaTime;
             rainbowValue = (rainbowValue + Engine.DeltaTime * 2f) % 1f;
 
-            if(TimeSinceLastIncrease > this.ExpirationTime) {
+            if(TimeSinceLastIncrease > ExpirationTime) {
                 Counter = 0;
 
                 Visible = false;
@@ -33,14 +33,14 @@ namespace Celeste.Mod.GooberHelper.UI {
         public override void Render(Vector2 position, bool highlighted) {
             base.Render(position, highlighted);
 
-            if(!this.Visible || this.Counter < this.Minimum) return;
+            if(!Visible || Counter < Minimum) return;
 
-            float fade = 1 - (TimeSinceLastIncrease > ExpirationTime / 2 ? 2 * (TimeSinceLastIncrease - ExpirationTime / 2) / ExpirationTime : 0);
+            var fade = 1 - (TimeSinceLastIncrease > ExpirationTime / 2 ? 2 * (TimeSinceLastIncrease - ExpirationTime / 2) / ExpirationTime : 0);
 
-            float pop = MathHelper.Lerp(1.5f, 1f, Ease.ExpoOut(TimeSinceLastIncrease));
+            var pop = MathHelper.Lerp(1.5f, 1f, Ease.ExpoOut(TimeSinceLastIncrease));
 
-            Color rainbow = Calc.HsvToColor(rainbowValue, 0.5f, 1f);
-            Color rainbow2 = Calc.HsvToColor(rainbowValue, 0.0f, 1f);
+            var rainbow = Calc.HsvToColor(rainbowValue, 0.5f, 1f);
+            var rainbow2 = Calc.HsvToColor(rainbowValue, 0.0f, 1f);
 
             ActiveFont.DrawEdgeOutline(
                 text: "x" + this.Counter,
@@ -55,9 +55,12 @@ namespace Celeste.Mod.GooberHelper.UI {
             );
         }
 
-        // public static void CreateComboModal(TextMenu menu) {
-        //     TextMenu.Header label = new TextMenu.Header("") { Container = menu };
-        //     TextMenuExt.Modal modal = new TextMenuExt.Modal(label, 85, 500) { Visible = false };
+        // public static void CreateComboModal(TextMenu menu, float expireTime = 1) {
+        //     var label = new TextMenu.Header("") { Container = menu };
+        //     var modal = new TextMenuExt.Modal(label, 85, 500) { Visible = false };
+
+        //     var timeSinceLastInput = 0f;
+        //     var counter = 0;
 
         //     menu.Add(modal);
 

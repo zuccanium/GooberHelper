@@ -1,10 +1,8 @@
 using System;
-using Microsoft.Xna.Framework;
-using Monocle;
 
 namespace Celeste.Mod.GooberHelper {
     public static partial class Utils {
-        public const string AnsiReset = "\e[0m";
+        public static readonly string AnsiReset = "\e[0m";
         public static string GetAnsiBackgroundColorCode(Color color) => $"\e[48;2;{color.R};{color.G};{color.B}m";
         public static string GetAnsiForegroundColorCode(Color color) => $"\e[38;2;{color.R};{color.G};{color.B}m";
         public static string GetAnsiColorCode(Color color) => GetAnsiForegroundColorCode(color);
@@ -38,7 +36,8 @@ namespace Celeste.Mod.GooberHelper {
                     )
             );
 #else
-        public static void Log(string str) {}
+        public static void Log(string str)
+            => Logger.Verbose("GooberHelper", str);
 #endif
     }
 }
