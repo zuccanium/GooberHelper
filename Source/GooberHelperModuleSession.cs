@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Celeste.Mod.GooberHelper.Options;
 using Celeste.Mod.GooberHelper.Triggers;
 
 namespace Celeste.Mod.GooberHelper {

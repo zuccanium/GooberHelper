@@ -1,6 +1,7 @@
 using System.Linq;
 using Celeste.Mod.Entities;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
+using Celeste.Mod.GooberHelper.Options;
 
 namespace Celeste.Mod.GooberHelper.Triggers {
     [CustomEntity("GooberHelper/GooberHelperOptions")]

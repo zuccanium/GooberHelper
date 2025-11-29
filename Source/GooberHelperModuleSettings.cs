@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Celeste.Mod.GooberHelper.Options;
 using Microsoft.Xna.Framework.Input;
 
 namespace Celeste.Mod.GooberHelper {
