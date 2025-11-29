@@ -13,9 +13,10 @@ namespace Celeste.Mod.GooberHelper.Options.Visuals {
             public override void Update() {
                 base.Update();
 
-                if(!GetOptionBool(Option.TheoNuclearReactor)) return;
+                if(!GetOptionBool(Option.TheoNuclearReactor))
+                    return;
 
-                if(Scene.OnInterval(0.02f)) {
+                if(Scene.OnInterval(0.02f))
                     (Scene as Level).Displacement.AddBurst(
                         Entity.Center + Vector2.One.Rotate(Random.Shared.NextAngle()) * 10f,
                         Random.Shared.Range(0.5f, 1f),
@@ -23,16 +24,18 @@ namespace Celeste.Mod.GooberHelper.Options.Visuals {
                         Random.Shared.Range(300f, 1000f),
                         Random.Shared.Range(0.2f, 0.3f)
                     );
-                }
             }
 
             public override void Render() {
                 base.Render();
 
-                if(!GetOptionBool(Option.TheoNuclearReactor)) return;
+                if(!GetOptionBool(Option.TheoNuclearReactor))
+                    return;
 
-                var nuclearReactorEffect = ModIntegration.FrostHelperAPI.GetEffectOrNull.Invoke("nuclearReactor");
-                if(nuclearReactorEffect == null || Engine.Scene is not Level) return;
+                var nuclearReactorEffect = ModIntegration.FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/NuclearReactor/nuclearReactor");
+                
+                if(nuclearReactorEffect == null || Engine.Scene is not Level)
+                    return;
 
                 var noiseTexture = GFX.Game["GooberHelper/noise"];
 

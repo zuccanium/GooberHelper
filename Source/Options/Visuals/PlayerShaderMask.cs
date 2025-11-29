@@ -71,9 +71,10 @@ namespace Celeste.Mod.GooberHelper.Options.Visuals {
         }
 
         private static void doPlayerMaskStuffBefore(Vector4 color, bool keepOutlines = false) {
-            var playerMaskEffect = ModIntegration.FrostHelperAPI.GetEffectOrNull.Invoke("playerMask");
+            var playerMaskEffect = ModIntegration.FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/PlayerShaderMask/playerMask");
 
-            if((Engine.Scene as Level) == null) return;
+            if((Engine.Scene as Level) == null)
+                return;
 
             GameplayRenderer.End();
 

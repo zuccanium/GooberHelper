@@ -108,14 +108,14 @@ namespace Celeste.Mod.GooberHelper.Entities {
 			foreach(var str in data.Attr("dyeColor", "00ffff,ffffff,ff44ff|0.5").Split('|')[0].Split(","))
 				dyeColors.Add(Calc.HexToColor(str));
 
-			DisplayShader          = FrostHelperAPI.GetEffectOrNull.Invoke("display");
-			AdvectionShader        = FrostHelperAPI.GetEffectOrNull.Invoke("advection");
-			BaseVelocityShader     = FrostHelperAPI.GetEffectOrNull.Invoke("baseVelocity");
-			JacobiShader           = FrostHelperAPI.GetEffectOrNull.Invoke("jacobi");
-			DivergenceCurlShader   = FrostHelperAPI.GetEffectOrNull.Invoke("divergenceCurl");
-			GradientShader         = FrostHelperAPI.GetEffectOrNull.Invoke("gradient");
-			DiffuseShader          = FrostHelperAPI.GetEffectOrNull.Invoke("diffuse");
-			VorticityShader        = FrostHelperAPI.GetEffectOrNull.Invoke("vorticity");
+			DisplayShader          = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/display");
+			AdvectionShader        = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/advection");
+			BaseVelocityShader     = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/baseVelocity");
+			JacobiShader           = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/jacobi");
+			DivergenceCurlShader   = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/divergenceCurl");
+			GradientShader         = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/gradient");
+			DiffuseShader          = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/diffuse");
+			VorticityShader        = FrostHelperAPI.GetEffectOrNull.Invoke("GooberHelper/FluidSimulation/vorticity");
 
 			AttemptAddSet();
 
