@@ -40,7 +40,7 @@ namespace Celeste.Mod.GooberHelper.Extensions {
         }
 
         public static Vector2 GetConservedSpeed(this Player self) {
-            var c = self.GetExtensionFields();
+            var ext = self.GetExtensionFields();
             var conserveBeforeDashSpeed = GetOptionBool(Option.ConserveBeforeDashSpeed) && self.StateMachine.State == Player.StDash;
 
             return new Vector2(
@@ -52,8 +52,8 @@ namespace Celeste.Mod.GooberHelper.Extensions {
                     conserveBeforeDashSpeed
                         ? self.beforeDashSpeed.X
                         : 0f,
-                    conserveBeforeDashSpeed && c.DashStickyRetentionExists
-                        ? c.DashStickyRetentionSpeed.X
+                    conserveBeforeDashSpeed && ext.DashStickyRetentionExists
+                        ? ext.DashStickyRetentionSpeed.X
                         : 0f
                 ),
                 Utils.SignedAbsMax(
@@ -61,8 +61,8 @@ namespace Celeste.Mod.GooberHelper.Extensions {
                     conserveBeforeDashSpeed
                         ? self.beforeDashSpeed.Y
                         : 0f,
-                    conserveBeforeDashSpeed && c.DashStickyRetentionExists
-                        ? c.DashStickyRetentionSpeed.Y
+                    conserveBeforeDashSpeed && ext.DashStickyRetentionExists
+                        ? ext.DashStickyRetentionSpeed.Y
                         : 0f
                 )
             );

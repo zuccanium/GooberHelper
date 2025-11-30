@@ -13,6 +13,8 @@ namespace Celeste.Mod.GooberHelper.Extensions {
 
             public bool FreezeFrameFrozen = false;
             public RefillFreezeGameSuspension.InputState FreezeFrameFrozenInputs;
+
+            public float[] TrailManagerSnapshotRotations = new float[64];
         }
 
         private static readonly string f_Scene_GooberHelperExtensionFields = nameof(f_Scene_GooberHelperExtensionFields);
