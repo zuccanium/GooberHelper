@@ -11,8 +11,6 @@ namespace Celeste.Mod.GooberHelper.Settings.Toggles {
             => SettingProperty.SetValue(GooberHelperModule.Settings, value);
 
 
-        public virtual string GetDescription() => null;
-
         public override void CreateEntry(TextMenu menu, bool inGame) {            
             if(SettingProperty.GetValue(GooberHelperModule.Settings) is not bool value) {
                 Logger.Error("GooberHelper", "hwfehowjhefoiawjeofjawiojefioawj");

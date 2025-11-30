@@ -7,7 +7,8 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
     [GooberHelperOption(Option.BubbleSpeedPreservation)]
     public static class BubbleSpeedPreservation {
-        [ILHook]
+        [ILHook(typeof(Player), "DashCoroutine")]
+        [ILHook(typeof(Player), "RedDashCoroutine")]
         private static void modifyDashSpeedThing(ILContext il) {
             var cursor = new ILCursor(il);
 

@@ -17,7 +17,7 @@ namespace Celeste.Mod.GooberHelper {
         public bool ShowOptionsInGame { get; set; } = false;
         public bool DebugMapPhysics { get; set; } = false;
         public bool FastMenuing { get; set; } = false;
-        public bool CustomSwimmingAnimation { get; set; } = false;
+        public bool CustomSwimmingAnimation { get; set; } = true;
 
         //buttons
         //theyre not public because i dont want them to be stored in the mod settings

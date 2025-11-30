@@ -7,14 +7,12 @@ namespace Celeste.Mod.GooberHelper.Extensions {
         public class SceneExtensionFields {
             public int Counter = 0;
             public int LastPauseCounterValue = 0;
-            public float StunningWatchTimer = 0;
+            public float StunningWatchTimer = 0f;
             public float StunningOffset = 0f;
             public int StunningGroup = 0;
 
             public bool FreezeFrameFrozen = false;
             public RefillFreezeGameSuspension.InputState FreezeFrameFrozenInputs;
-
-            public float[] TrailManagerSnapshotRotations = new float[64];
         }
 
         private static readonly string f_Scene_GooberHelperExtensionFields = nameof(f_Scene_GooberHelperExtensionFields);

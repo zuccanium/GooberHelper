@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
@@ -10,7 +9,6 @@ using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
     public static class PlayerRender {
-        public static Color LastPlayerHairColor = Player.NormalHairColor;
         private static bool startedRendering = false;
 
         public static bool ShouldCustomRenderBody(Player player)
@@ -29,20 +27,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         }
 
         public static float PlayerRotation = 0f;
-
-        public static void UpdatePlayerRotation(Player player) {
-            if(!CustomSwimmingAnimation.ShouldDoAnimation(player)) {
-                PlayerRotation = 0f;
-
-                return;
-            }
-
-            var speedAngle = player.GetConservedSpeed().Angle() + MathF.PI / 2;
-
-            PlayerRotation = Input.Aim != Vector2.Zero
-                ? speedAngle
-                : Calc.AngleLerp(0, speedAngle, 1f / (1f + 100f / MathF.Exp(player.Speed.Length() / 10f)));
-        }
+        public static float PlayerRotationTarget = 0f;
 
         public static Matrix RotateMatrixToPlayerRotationAroundVector(Matrix matrix, Vector2 vector) {
             var offset = new Vector3(vector, 0);
@@ -51,6 +36,27 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
                 * Matrix.CreateTranslation(offset)
                 * Matrix.CreateRotationZ(PlayerRotation)
                 * Matrix.CreateTranslation(-offset);
+        }
+
+        [OnHook]
+        private static void patch_Player_UpdateSprite(On.Celeste.Player.orig_UpdateSprite orig, Player self) {
+            var ext = self.GetExtensionFields();
+
+            PlayerRotation = ext.PlayerRotation;
+            PlayerRotationTarget = ext.PlayerRotationTarget;
+
+            //this should probably go into the other one but im really lazy rn and i dont care 🧼😭
+            if(self.StateMachine.State != Player.StSwim) {
+                PlayerRotation = 0f;
+                PlayerRotationTarget = 0f;
+            }
+            
+            orig(self);
+
+            PlayerRotation = Calc.AngleApproach(PlayerRotation, PlayerRotationTarget, 20f * Engine.DeltaTime);
+
+            ext.PlayerRotation = PlayerRotation;
+            ext.PlayerRotationTarget = PlayerRotationTarget;
         }
 
         [OnHook]
@@ -104,7 +110,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
                 return;
             }
 
-            LastPlayerHairColor = self.Hair.Color;
+            PlayerShaderMask.SetMaskColor(self);
 
             beforeRender(self, RenderSource.Body);
 

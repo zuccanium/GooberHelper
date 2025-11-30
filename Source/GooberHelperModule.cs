@@ -32,6 +32,9 @@ namespace Celeste.Mod.GooberHelper {
         public override void Load()
             => OnLoadAttribute.Load();
 
+        public override void LoadContent(bool firstLoad)
+            => OnLoadContentAttribute.Load();
+
         public override void Unload()
             => OnUnloadAttribute.Unload();
 

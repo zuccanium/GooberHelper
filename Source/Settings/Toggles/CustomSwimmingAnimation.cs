@@ -1,6 +1,7 @@
 using System;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
+using Celeste.Mod.GooberHelper.Extensions;
 using Celeste.Mod.GooberHelper.Helpers;
 using Celeste.Mod.GooberHelper.Options.GeneralHooks;
 using Celeste.Mod.Helpers;
@@ -12,8 +13,8 @@ namespace Celeste.Mod.GooberHelper.Settings.Toggles {
     public class CustomSwimmingAnimation : AbstractToggle {
         public static ParticleType P_SwimTrail;
 
-        [OnLoad]
-        public static void Load()
+        [OnLoadContent]
+        public static void LoadContent()
             => P_SwimTrail = new() {
                 SourceChooser = new Chooser<MTexture>([
                     GFX.Game["particles/zappysmoke00"],
@@ -32,16 +33,12 @@ namespace Celeste.Mod.GooberHelper.Settings.Toggles {
                 ScaleOut = true,
                 UseActualDeltaTime = true
             };
-
-        public override string GetDescription()
-            => Dialog.Clean("jiwoefjiojwefiowejoiwejoif");
         
         public static bool ShouldDoAnimation(Player player)
             => player is not null
             && player.StateMachine.State == Player.StSwim
             && GetOptionBool(Option.CustomSwimming) 
             && GooberHelperModule.Settings.CustomSwimmingAnimation;
-
 
         [ILHook]
         private static void patch_Player_SwimUpdate(ILContext il) {
@@ -58,12 +55,6 @@ namespace Celeste.Mod.GooberHelper.Settings.Toggles {
             HookHelper.Begin(cursor, "bingle b", true);
 
             var exitLabel = cursor.DefineLabel();
-
-            HookHelper.Move("moving nowhere", () => {});
-            HookHelper.Do(() => {
-                cursor.EmitLdarg0();
-                cursor.EmitDelegate(PlayerRender.UpdatePlayerRotation);
-            });
 
             HookHelper.Move("going to the stswim check", () => {
                 cursor.GotoNextBestFit(MoveType.After,
@@ -108,10 +99,30 @@ namespace Celeste.Mod.GooberHelper.Settings.Toggles {
         }
 
         private static bool maybeUpdateSprite(Player player) {
-            if(!ShouldDoAnimation(player))
-                return false;
+            if(!ShouldDoAnimation(player)) {
+                PlayerRender.PlayerRotationTarget = 0f;
+                PlayerRender.PlayerRotation = 0f;
 
-            player.Sprite.Play("spin");
+                return false;
+            }
+
+            if(Input.Aim != Vector2.Zero) {
+                var speedAngle = player.GetConservedSpeed().Angle() + MathF.PI / 2f;
+
+                PlayerRender.PlayerRotationTarget = speedAngle;
+
+                var animationStarted = player.Sprite.CurrentAnimationID == "spin";
+
+                player.Sprite.Play("spin");
+                
+                if(!animationStarted) {
+                    player.Sprite.CurrentAnimationFrame = 8;
+                    player.Sprite.SetFrame(player.Sprite.currentAnimation.Frames[player.Sprite.CurrentAnimationFrame]);
+                }
+            } else {
+                PlayerRender.PlayerRotationTarget = 0f;
+                player.Sprite.Play("swimIdle");
+            }
             
             return true;
         }

@@ -16,7 +16,9 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
                 timeDist++;
             }
 
-            return timeDist < 3 ? (timeDist + Engine.Scene.GetExtensionFields().Counter) % 3 : 3;
+            return timeDist < 3
+                ? (timeDist + Engine.Scene.GetExtensionFields().Counter) % 3
+                : 3;
         }
 
         private static float getGroupOffset(int targetGroup) {
@@ -32,14 +34,14 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
 
         private static void setStunnableEntityOffset(float offset) {
             using(var enumerator = Engine.Scene.Tracker.GetComponents<PlayerCollider>().GetEnumerator()) {
-				while (enumerator.MoveNext()) {
-                    if (enumerator.Current.Entity is CrystalStaticSpinner spinner && !spinner.Collidable)
+				while(enumerator.MoveNext()) {
+                    if(enumerator.Current.Entity is CrystalStaticSpinner spinner && !spinner.Collidable)
                         spinner.offset = offset;
 
-                    if (enumerator.Current.Entity is Lightning lightning && !lightning.Collidable)
+                    if(enumerator.Current.Entity is Lightning lightning && !lightning.Collidable)
                         lightning.toggleOffset = offset;
 
-                    if (enumerator.Current.Entity is DustStaticSpinner dust && !dust.Collidable)
+                    if(enumerator.Current.Entity is DustStaticSpinner dust && !dust.Collidable)
                         dust.offset = offset;
                 }
 			}
@@ -49,12 +51,12 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         private static void patch_Level_Pause(On.Celeste.Level.orig_Pause orig, Level self, int startIndex, bool minimal, bool quickReset) {
             orig(self, startIndex, minimal, quickReset);
 
-            if(!GetOptionBool(Option.LenientStunning)) return;
+            if(!GetOptionBool(Option.LenientStunning))
+                return;
 
-            var ext = self.GetExtensionFields();
+            if(self.GetExtensionFields() is not SceneExtensions.SceneExtensionFields ext)
+                return;
             
-            if(ext == null) return;
-
             //dont let the player pause buffer to mimic spinner stunning
             //11 because unpausing time still adds to the counter
             if(ext.Counter <= ext.LastPauseCounterValue + 11) {
@@ -101,7 +103,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         //code stolen from https://github.com/EverestAPI/CelesteTAS-EverestInterop/blob/c3595e5af47bde0bca28e4693c80c180434c218c/CelesteTAS-EverestInterop/Source/EverestInterop/Hitboxes/CycleHitboxColor.cs
         //very helpful resource for this
         [OnHook]
-        private static void modSceneBeforeUpdate(On.Monocle.Scene.orig_BeforeUpdate orig, Scene self) {
+        private static void patch_Scene_BeforeUpdate(On.Monocle.Scene.orig_BeforeUpdate orig, Scene self) {
             if(self is not Level) {
                 orig(self);
 

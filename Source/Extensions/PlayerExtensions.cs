@@ -4,15 +4,12 @@ using MonoMod.Utils;
 namespace Celeste.Mod.GooberHelper.Extensions {
     public static class PlayerExtensions {
         public class PlayerExtensionFields {
-            public Vector2 AwesomeRetentionSpeed = Vector2.Zero;
-            public float AwesomeRetentionTimer = 0f;
-            public Vector2 AwesomeRetentionDirection = Vector2.Zero;
-            public bool AwesomeRetentionWasInWater = false;
-            public Platform AwesomeRetentionPlatform;
+            public Vector2 LenientAllDirectionRetentionSpeed = Vector2.Zero;
+            public float LenientAllDirectionRetentionTimer = 0f;
+            public Platform LenientAllDirectionRetentionPlatform;
 
             public bool DashStickyRetentionExists = false;
-            public Vector2 DashStickyRetentionDirection = Vector2.Zero;
-            public Vector2 DashStickyRetentionSpeed;
+            public Vector2 DashStickyRetentionSpeed = Vector2.Zero;
             
             public Vector2 BeforeDashSpeedConserved = Vector2.Zero;
             
@@ -25,6 +22,9 @@ namespace Celeste.Mod.GooberHelper.Extensions {
             public Vector2 DashWindBoost = Vector2.Zero;
             
             public float HitboxCompression = 0f;
+
+            public float PlayerRotationTarget = 0f;
+            public float PlayerRotation = 0f;
         }
 
         private static readonly string f_Player_GooberHelperExtensionFields = nameof(f_Player_GooberHelperExtensionFields);
@@ -41,7 +41,7 @@ namespace Celeste.Mod.GooberHelper.Extensions {
 
         public static Vector2 GetConservedSpeed(this Player self) {
             var ext = self.GetExtensionFields();
-            var conserveBeforeDashSpeed = GetOptionBool(Option.ConserveBeforeDashSpeed) && self.StateMachine.State == Player.StDash;
+            var conserveBeforeDashSpeed = self.StateMachine.State == Player.StDash && GetOptionBool(Option.ConserveBeforeDashSpeed);
 
             return new Vector2(
                 Utils.SignedAbsMax(
