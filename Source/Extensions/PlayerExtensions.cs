@@ -10,6 +10,7 @@ namespace Celeste.Mod.GooberHelper.Extensions {
 
             //i love naming variables
             public bool IsDolphin = false;
+            public float SwimLaunchCooldownTimer = 0f;
 
             public bool DashStickyRetentionExists = false;
             public Vector2 DashStickyRetentionSpeed = Vector2.Zero;

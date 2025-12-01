@@ -12,7 +12,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         private static bool startedRendering = false;
 
         public static bool ShouldCustomRenderBody(Player player)
-            => CustomSwimmingAnimation.ShouldDoAnimation(player) || GetOptionEnum<PlayerShaderMaskValue>(Option.PlayerShaderMask) == PlayerShaderMaskValue.Cover;
+            => CustomSwimmingAnimation.ShouldDoAnimation(player) || GetOptionBool(Option.RotatePlayerToSpeed) || GetOptionEnum<PlayerShaderMaskValue>(Option.PlayerShaderMask) == PlayerShaderMaskValue.Cover;
         
         public static bool ShouldCustomRenderHair(Player player)
             => GetOptionEnum<PlayerShaderMaskValue>(Option.PlayerShaderMask) == PlayerShaderMaskValue.HairOnly;
@@ -48,7 +48,9 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
 
             var shouldCancel = false;
             
-            shouldCancel |= CustomSwimmingAnimation.OnUpdateSprite(self);
+            shouldCancel = shouldCancel
+                || CustomSwimmingAnimation.OnUpdateSprite(self)
+                || RotatePlayerToSpeed.OnUpdateSprite(self);
             
             if(!shouldCancel) {
                 orig(self);
@@ -75,8 +77,14 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             //the startedRendering boolean is set to true when the actual render method is called
             //that Should prevent this method from executing the custom shader code
             //i should document these things more often
+
+            rotateHairNodes(self, -1);
+
+            //you
             if(!ShouldCustomRenderHair(self.Entity as Player) || ShouldCustomRenderBody(self.Entity as Player) || !startedRendering || self.Entity is not Player player) {
                 orig(self);
+
+                rotateHairNodes(self, 1);
 
                 return;
             }
@@ -87,7 +95,19 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             
             afterRender();
 
+            rotateHairNodes(self, 1);
+
             startedRendering = false;
+        }
+
+        private static void rotateHairNodes(PlayerHair hair, int dir) {
+            if(PlayerRotation == 0f)
+                return;
+
+            var center = hair.Nodes[0];
+
+            for(var i = 0; i < hair.Nodes.Count; i++)
+                hair.Nodes[i] = (hair.Nodes[i] - center).Rotate(PlayerRotation * dir) + center;
         }
 
         [OnHook]

@@ -95,6 +95,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             { "Visuals", [
                 new OptionData(Option.PlayerShaderMask, typeof(PlayerShaderMaskValue), PlayerShaderMaskValue.None),
                 new OptionData(Option.TheoNuclearReactor),
+                new OptionData(Option.RotatePlayerToSpeed),
             ]},
             { "Miscellaneous", [
                 new OptionData(Option.AlwaysExplodeSpinners),
