@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 using Celeste.Mod.GooberHelper.Helpers;
 using Celeste.Mod.GooberHelper.Options.GeneralHooks;
+using Celeste.Mod.GooberHelper.Settings.Toggles;
 using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
@@ -54,15 +56,15 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         }
 
         private static bool trySwimWalljumpFromDash(Player player) {
-            if(!player.CollideCheck<Water>())
+            if(!player.CollideCheck<Water>() || !Input.Jump.Pressed)
                 return false;
         
             return trySwimWalljump(player);
         }
 
-        private static bool tryWaterLaunch(Player player) {
+        private static bool trySwimLaunch(Player player) {
             var upwardsDisplacement = Math.Min(player.Speed.Y * Engine.DeltaTime, 0);
-            var inWaterNextFrame = player.CollideCheck<Water>(player.Position + Vector2.UnitY * upwardsDisplacement);
+            var inWaterNextFrame = player.CollideCheck<Water>(player.Position + Vector2.UnitY * (upwardsDisplacement - 10f)); //8 because you stop being in stswim a bit before the surface
 
             if(inWaterNextFrame || player.Speed.Y > WaterLaunchSpeedThreshold)
                 return false;
@@ -75,14 +77,28 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
 
             Dust.Burst(player.Position, MathF.PI + player.Speed.Angle(), 4);
 
+            CustomSwimmingAnimation.ParticleBurst(player);
+            
+            var ext = player.GetExtensionFields();
+
+            ext.IsDolphin = true;
+
             return true;
         }
 
         private static bool doCustomSwimMovement(Player player, Vector2 vector) {
-            // var ext = player.GetExtensionFields();
+            var ext = player.GetExtensionFields();
 
             //lenient all direction retention is used underwater
             player.wallSpeedRetentionTimer = 0f;
+
+            var retention = ext.LenientAllDirectionRetentionSpeed;
+
+            if(Math.Abs(retention.X) > Math.Abs(player.Speed.X) && !player.CollideCheck<Solid>(player.Position + Math.Sign(retention.X) * Vector2.UnitX))
+                player.Speed.X = ext.LenientAllDirectionRetentionSpeed.X;
+
+            if(Math.Abs(retention.Y) > Math.Abs(player.Speed.Y) && !player.CollideCheck<Solid>(player.Position + Math.Sign(retention.Y) * Vector2.UnitY))
+                player.Speed.Y = ext.LenientAllDirectionRetentionSpeed.Y;
 
             var useSlowMovement =
                 Vector2.Dot(player.Speed.SafeNormalize(Vector2.Zero), vector) < -0.5f ||
@@ -98,7 +114,9 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
 
             if(Input.Jump.Pressed) {
                 trySwimWalljump(player);
-                tryWaterLaunch(player);
+                
+                if(trySwimLaunch(player))
+                    return true;
             }
 
             return false;
@@ -170,6 +188,50 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
                 cursor.MoveAfterLabels();
                 cursor.EmitDelegate(getOptionBool);
                 cursor.EmitBrtrue(swimJumpEndLabel);
+            });
+
+            HookHelper.End();
+        }
+
+        [ILHook]
+        private static void patch_Player_NormalUpdate(ILContext il) {
+            var cursor = new ILCursor(il);
+
+            HookHelper.Begin(cursor, "making the custom swimming launch thing work in normalupdate");
+
+            var afterJumpLabel = cursor.DefineLabel();
+
+            HookHelper.Move("going to the water check", () => {
+                var collideFirstMethod = typeof(Entity)
+                    .GetMethods()
+                    .Where(method =>
+                        method.Name == "CollideFirst" &&
+                        method.IsGenericMethodDefinition &&
+                        method.GetParameters().FirstOrDefault()?.ParameterType == typeof(Vector2)
+                    )
+                    .First()
+                    .MakeGenericMethod(typeof(Water));
+
+                cursor.GotoNextBestFit(MoveType.After,
+                    instr => instr.MatchCallOrCallvirt(collideFirstMethod),
+                    instr => instr.MatchDup(),
+                    instr => instr.MatchStloc(out _),
+                    instr => instr.MatchBrfalse(out _)
+                );
+            });
+
+            HookHelper.Do(() => {
+                cursor.EmitLdarg0();
+                cursor.EmitDelegate(trySwimLaunch);
+                cursor.EmitBrtrue(afterJumpLabel);
+            });
+
+            HookHelper.Move("going after the jump call", () => {
+                cursor.GotoNextBestFit(MoveType.After, instr => instr.MatchCallOrCallvirt<Player>("Jump"));
+            });
+
+            HookHelper.Do(() => {
+                cursor.MarkLabel(afterJumpLabel);
             });
 
             HookHelper.End();

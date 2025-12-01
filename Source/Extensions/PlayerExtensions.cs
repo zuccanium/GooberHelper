@@ -8,6 +8,9 @@ namespace Celeste.Mod.GooberHelper.Extensions {
             public float LenientAllDirectionRetentionTimer = 0f;
             public Platform LenientAllDirectionRetentionPlatform;
 
+            //i love naming variables
+            public bool IsDolphin = false;
+
             public bool DashStickyRetentionExists = false;
             public Vector2 DashStickyRetentionSpeed = Vector2.Zero;
             

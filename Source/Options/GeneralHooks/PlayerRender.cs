@@ -19,6 +19,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
 
         private static FieldInfo f_RasterizerState_CullNone = typeof(RasterizerState).GetField("CullNone");
         private static FieldInfo f_SpriteBatch_transformMatrix = typeof(SpriteBatch).GetField("transformMatrix", Utils.BindingFlagsAll);
+        private static Matrix previousBatchMatrix;
         
         public enum RenderSource {
             Body,
@@ -45,13 +46,17 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             PlayerRotation = ext.PlayerRotation;
             PlayerRotationTarget = ext.PlayerRotationTarget;
 
-            //this should probably go into the other one but im really lazy rn and i dont care 🧼😭
-            if(self.StateMachine.State != Player.StSwim) {
-                PlayerRotation = 0f;
-                PlayerRotationTarget = 0f;
-            }
+            var shouldCancel = false;
             
-            orig(self);
+            shouldCancel |= CustomSwimmingAnimation.OnUpdateSprite(self);
+            
+            if(!shouldCancel) {
+                orig(self);
+            } else {
+                //these are important
+                self.Sprite.Scale.X = Calc.Approach(self.Sprite.Scale.X, 1f, 1.75f * Engine.DeltaTime);
+                self.Sprite.Scale.Y = Calc.Approach(self.Sprite.Scale.Y, 1f, 1.75f * Engine.DeltaTime);
+            }
 
             PlayerRotation = Calc.AngleApproach(PlayerRotation, PlayerRotationTarget, 20f * Engine.DeltaTime);
 
@@ -135,12 +140,20 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             if(Engine.Scene is not Level level)
                 return;
 
+            previousBatchMatrix = (Matrix)f_SpriteBatch_transformMatrix.GetValue(Draw.SpriteBatch);
+
+            //should be equal to the camera position (but it accounts for translation like in mirror reflections)
+            //dw about the negation
+            var translation = -previousBatchMatrix.Translation;
+
             GameplayRenderer.End();
 
-            Effect effect = null;
-            var matrix = RotateMatrixToPlayerRotationAroundVector(level.Camera.Matrix, level.Camera.Position - (playerMaybe.Center - new Vector2(0, 2)));
+            var playerSpriteCenter = playerMaybe.Center - new Vector2(0, 2);
 
-            PlayerShaderMask.BeforeRender(playerMaybe, source, ref effect, ref matrix);
+            Effect effect = null;
+            var matrix = RotateMatrixToPlayerRotationAroundVector(previousBatchMatrix, new Vector2(translation.X, translation.Y) - playerSpriteCenter);
+
+            PlayerShaderMask.BeforeRender(playerMaybe, level, source, ref effect, ref matrix);
 
             Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, effect, matrix);
         }
@@ -148,11 +161,15 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         private static void afterRender() {
             Draw.SpriteBatch.End();
             GameplayRenderer.Begin();
+
+            f_SpriteBatch_transformMatrix.SetValue(Draw.SpriteBatch, previousBatchMatrix);
         }
 
         private static void rotateTrailManagerMatrix() {
             var matrix = (Matrix)f_SpriteBatch_transformMatrix.GetValue(Draw.SpriteBatch);
 
+            //256 = 512/2 = buffer.width/2 = buffer.height/2
+            //the 8 is just a magic number to make the rotation around the player sprite work dw about it
             matrix = RotateMatrixToPlayerRotationAroundVector(matrix, -new Vector2(256, 256) + new Vector2(0, 8));
 
             f_SpriteBatch_transformMatrix.SetValue(Draw.SpriteBatch, matrix);

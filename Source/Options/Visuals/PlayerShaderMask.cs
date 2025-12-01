@@ -10,7 +10,7 @@ namespace Celeste.Mod.GooberHelper.Options.Visuals {
     public static class PlayerShaderMask {
         private static Color maskColor;
 
-        public static void BeforeRender(Entity playerMaybe, PlayerRender.RenderSource source, ref Effect effect, ref Matrix matrix) {
+        public static void BeforeRender(Entity playerMaybe, Level level, PlayerRender.RenderSource source, ref Effect effect, ref Matrix matrix) {
             var playerShaderMaskValue = GetOptionEnum<PlayerShaderMaskValue>(Option.PlayerShaderMask);
 
             var ableToRender = playerShaderMaskValue switch {
@@ -19,7 +19,7 @@ namespace Celeste.Mod.GooberHelper.Options.Visuals {
                 _ => false
             };
 
-            if(!ableToRender || Engine.Scene is not Level level)
+            if(!ableToRender)
                 return;
 
             effect = FrostHelper.GetEffectOrNull?.Invoke("GooberHelper/PlayerShaderMask/playerMask");

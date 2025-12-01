@@ -1,3 +1,4 @@
+using System;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 using MonoMod.Cil;
@@ -41,13 +42,13 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
 
             var newCollision = false;
 
-            if(data.Direction.Y == 0 && ext.LenientAllDirectionRetentionSpeed.X == 0) {
+            if(data.Direction.Y == 0 && Math.Abs(player.Speed.X) > Math.Abs(ext.LenientAllDirectionRetentionSpeed.X)) {
                 ext.LenientAllDirectionRetentionSpeed.X = player.Speed.X;
                 
                 newCollision = true;
             }
 
-            if(data.Direction.X == 0 && ext.LenientAllDirectionRetentionSpeed.Y == 0) {
+            if(data.Direction.X == 0 && Math.Abs(player.Speed.Y) > Math.Abs(ext.LenientAllDirectionRetentionSpeed.Y)) {
                 ext.LenientAllDirectionRetentionSpeed.Y = player.Speed.Y;
                 
                 newCollision = true;
