@@ -19,7 +19,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
 
         private static FieldInfo f_RasterizerState_CullNone = typeof(RasterizerState).GetField("CullNone");
         private static FieldInfo f_SpriteBatch_transformMatrix = typeof(SpriteBatch).GetField("transformMatrix", Utils.BindingFlagsAll);
-        private static Matrix previousBatchMatrix;
+        private static Matrix levelBatchMatrix;
         
         public enum RenderSource {
             Body,
@@ -78,10 +78,12 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             //that Should prevent this method from executing the custom shader code
             //i should document these things more often
 
+            var previousMatrix = (Matrix)f_SpriteBatch_transformMatrix.GetValue(Draw.SpriteBatch);
+
             rotateHairNodes(self, -1);
 
             //you
-            if(!ShouldCustomRenderHair(self.Entity as Player) || ShouldCustomRenderBody(self.Entity as Player) || !startedRendering || self.Entity is not Player player) {
+            if(!ShouldCustomRenderHair(self.Entity as Player) || !startedRendering || self.Entity is not Player player) {
                 orig(self);
 
                 rotateHairNodes(self, 1);
@@ -98,6 +100,8 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             rotateHairNodes(self, 1);
 
             startedRendering = false;
+
+            f_SpriteBatch_transformMatrix.SetValue(Draw.SpriteBatch, previousMatrix);
         }
 
         private static void rotateHairNodes(PlayerHair hair, int dir) {
@@ -137,11 +141,15 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
 
             PlayerShaderMask.SetMaskColor(self);
 
+            levelBatchMatrix = (Matrix)f_SpriteBatch_transformMatrix.GetValue(Draw.SpriteBatch);
+
             beforeRender(self, RenderSource.Body);
 
             orig(self);
 
             afterRender();
+
+            f_SpriteBatch_transformMatrix.SetValue(Draw.SpriteBatch, levelBatchMatrix);
         }
 
         [ILHook]
@@ -160,18 +168,16 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             if(Engine.Scene is not Level level)
                 return;
 
-            previousBatchMatrix = (Matrix)f_SpriteBatch_transformMatrix.GetValue(Draw.SpriteBatch);
-
             //should be equal to the camera position (but it accounts for translation like in mirror reflections)
             //dw about the negation
-            var translation = -previousBatchMatrix.Translation;
+            var translation = -levelBatchMatrix.Translation;
 
             GameplayRenderer.End();
 
             var playerSpriteCenter = playerMaybe.Center - new Vector2(0, 2);
 
             Effect effect = null;
-            var matrix = RotateMatrixToPlayerRotationAroundVector(previousBatchMatrix, new Vector2(translation.X, translation.Y) - playerSpriteCenter);
+            var matrix = RotateMatrixToPlayerRotationAroundVector(levelBatchMatrix, new Vector2(translation.X, translation.Y) - playerSpriteCenter);
 
             PlayerShaderMask.BeforeRender(playerMaybe, level, source, ref effect, ref matrix);
 
@@ -181,8 +187,6 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         private static void afterRender() {
             Draw.SpriteBatch.End();
             GameplayRenderer.Begin();
-
-            f_SpriteBatch_transformMatrix.SetValue(Draw.SpriteBatch, previousBatchMatrix);
         }
 
         private static void rotateTrailManagerMatrix() {

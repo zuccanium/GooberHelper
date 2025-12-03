@@ -121,8 +121,12 @@ namespace Celeste.Mod.GooberHelper.Settings.Toggles {
 
                 return true;
             } else {
+                var ext = player.GetExtensionFields();
+
                 PlayerRender.PlayerRotationTarget = 0f;
                 PlayerRender.PlayerRotation = 0f;
+
+                ext.IsDolphin = false;
             }
 
             return false;
