@@ -149,9 +149,6 @@ namespace Celeste.Mod.GooberHelper {
             On.Celeste.Player.Boost += modPlayerBoost;
             On.Celeste.Player.RedBoost += modPlayerRedBoost;
             On.Celeste.Player.Render += modPlayerRender;
-            On.Celeste.Player.SwimCheck += modPlayerSwimCheck;
-            On.Celeste.Player.SwimJumpCheck += modPlayerSwimJumpCheck;
-            On.Celeste.Player.UnderwaterMusicCheck += modPlayerUnderwaterMusicCheck;
             On.Celeste.Player.Pickup += modPlayerPickup;
             On.Celeste.Player.NormalBegin += modPlayerNormalBegin;
 
@@ -266,9 +263,6 @@ namespace Celeste.Mod.GooberHelper {
             On.Celeste.Player.Boost -= modPlayerBoost;
             On.Celeste.Player.RedBoost -= modPlayerRedBoost;
             On.Celeste.Player.Render -= modPlayerRender;
-            On.Celeste.Player.SwimCheck -= modPlayerSwimCheck;
-            On.Celeste.Player.SwimJumpCheck -= modPlayerSwimJumpCheck;
-            On.Celeste.Player.UnderwaterMusicCheck -= modPlayerUnderwaterMusicCheck;
             On.Celeste.Player.Pickup -= modPlayerPickup;
             On.Celeste.Player.NormalBegin -= modPlayerNormalBegin;
 
@@ -675,24 +669,6 @@ namespace Celeste.Mod.GooberHelper {
             
             // Console.WriteLine("offsetGroup: " + c.StunningGroup);
             // Console.WriteLine("offset: " + offset);
-        }
-
-        private bool modPlayerSwimCheck(On.Celeste.Player.orig_SwimCheck orig, Player self) {
-            if(self.CollideAll<Water>().Any(water => water is Waterfall && (water as Waterfall).nonCollidable)) return false;
-            
-            return orig(self);
-        }
-
-        private bool modPlayerSwimJumpCheck(On.Celeste.Player.orig_SwimJumpCheck orig, Player self) {
-            if(self.CollideAll<Water>().Any(water => water is Waterfall && (water as Waterfall).nonCollidable)) return false;
-            
-            return orig(self);
-        }
-
-        private bool modPlayerUnderwaterMusicCheck(On.Celeste.Player.orig_UnderwaterMusicCheck orig, Player self) {
-            if(self.CollideAll<Water>().Any(water => water is Waterfall && (water as Waterfall).nonCollidable)) return false;
-            
-            return orig(self);
         }
 
         private void modPlayerHairRender(On.Celeste.PlayerHair.orig_Render orig, PlayerHair self) {

@@ -1,110 +1,164 @@
-using Monocle;
-using Microsoft.Xna.Framework;
 using Celeste.Mod.Entities;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.GooberHelper.Entities {
-
     [CustomEntity("GooberHelper/Waterfall")]
     [TrackedAs(typeof(Water))]
     public class Waterfall : Water {
+        public class Splash {
+            public float Position;
+            public Vector2 Direction;
+            public float Offset;
 
-        private MTexture splashTexture = GFX.Game["objs/waterfall/GooberHelper/fade"];
-        private MTexture noiseTexture;
-        public bool nonCollidable = false;
+            public Splash(float position) {
+                Position = position;
+                
+                Direction = Calc.AngleToVector(Random.Shared.NextAngle(), 1);
+                Offset = Random.Shared.NextFloat();
+            }
+        }
 
-        bool playerInside = false;
-        float speed = 200f;
+        private bool nonCollidable = false;
+        
+        private float speed;
 
-        List<Vector4> splashes = new List<Vector4>();
+        private Color waterColor;
+        private List<Texture2D> waterTextureLayers;
+        private float waterLayerDistance;
+        private float waterSpeed;
+        private int waterPadding = 3;
+
+        private Color splashColor;
+        private List<MTexture> splashTextures;
+        private float splashSpeed;
+        private float splashSize;
+        private float splashOpacity;
+        private float splashDensity;
+        private float splashDistance;
+
+        private float time = 0f;
+        private Player playerInside;
+        private List<Splash> splashes = [];
 
         public Waterfall(EntityData data, Vector2 offset) : base(data.Position + offset, false, false, data.Width, data.Height) {
-            this.Depth = -9999;
+            Depth = data.Int("depth", -9999);
+            
+            speed = data.Float("speed", 200f);
+            
+            waterColor = data.HexColor("waterColor", Color.White);
+            waterTextureLayers = [..
+                data.Attr("waterTextureLayers", "objects/waterfall/GooberHelper/water")
+                    .Split(",")
+                    .Where(path => path != "")
+                    .Select(path => GFX.Game[path].Texture.Texture)
+            ];
+            waterPadding = data.Int("padding", 3);
+            waterSpeed = data.Float("waterSpeed", 192f);
+            waterLayerDistance = data.Float("waterLayerDistance", 0f);
 
-            this.nonCollidable = data.Bool("nonCollidable", false);
+            splashColor = data.HexColor("splashColor", Color.White);
+            splashTextures = [.. 
+                data.Attr("splashTextures", "objects/waterfall/GooberHelper/splash")
+                    .Split(",")
+                    .Where(path => path != "")
+                    .Select(path => GFX.Game[path])
+            ];
+            splashSpeed = data.Float("splashSpeed", 96f);
+            splashSize = data.Float("splashSize", 0.75f);
+            splashOpacity = data.Float("splashOpacity", 0.75f);
+            splashDensity = data.Float("splashDensity", 0.1f);
+            splashDistance = data.Float("splashDistance", 48f);
 
-            // Collider = new Hitbox(16f, 16f, -8f, -8f);
-            Add(new PlayerCollider(onPlayer, null, Collider));
-        }
+            nonCollidable = data.Bool("nonCollidable", false);
 
-        public override void Added(Scene scene)
-        {
-            for(int i = 0; i < this.Width / 2; i++) {
-                float angle = Random.Shared.NextAngle();
+            if(nonCollidable) {
+                Collidable = false;
 
-                this.splashes.Add(new Vector4((float)i * 2f, (float)Math.Cos(angle), (float)Math.Sin(angle), Random.Shared.NextFloat()));
+                return;
             }
-
-            base.Added(scene);
         }
 
-        private void onPlayer(Player player) {
-            if(this.nonCollidable) return;
+        public override void Added(Scene scene) {
+            base.Added(scene);
 
-            player.MoveV(speed * Engine.DeltaTime);
+            if(splashDensity == 0 || Width == 0)
+                return;
+
+            for(var i = 0f; i < 1f; i += 1f / (splashDensity * Width))
+                splashes.Add(new Splash(i));
         }
 
         public override void Update() {
             base.Update();
+            
+            time += Engine.DeltaTime;
 
-            if(this.nonCollidable) return;
+            if(nonCollidable)
+                return;
+            
+            var player = CollideFirst<Player>();
 
-            if(!base.CollideCheck<Player>() && playerInside) {
-                Engine.Scene.Tracker.GetEntity<Player>().Speed.Y += speed;
-            }
+            //player just exited the waterfall
+            if(player is null && playerInside is not null)
+                playerInside.Speed.Y += speed;
+            
+            player?.MoveV(speed * Engine.DeltaTime);
 
-
-            playerInside = base.CollideCheck<Player>();
+            playerInside = player;
         }
 
         public override void Render() {
             base.Render();
 
-            int scroll = 128 - ((int)(Scene.TimeActive * 96) % 128);
-            int scrollOverlay = 128 - ((int)(Scene.TimeActive * 192) % 128);
+            var scroll = time * waterSpeed;
 
-            int padding = 3;
+            //this solution is so much better than manually tiling the water holy
 
-            for(int i = 0; i < Math.Ceiling(this.Height/128) + 1; i++) {
-                noiseTexture = new MTexture(GFX.Game["objs/waterfall/GooberHelper/noiseOverlay"], null, new Rectangle(0, scrollOverlay - i * 128, 128, (int)this.Height + padding), new Vector2(0, 0), 128, (int)this.Height + padding);
+            GameplayRenderer.End();
+            Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, (Scene as Level).Camera.Matrix);
 
-                for(int j = 0; j < Math.Ceiling(this.Width/128); j++) {
-                    if(j == Math.Floor(this.Width/128)) {
-                        noiseTexture = new MTexture(GFX.Game["objs/waterfall/GooberHelper/noiseOverlay"], null, new Rectangle(0, scrollOverlay - i * 128, (int)this.Width % 128, (int)this.Height + padding), new Vector2(0, 0), (int)this.Width % 128, (int)this.Height + padding);
-                    }
+            for(var i = waterTextureLayers.Count - 1; i >= 0; i--) {
+                var layer = waterTextureLayers[i];
 
-                    noiseTexture.DrawJustified(base.Position + new Vector2(j * 128, i * 128 - (i > 0 ? scrollOverlay : 0)), Vector2.Zero);
-                }
+                var layerScroll = 1f / (i * waterLayerDistance + 1f);
+                var camPosMult = 1f - layerScroll;
+                var camPos = (Scene as Level).Camera.Position;
+
+                Draw.SpriteBatch.Draw(
+                    layer,
+                    Position,
+                    new Rectangle(
+                        (int)(-camPos.X * camPosMult + Position.X),
+                        (int)(-camPos.Y * camPosMult + Position.Y - scroll * layerScroll),
+                        (int)Width,
+                        (int)Height + waterPadding
+                    ),
+                    waterColor
+                );
             }
 
-            foreach(Vector4 splash in splashes) {
-                Vector2 basePos = base.Position + new Vector2(splash.X, base.Height);
-                float len = 1.5f;
-                float fac = (base.Scene.TimeActive * 4f + splash.W * len) % len;
+            Draw.SpriteBatch.End();
+            GameplayRenderer.Begin();
 
-                Vector2 offset = new Vector2(splash.Y, splash.Z) * 32 * fac;
+            foreach(var splash in splashes) {
+                var worldPosition = BottomLeft + new Vector2(splash.Position * Width, 0);
+                var pathLerp = (time * splashSpeed / splashDistance + splash.Offset) % 1f;
 
-                float a = (len-fac) * 0.5f;
+                if(pathLerp > 1f - Engine.DeltaTime * splashSpeed / splashDistance)
+                    splash.Position = Random.Shared.NextFloat();
 
-                splashTexture.DrawCentered(basePos + offset, new Color(a,a,a,a), 0.75f);
+                worldPosition += splash.Direction * pathLerp * splashDistance;
+
+                var alpha = (1f - pathLerp) * splashOpacity;
+
+                //completely arbitrary constant that acts kinda like hashing go
+                splashTextures[(int)MathF.Floor(splash.Offset * 82935.235f % splashTextures.Count)].DrawCentered(worldPosition, splashColor * alpha, splashSize);
             }
         }
-
-        // public class Splash {
-        //     public Vector2 Position;
-        //     public float Angle;
-
-        //     public Splash(Vector2 position, float angle, float time) {
-        //         this.Position = position;
-        //         this.Angle = angle;
-        //     }
-
-        //     public void Draw() {
-
-        //     }
-        // }
     }
 }
