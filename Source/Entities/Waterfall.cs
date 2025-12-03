@@ -53,6 +53,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             waterTextureLayers = [..
                 data.Attr("waterTextureLayers", "objects/waterfall/GooberHelper/water")
                     .Split(",")
+                    .Where(path => path != "")
                     .Select(path => GFX.Game[path].Texture.Texture)
             ];
             waterPadding = data.Int("padding", 3);
@@ -63,6 +64,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             splashTextures = [.. 
                 data.Attr("splashTextures", "objects/waterfall/GooberHelper/splash")
                     .Split(",")
+                    .Where(path => path != "")
                     .Select(path => GFX.Game[path])
             ];
             splashSpeed = data.Float("splashSpeed", 96f);
@@ -117,9 +119,9 @@ namespace Celeste.Mod.GooberHelper.Entities {
             //this solution is so much better than manually tiling the water holy
 
             GameplayRenderer.End();
-            Draw.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, (Scene as Level).Camera.Matrix);
+            Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, (Scene as Level).Camera.Matrix);
 
-            for(var i = 0; i < waterTextureLayers.Count; i++) {
+            for(var i = waterTextureLayers.Count - 1; i >= 0; i--) {
                 var layer = waterTextureLayers[i];
 
                 var layerScroll = 1f / (i * waterLayerDistance + 1f);
@@ -135,7 +137,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
                         (int)Width,
                         (int)Height + waterPadding
                     ),
-                    waterColor * layerScroll
+                    waterColor
                 );
             }
 
