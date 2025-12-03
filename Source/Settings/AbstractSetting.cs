@@ -1,5 +1,9 @@
+using System.Reflection;
+
 namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractSetting {
+        public PropertyInfo SettingProperty;
+        public object SettingContainer;
         public TextMenu.Item Entry;
 
         public virtual string GetDescription() {
@@ -10,6 +14,6 @@ namespace Celeste.Mod.GooberHelper.Settings {
                 : null;
         }
 
-        public virtual void CreateEntry(TextMenu menu, bool inGame) {}
+        public virtual void CreateEntry(object container, bool inGame) {}
     }
 }

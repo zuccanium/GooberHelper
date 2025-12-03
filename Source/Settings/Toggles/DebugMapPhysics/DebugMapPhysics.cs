@@ -15,8 +15,11 @@ namespace Celeste.Mod.GooberHelper.Settings.Toggles.DebugMapPhysics {
                 description.Unexplode();
         }
 
-        public override void CreateEntry(TextMenu menu, bool inGame) {
-            base.CreateEntry(menu, inGame);
+        public override void CreateEntry(object container, bool inGame) {
+            base.CreateEntry(container, inGame);
+
+            if(container is not TextMenu menu)
+                return;
 
             Entry.AddExplodingDescription(menu, Dialog.Clean("menu_gooberhelper_setting_description_DebugMapPhysics"));
 

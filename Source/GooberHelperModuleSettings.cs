@@ -13,11 +13,18 @@ namespace Celeste.Mod.GooberHelper {
         [SettingIgnore]
         public List<string> OptionsProfileOrder { get; set; } = [];
 
+        public class MouseJoystickSubMenu {
+            public bool Enabled { get; set; } = false;
+
+            public MouseJoystickSubMenu() {}
+        }
+
         //actual settings
         public bool ShowOptionsInGame { get; set; } = false;
         public bool DebugMapPhysics { get; set; } = false;
         public bool FastMenuing { get; set; } = false;
-        public bool CustomSwimmingAnimation { get; set; } = true;
+        public bool CustomSwimmingAnimation { get; set; } = true; 
+        public MouseJoystickSubMenu MouseJoystick { get; set; } = new();
 
         //buttons
         //theyre not public because i dont want them to be stored in the mod settings

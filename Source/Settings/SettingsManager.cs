@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Celeste.Mod.GooberHelper.Attributes;
 using FMOD.Studio;
@@ -20,17 +21,37 @@ namespace Celeste.Mod.GooberHelper.Settings {
             settingClasses.Clear();
         }
 
-        public static void CreateModMenuSection(TextMenu menu, bool inGame, EventInstance eventInstance) {
-            foreach(var member in typeof(GooberHelperModuleSettings).GetMembers(Utils.BindingFlagsAll)) {
-                if(member.IsDefined(typeof(SettingIgnoreAttribute), false))
+        public static void PopulateMenu(object containerObject, object containerMenu, bool inGame) {
+            var containerType = containerObject.GetType();
+            
+            Utils.Log($"going through type {containerType}");
+
+            foreach(var property in containerType.GetProperties(Utils.BindingFlagsAll)) {
+                if(property.IsDefined(typeof(SettingIgnoreAttribute), false))
                     continue;
                 
-                if(settingClasses.TryGetValue(member.Name, out var type)) {
-                    var instance = Activator.CreateInstance(type) as AbstractSetting;
+                if(settingClasses.TryGetValue(property.Name, out var memberType)) {
+                    var instance = Activator.CreateInstance(memberType) as AbstractSetting;
 
-                    instance.CreateEntry(menu, inGame);
+                    instance.SettingProperty = property;
+                    instance.SettingContainer = containerObject;
+                    instance.CreateEntry(containerMenu, inGame);
+
+                    continue;
+                }
+
+                if(property.PropertyType.DeclaringType == containerType) {
+                    var subMenu = new TextMenuExt.SubMenu(Dialog.Clean($"menu_gooberhelper_submenu_{property.Name}"), false);
+
+                    if(containerMenu is TextMenu menu)
+                        menu.Add(subMenu);
+
+                    PopulateMenu(property.GetValue(containerObject), subMenu, inGame);
                 }
             }
         }
+
+        public static void CreateModMenuSection(TextMenu menu, bool inGame, EventInstance eventInstance)
+            => PopulateMenu(GooberHelperModule.Settings, menu, inGame);
     }
 }
