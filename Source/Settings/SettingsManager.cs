@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Celeste.Mod.GooberHelper.Attributes;
+using Celeste.Mod.GooberHelper.UI.TextMenuGooberExt;
 using FMOD.Studio;
 
 namespace Celeste.Mod.GooberHelper.Settings {
@@ -39,6 +40,8 @@ namespace Celeste.Mod.GooberHelper.Settings {
                 if(property.IsDefined(typeof(SettingIgnoreAttribute), false))
                     continue;
                 
+                Utils.Log($"found property {property} with declaring type {property.PropertyType.DeclaringType}");
+
                 if(settingClasses.TryGetValue(prefix + property.Name, out var memberType)) {
                     var instance = Activator.CreateInstance(memberType) as AbstractSetting;
 
@@ -51,12 +54,17 @@ namespace Celeste.Mod.GooberHelper.Settings {
                 }
 
                 if(property.PropertyType.DeclaringType == containerType) {
-                    var subMenu = new TextMenuExt.SubMenu(Dialog.Clean($"menu_gooberhelper_submenu_{property.Name}"), false);
+                    Utils.Log("found submenu");
+
+                    var newSubMenu = new TextMenuGooberExt.NestableSubMenu(Dialog.Clean($"menu_gooberhelper_submenu_{property.Name}"), false);
 
                     if(containerMenu is TextMenu menu)
-                        menu.Add(subMenu);
+                        menu.Add(newSubMenu);
 
-                    PopulateMenu(property.GetValue(containerObject), subMenu, inGame, $"{prefix}{property.Name}.");
+                    if(containerMenu is TextMenuGooberExt.NestableSubMenu subMenu)
+                        subMenu.Add(newSubMenu);
+
+                    PopulateMenu(property.GetValue(containerObject), newSubMenu, inGame, $"{prefix}{property.Name}.");
                 }
             }
         }

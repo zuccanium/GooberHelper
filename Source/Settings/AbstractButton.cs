@@ -3,8 +3,6 @@ using System.Reflection;
 
 namespace Celeste.Mod.GooberHelper.Settings.Buttons {
     public abstract class AbstractButton : AbstractSetting {
-        public AbstractButton() {}
-
         public virtual void OnPressed() {}
 
         public override void CreateEntry(object container, bool inGame) {

@@ -1,4 +1,5 @@
 using System.Reflection;
+using Celeste.Mod.GooberHelper.UI.TextMenuGooberExt;
 
 namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractSetting {
@@ -31,7 +32,7 @@ namespace Celeste.Mod.GooberHelper.Settings {
 
             if(ContainerMenu is TextMenu menu) {
                 Entry.AddDescription(menu, description);
-            } else if(ContainerMenu is TextMenuExt.SubMenu subMenu) {
+            } else if(ContainerMenu is TextMenuGooberExt.NestableSubMenu subMenu) {
                 Entry.AddDescription(subMenu, subMenu.Container, description);
             }
         }
@@ -39,7 +40,7 @@ namespace Celeste.Mod.GooberHelper.Settings {
         public virtual void AddToContainer() {
             if(ContainerMenu is TextMenu menu) {
                 menu.Add(Entry);
-            } else if(ContainerMenu is TextMenuExt.SubMenu subMenu) {
+            } else if(ContainerMenu is TextMenuGooberExt.NestableSubMenu subMenu) {
                 subMenu.Add(Entry);
             }
         }

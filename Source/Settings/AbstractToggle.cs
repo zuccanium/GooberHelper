@@ -2,8 +2,6 @@ using System.Reflection;
 
 namespace Celeste.Mod.GooberHelper.Settings.Toggles {
     public abstract class AbstractToggle : AbstractSetting {
-        public AbstractToggle() {}
-
         public virtual void OnValueChange(bool value)
             => SettingProperty.SetValue(ContainerObject, value);
 

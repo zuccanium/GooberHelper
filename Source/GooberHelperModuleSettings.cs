@@ -15,19 +15,24 @@ namespace Celeste.Mod.GooberHelper {
         [SettingIgnore]
         public List<string> OptionsProfileOrder { get; set; } = [];
 
-        public class MouseJoystickSubMenu {
-            public Mode.MouseJoystickMode Mode { get; set; } = Settings.Root.MouseJoystick.Mode.MouseJoystickMode.None;
-            public DummyCircle JoystickCircle { get; set; } = new DummyCircle(100, 0, 0);
-
-            public MouseJoystickSubMenu() {}
-        }
-
         //actual settings
+        //formatting menace
         public bool ShowOptionsInGame { get; set; } = false;
         public bool DebugMapPhysics { get; set; } = false;
         public bool FastMenuing { get; set; } = false;
         public bool CustomSwimmingAnimation { get; set; } = true; 
-        public MouseJoystickSubMenu MouseJoystick { get; set; } = new();
+        public MouseJoystickSubMenu MouseJoystick { get; set; } = new(); public class MouseJoystickSubMenu() {
+            public Mode.MouseJoystickMode Mode { get; set; } = Settings.Root.MouseJoystick.Mode.MouseJoystickMode.None;
+            public AbsoluteModeSubMenu AbsoluteMode { get; set; } = new(); public class AbsoluteModeSubMenu() {
+                public DummyCircle Circle { get; set; } = new DummyCircle(100, 0, 0);
+            }
+
+            public RelativeModeSubMenu RelativeMode { get; set; } = new(); public class RelativeModeSubMenu() {
+                public DummyCircle Circle { get; set; } = new DummyCircle(100, 0, 0);
+                public float DeadzoneRadius { get; set; } = 50f;
+                public float Margin { get; set; } = 5f;
+            }
+        }
 
         //buttons
         //theyre not public because i dont want them to be stored in the mod settings
