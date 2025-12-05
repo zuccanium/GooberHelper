@@ -1,7 +1,8 @@
 using Celeste.Mod.GooberHelper.Attributes;
+using Celeste.Mod.GooberHelper.Settings.Toggles;
 using Celeste.Mod.GooberHelper.UI;
 
-namespace Celeste.Mod.GooberHelper.Settings.Toggles.DebugMapPhysics {
+namespace Celeste.Mod.GooberHelper.Settings.Root {
     [GooberHelperSetting]
     public class DebugMapPhysics : AbstractToggle {
         private ExplodingDescription description;

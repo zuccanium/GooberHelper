@@ -5,20 +5,21 @@ namespace Celeste.Mod.GooberHelper.Settings.Toggles {
         public AbstractToggle() {}
 
         public virtual void OnValueChange(bool value)
-            => SettingProperty.SetValue(SettingContainer, value);
-
+            => SettingProperty.SetValue(ContainerObject, value);
 
         public override void CreateEntry(object container, bool inGame) {
+            base.CreateEntry(container, inGame);
+
             Utils.Log($"creating toggle for {GetType()}");
 
-            if(SettingProperty.GetValue(SettingContainer) is not bool value) {
+            if(SettingProperty.GetValue(ContainerObject) is not bool value) {
                 Logger.Error("GooberHelper", "hwfehowjhefoiawjeofjawiojefioawj");
 
                 value = false;
             }
 
             var toggle = new TextMenu.OnOff(
-                Dialog.Clean($"menu_gooberhelper_setting_{GetType().Name}"),
+                GetName(),
                 value
             );
 
@@ -26,17 +27,8 @@ namespace Celeste.Mod.GooberHelper.Settings.Toggles {
             
             Entry = toggle;
 
-            if(container is TextMenu menu) {
-                menu.Add(toggle);
-
-                if(GetDescription() is string description)
-                    toggle.AddDescription(menu, description);
-            } else if(container is TextMenuExt.SubMenu subMenu) {
-                subMenu.Add(toggle);
-
-                if(GetDescription() is string description)
-                    toggle.AddDescription(subMenu, subMenu.Container, description);
-            }
+            AddToContainer();
+            AddDescription();
         }
     }
 }

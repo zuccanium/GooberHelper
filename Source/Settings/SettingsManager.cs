@@ -11,9 +11,18 @@ namespace Celeste.Mod.GooberHelper.Settings {
 
         [OnLoad]
         public static void Load() {
+            var namespacePrefix = $"{typeof(SettingsManager).Namespace}.Root.";
+
             foreach(var type in typeof(SettingsManager).Assembly.GetTypes())
-                if(type.GetCustomAttribute(typeof(GooberHelperSettingAttribute), true) is GooberHelperSettingAttribute)
-                    settingClasses[type.Name] = type;
+                if(type.GetCustomAttribute(typeof(GooberHelperSettingAttribute), true) is GooberHelperSettingAttribute) {
+                    var id = type.Namespace.Length < namespacePrefix.Length
+                        ? type.Name
+                        : $"{type.Namespace[namespacePrefix.Length..]}.{type.Name}";
+                    
+                    Utils.Log($"{type.Name} -> {id}");
+                    
+                    settingClasses[id] = type;
+                }
         }
 
         [OnUnload]
@@ -21,7 +30,7 @@ namespace Celeste.Mod.GooberHelper.Settings {
             settingClasses.Clear();
         }
 
-        public static void PopulateMenu(object containerObject, object containerMenu, bool inGame) {
+        public static void PopulateMenu(object containerObject, object containerMenu, bool inGame, string prefix = "") {
             var containerType = containerObject.GetType();
             
             Utils.Log($"going through type {containerType}");
@@ -30,11 +39,12 @@ namespace Celeste.Mod.GooberHelper.Settings {
                 if(property.IsDefined(typeof(SettingIgnoreAttribute), false))
                     continue;
                 
-                if(settingClasses.TryGetValue(property.Name, out var memberType)) {
+                if(settingClasses.TryGetValue(prefix + property.Name, out var memberType)) {
                     var instance = Activator.CreateInstance(memberType) as AbstractSetting;
 
                     instance.SettingProperty = property;
-                    instance.SettingContainer = containerObject;
+                    instance.ContainerObject = containerObject;
+                    instance.ContainerMenu = containerMenu;
                     instance.CreateEntry(containerMenu, inGame);
 
                     continue;
@@ -46,7 +56,7 @@ namespace Celeste.Mod.GooberHelper.Settings {
                     if(containerMenu is TextMenu menu)
                         menu.Add(subMenu);
 
-                    PopulateMenu(property.GetValue(containerObject), subMenu, inGame);
+                    PopulateMenu(property.GetValue(containerObject), subMenu, inGame, $"{prefix}{property.Name}.");
                 }
             }
         }

@@ -3,7 +3,8 @@ using System.Reflection;
 namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractSetting {
         public PropertyInfo SettingProperty;
-        public object SettingContainer;
+        public object ContainerObject;
+        public object ContainerMenu;
         public TextMenu.Item Entry;
 
         public virtual string GetDescription() {
@@ -14,6 +15,33 @@ namespace Celeste.Mod.GooberHelper.Settings {
                 : null;
         }
 
+        public virtual string GetName() {
+            var key = $"menu_gooberhelper_setting_{GetType().Name}";
+            
+            return Dialog.Has(key)
+                ? Dialog.Clean(key)
+                : key;
+        }
+
         public virtual void CreateEntry(object container, bool inGame) {}
+
+        public virtual void AddDescription() {
+            if(GetDescription() is not string description)
+                return;
+
+            if(ContainerMenu is TextMenu menu) {
+                Entry.AddDescription(menu, description);
+            } else if(ContainerMenu is TextMenuExt.SubMenu subMenu) {
+                Entry.AddDescription(subMenu, subMenu.Container, description);
+            }
+        }
+        
+        public virtual void AddToContainer() {
+            if(ContainerMenu is TextMenu menu) {
+                menu.Add(Entry);
+            } else if(ContainerMenu is TextMenuExt.SubMenu subMenu) {
+                subMenu.Add(Entry);
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ using System.Reflection;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 using Celeste.Mod.GooberHelper.Options.Visuals;
+using Celeste.Mod.GooberHelper.Settings.Root;
 using Celeste.Mod.GooberHelper.Settings.Toggles;
 using Celeste.Mod.Helpers;
 using Microsoft.Xna.Framework.Graphics;

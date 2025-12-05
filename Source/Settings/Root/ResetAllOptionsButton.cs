@@ -1,6 +1,7 @@
 using Celeste.Mod.GooberHelper.Attributes;
+using Celeste.Mod.GooberHelper.Settings.Buttons;
 
-namespace Celeste.Mod.GooberHelper.Settings.Buttons {
+namespace Celeste.Mod.GooberHelper.Settings.Root {
     [GooberHelperSetting]
     public class ResetAllOptionsButton : AbstractButton {
         public override void CreateEntry(object container, bool inGame) {

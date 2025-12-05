@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Celeste.Mod.GooberHelper.DataStructures;
 using Celeste.Mod.GooberHelper.Options;
+using Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick;
 using Microsoft.Xna.Framework.Input;
 
 namespace Celeste.Mod.GooberHelper {
@@ -14,7 +16,8 @@ namespace Celeste.Mod.GooberHelper {
         public List<string> OptionsProfileOrder { get; set; } = [];
 
         public class MouseJoystickSubMenu {
-            public bool Enabled { get; set; } = false;
+            public Mode.MouseJoystickMode Mode { get; set; } = Settings.Root.MouseJoystick.Mode.MouseJoystickMode.None;
+            public DummyCircle JoystickCircle { get; set; } = new DummyCircle(100, 0, 0);
 
             public MouseJoystickSubMenu() {}
         }
