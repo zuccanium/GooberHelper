@@ -439,7 +439,7 @@ namespace Celeste.Mod.GooberHelper.UI {
 
                 ActiveFont.DrawOutline(
                     "<",
-                    position + new Vector2(left + 40f, 0f) + Calc.AngleToVector(sine * 4f, 4f),
+                    position + new Vector2(left + 40f, 0f) + (highlighted ? Calc.AngleToVector(sine * 4f, 4f) : Vector2.Zero),
                     new Vector2(0.5f, 0.5f),
                     Vector2.One,
                     color,
@@ -459,7 +459,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                 
                 ActiveFont.DrawOutline(
                     ">",
-                    position + new Vector2(left + positionPartWidth - 40f, 0f) + Calc.AngleToVector(MathF.PI - sine * 4f, 4f),
+                    position + new Vector2(left + positionPartWidth - 40f, 0f) + (highlighted ? Calc.AngleToVector(MathF.PI - sine * 4f, 4f) : Vector2.Zero),
                     new Vector2(0.5f, 0.5f),
                     Vector2.One,
                     color,

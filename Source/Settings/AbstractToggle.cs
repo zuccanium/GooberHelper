@@ -1,5 +1,3 @@
-using System.Reflection;
-
 namespace Celeste.Mod.GooberHelper.Settings.Toggles {
     public abstract class AbstractToggle : AbstractSetting {
         public virtual void OnValueChange(bool value)

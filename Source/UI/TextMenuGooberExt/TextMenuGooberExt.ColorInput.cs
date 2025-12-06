@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Celeste.Mod.GooberHelper.UI {
     public static partial class TextMenuGooberExt {
@@ -265,7 +263,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                     position + new Vector2(left + colorCodePartWidth / 2f, 0f),
                     new Vector2(0.5f, 0.5f),
                     Vector2.One * 0.8f,
-                    Color.Lerp(VectorColor.ToColor().MultiplyByAlpha(), Color.White, 0.5f),
+                    Color.Lerp(VectorColor.ToColor().MultiplyByAlpha(), Color.White, highlighted ? 0.25f : 0.5f),
                     2f,
                     strokeColor
                 );
@@ -286,8 +284,8 @@ namespace Celeste.Mod.GooberHelper.UI {
                     var hsv = VectorColor.RgbToHsv();
 
                     draggableHueWheel?.Render(offsetPosition, easedEase, ref offset, Calc.HsvToColor(0, 0, hsv.Z), gap);
-                    draggableBrightnessSlider?.Render(offsetPosition, easedEase, ref offset, Calc.HsvToColor(hsv.X, 1, 1), gap);
-                    draggableAlphaSlider?.Render(offsetPosition, easedEase, ref offset, Calc.HsvToColor(hsv.X, 1, hsv.Z), gap);
+                    draggableBrightnessSlider?.Render(offsetPosition, easedEase, ref offset, Calc.HsvToColor(hsv.X, hsv.Y, 1), gap);
+                    draggableAlphaSlider?.Render(offsetPosition, easedEase, ref offset, Calc.HsvToColor(hsv.X, hsv.Y, hsv.Z), gap);
                 }
             }
         }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Celeste.Mod.GooberHelper.UI;
 
 namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractEnum : AbstractSetting {
@@ -15,23 +14,20 @@ namespace Celeste.Mod.GooberHelper.Settings {
 
             Utils.Log($"creating enum for {GetType()}");
 
-            if(SettingProperty.GetValue(ContainerObject) is not object value || value.GetType() != EnumType) {
-                Logger.Error("GooberHelper", "hwfehowjhefoiawjeofjawiojefioawj");
-
-                value = null;
-            }
+            if(SettingProperty.GetValue(ContainerObject) is not object value || value.GetType() != EnumType)
+                throw new Exception("NOT THE CORRECT TYPE");
 
             var enumNames = Enum.GetNames(EnumType);
-            var enumValues = Enum.GetValuesAsUnderlyingType(EnumType).Cast<object>();
+            var enumValues = Enum.GetValues(EnumType).Cast<object>();
 
             var enumPairs = enumValues
                 .Zip(enumNames)
-                .Select(pair => KeyValuePair.Create(pair.First, pair.Second));
+                .Select((pair, index) => KeyValuePair.Create(pair.First, Dialog.Clean($"gooberhelper_enum_{pair.Second}")));
 
             var slider = new TextMenuExt.EnumerableSlider<object>(
                 GetName(),
                 enumPairs,
-                enumValues.First()
+                value
             );
 
             slider.OnValueChange += OnValueChange;

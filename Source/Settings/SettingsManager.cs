@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.UI;
@@ -56,7 +55,7 @@ namespace Celeste.Mod.GooberHelper.Settings {
                 if(property.PropertyType.DeclaringType == containerType) {
                     Utils.Log("found submenu");
 
-                    var newSubMenu = new TextMenuGooberExt.NestableSubMenu(Dialog.Clean($"menu_gooberhelper_submenu_{property.Name}"), false);
+                    var newSubMenu = new TextMenuGooberExt.NestableSubMenu(Dialog.Clean($"menu_gooberhelper_setting_submenu_{property.Name}"), false);
 
                     if(containerMenu is TextMenu menu)
                         menu.Add(newSubMenu);
