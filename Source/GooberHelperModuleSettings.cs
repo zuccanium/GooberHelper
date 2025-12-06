@@ -26,6 +26,9 @@ namespace Celeste.Mod.GooberHelper {
             public AbsoluteModeSubMenu AbsoluteMode { get; set; } = new(); public class AbsoluteModeSubMenu() {
                 public DummyCircle Circle { get; set; } = new DummyCircle(100, 0, 0);
                 public Color OuterColor { get; set; } = new Color(1f, 0, 0, 0.2f);
+                public Color InnerColor { get; set; } = new Color(0, 1f, 0, 0.2f);
+                public Color BorderColor { get; set; } = new Color(0, 0, 1f, 1f);
+                public float BorderThickness { get; set; } = 2f;
             }
 
             public RelativeModeSubMenu RelativeMode { get; set; } = new(); public class RelativeModeSubMenu() {

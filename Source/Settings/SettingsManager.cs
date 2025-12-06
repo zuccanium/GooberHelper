@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Celeste.Mod.GooberHelper.Attributes;
-using Celeste.Mod.GooberHelper.UI.TextMenuGooberExt;
+using Celeste.Mod.GooberHelper.UI;
 using FMOD.Studio;
 
 namespace Celeste.Mod.GooberHelper.Settings {

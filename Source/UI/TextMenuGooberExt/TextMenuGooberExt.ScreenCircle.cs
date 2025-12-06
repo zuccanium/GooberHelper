@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
+namespace Celeste.Mod.GooberHelper.UI {
     public static partial class TextMenuGooberExt {
         public class ScreenCircle : TextMenu.Item {
             [Tracked(false)]
@@ -65,6 +65,8 @@ namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
                     Editing = true;
 
                     screenCenter = new Vector2(Engine.Viewport.Width, Engine.Viewport.Height) / 2;
+
+                    Audio.Play(SFX.ui_main_button_select);
                 }
 
                 public void StopEditing() {
@@ -82,6 +84,8 @@ namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
                     selectedSide = -1;
                     scaling = false;
                     dragging = false;
+
+                    Audio.Play(SFX.ui_main_button_back);
                 }
 
                 private void setCache() {

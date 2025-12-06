@@ -1,8 +1,8 @@
-
-
 using System;
+using System.Linq;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
+namespace Celeste.Mod.GooberHelper.UI {
     public static partial class TextMenuGooberExt {
         public class ColorInput : TextMenu.Item {
             public abstract class AbstractDraggableThing {
@@ -98,7 +98,13 @@ namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
                     Math.Abs(toScreen.X - mousePosition.X) < Texture.Width / 2 + Threshold && Math.Abs(toScreen.Y - mousePosition.Y) < Threshold || Dragging;
             }
 
-            public static readonly int GapWidth = 0;
+            public enum ColorDiplayMode {
+                Rgba,
+                Hex,
+                Hsva
+            }
+
+            public static readonly int GapWidth = 20;
 
             public Color UnselectedColor = Color.White;
             public string Label;
@@ -107,6 +113,7 @@ namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
             public bool Editing = false;
             private float ease = 0;
             private float easedEase = 0;
+            private ColorDiplayMode displayMode = ColorDiplayMode.Rgba;
 
             private MTexture hueWheel = GFX.Gui["GooberHelper/hueWheel"];
             private MTexture brightnessSlider = GFX.Gui["GooberHelper/brightnessSlider"];
@@ -144,16 +151,33 @@ namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
 
             //color code
             public string GetColorCodeString()
-                => $"rgba({VectorColor.X * 255:F0}, {VectorColor.Y * 255:F0}, {VectorColor.Z * 255:F0}, {VectorColor.W * 255:F0})";
+                => displayMode switch {
+                    ColorDiplayMode.Rgba => VectorColor.ToStringRgba(),
+                    ColorDiplayMode.Hex => VectorColor.ToStringHex(),
+                    ColorDiplayMode.Hsva => VectorColor.RgbToHsv().ToStringHsva(),
+                    _ => "what the hell????"
+                };
 
             public float ColorCodePartWidth()
-                => ActiveFont.Measure(GetColorCodeString()).X;
+                => ActiveFont.Measure(GetColorCodeString()).X * 0.8f;
 
             //color square thing
             public float ColorDisplayPartWidth()
                 => ActiveFont.LineHeight;
 
             //functionality
+            public override void LeftPressed() {
+                displayMode = Utils.RotateEnum(displayMode, -1);
+
+                Audio.Play(SFX.ui_main_button_select);
+            }
+            
+            public override void RightPressed() {
+                displayMode = Utils.RotateEnum(displayMode, 1);
+                
+                Audio.Play(SFX.ui_main_button_select);
+            }
+
             public override void ConfirmPressed()
                 => StartEditing();
 
@@ -173,6 +197,8 @@ namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
 
                 wasMouseVisible = Engine.Instance.IsMouseVisible;
                 Engine.Instance.IsMouseVisible = true;
+
+                Audio.Play(SFX.ui_main_button_select);
             }
 
             public void StopEditing() {
@@ -184,7 +210,7 @@ namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
 
             public override void Update() {
                 if(Input.MenuCancel.Pressed) {
-                    Console.WriteLine("AAAAA");
+                    Utils.Log("AAAAA EXITING");
 
                     StopEditing();
 
@@ -234,21 +260,21 @@ namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
 
                 var colorDisplayRectangleSize = new Vector2(ColorDisplayPartWidth(), ActiveFont.LineHeight) * 0.8f;
 
-                Draw.Rect(
-                    position + new Vector2(left + 40f, 0f) - colorDisplayRectangleSize / 2f,
-                    colorDisplayRectangleSize.X,
-                    colorDisplayRectangleSize.Y,
-                    VectorColor.ToColor().MultiplyByAlpha()
-                );
-
                 ActiveFont.DrawOutline(
                     GetColorCodeString(),
-                    position + new Vector2(left + colorDisplayPartWidth + GapWidth + colorCodePartWidth / 2f, 0f),
+                    position + new Vector2(left + colorCodePartWidth / 2f, 0f),
                     new Vector2(0.5f, 0.5f),
                     Vector2.One * 0.8f,
                     Color.Lerp(VectorColor.ToColor().MultiplyByAlpha(), Color.White, 0.5f),
                     2f,
                     strokeColor
+                );
+
+                Draw.Rect(
+                    position + new Vector2(left + colorCodePartWidth + 20f + GapWidth, 0f) - colorDisplayRectangleSize / 2f,
+                    colorDisplayRectangleSize.X,
+                    colorDisplayRectangleSize.Y,
+                    VectorColor.ToColor().MultiplyByAlpha()
                 );
 
                 if(ease > 0f && draggableHueWheel != null) {

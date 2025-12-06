@@ -1,6 +1,5 @@
 using System.Reflection;
 using Celeste.Mod.GooberHelper.UI;
-using Celeste.Mod.GooberHelper.UI.TextMenuGooberExt;
 
 namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractSetting {
@@ -38,9 +37,6 @@ namespace Celeste.Mod.GooberHelper.Settings {
                 menu.Add(Entry);
             } else if(ContainerMenu is TextMenuGooberExt.NestableSubMenu subMenu) {
                 subMenu.Add(Entry);
-
-                if(Entry is TextMenuGooberExt.ResizableItem resizableEntry)
-                    resizableEntry.ResizeContainer = subMenu.RecalculateSize;
             }
         }
     }

@@ -5,7 +5,7 @@ using Celeste.Mod.GooberHelper.UI;
 namespace Celeste.Mod.GooberHelper.Settings.Root {
     [GooberHelperSetting]
     public class DebugMapPhysics : AbstractToggle {
-        private ExplodingDescription description;
+        private TextMenuGooberExt.ExplodingDescription description;
 
         public override void OnValueChange(bool value) {
             base.OnValueChange(value);
@@ -24,7 +24,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root {
 
             Entry.AddExplodingDescription(menu, Dialog.Clean("menu_gooberhelper_setting_description_DebugMapPhysics"));
 
-            description = menu.items[^1] as ExplodingDescription;
+            description = menu.items[^1] as TextMenuGooberExt.ExplodingDescription;
         }
     }
 }

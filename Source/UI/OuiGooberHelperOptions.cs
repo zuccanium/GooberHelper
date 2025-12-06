@@ -107,7 +107,7 @@ namespace Celeste.Mod.GooberHelper.UI {
         private static bool wasAllowingHudHide = true;
         private static bool wasPauseMainMenuOpen = true;
         private static int optionsProfileStartIndex;
-        private static TextMenuCombo combo;
+        private static TextMenuGooberExt.Combo combo;
         private static TextMenuExt.Modal comboModal;
 
         public enum OptionsProfileAction {
@@ -479,7 +479,7 @@ namespace Celeste.Mod.GooberHelper.UI {
 
             Utils.CreateTextInputField(menu);
 
-            combo = new TextMenuCombo(1f, 2) { Container = menu };
+            combo = new TextMenuGooberExt.Combo(1f, 2) { Container = menu };
             comboModal = new TextMenuExt.Modal(combo, 120, 1000) { BorderThickness = 0 };
 
             menu.Add(comboModal);

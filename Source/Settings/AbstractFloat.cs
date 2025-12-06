@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractFloat : AbstractSetting {
@@ -31,6 +32,9 @@ namespace Celeste.Mod.GooberHelper.Settings {
 
                     caughtValue = true;
                 }
+
+                if(value == i)
+                    caughtValue = true;
                 
                 values.Add(KeyValuePair.Create(i, i + Suffix));
             }

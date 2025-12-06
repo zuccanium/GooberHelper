@@ -1,5 +1,5 @@
 using Celeste.Mod.GooberHelper.DataStructures;
-using Celeste.Mod.GooberHelper.UI.TextMenuGooberExt;
+using Celeste.Mod.GooberHelper.UI;
 
 namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractScreenCircle : AbstractSetting {

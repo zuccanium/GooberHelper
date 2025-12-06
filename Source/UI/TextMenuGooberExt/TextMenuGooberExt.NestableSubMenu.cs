@@ -6,7 +6,7 @@ using Celeste.Mod.Core;
 //SORRY EVEREST TEAM I KNOW THIS IS STUPID BUT YOU DONT HAVE NESTABLE SUBMENU SUPPORT AND I REALLY NEED THAT
 //I MIGHT MAKE A PR WITH THIS EVENTUALLY IDK
 //I TRIED TO NOT CHANGE MUCH EVEN THOUGH THIS FORMATTING MAKES MY EDITORCONFIG REALLY UPSET
-namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
+namespace Celeste.Mod.GooberHelper.UI {
     public static partial class TextMenuGooberExt {
         public class NestableSubMenu : TextMenu.Item {
             public string Label;
