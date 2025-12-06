@@ -25,6 +25,7 @@ namespace Celeste.Mod.GooberHelper {
             public Mode.MouseJoystickMode Mode { get; set; } = Settings.Root.MouseJoystick.Mode.MouseJoystickMode.None;
             public AbsoluteModeSubMenu AbsoluteMode { get; set; } = new(); public class AbsoluteModeSubMenu() {
                 public DummyCircle Circle { get; set; } = new DummyCircle(100, 0, 0);
+                public Color OuterColor { get; set; } = new Color(1f, 0, 0, 0.2f);
             }
 
             public RelativeModeSubMenu RelativeMode { get; set; } = new(); public class RelativeModeSubMenu() {

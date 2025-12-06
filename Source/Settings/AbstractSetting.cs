@@ -1,4 +1,5 @@
 using System.Reflection;
+using Celeste.Mod.GooberHelper.UI;
 using Celeste.Mod.GooberHelper.UI.TextMenuGooberExt;
 
 namespace Celeste.Mod.GooberHelper.Settings {
@@ -16,13 +17,8 @@ namespace Celeste.Mod.GooberHelper.Settings {
                 : null;
         }
 
-        public virtual string GetName() {
-            var key = $"menu_gooberhelper_setting_{GetType().Name}";
-            
-            return Dialog.Has(key)
-                ? Dialog.Clean(key)
-                : key;
-        }
+        public virtual string GetName()
+            => Dialog.Clean($"menu_gooberhelper_setting_{GetType().Name}");
 
         public virtual void CreateEntry(object container, bool inGame) {}
 
@@ -42,6 +38,9 @@ namespace Celeste.Mod.GooberHelper.Settings {
                 menu.Add(Entry);
             } else if(ContainerMenu is TextMenuGooberExt.NestableSubMenu subMenu) {
                 subMenu.Add(Entry);
+
+                if(Entry is TextMenuGooberExt.ResizableItem resizableEntry)
+                    resizableEntry.ResizeContainer = subMenu.RecalculateSize;
             }
         }
     }

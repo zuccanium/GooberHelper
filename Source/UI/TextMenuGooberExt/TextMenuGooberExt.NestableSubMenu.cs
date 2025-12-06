@@ -367,6 +367,9 @@ namespace Celeste.Mod.GooberHelper.UI.TextMenuGooberExt {
 
                     if (!Input.MenuUp.Repeating && !Input.MenuDown.Repeating)
                         Audio.Play(ConfirmSfx);
+
+                    RecalculateSize();
+
                     base.ConfirmPressed();
                 }
             }
