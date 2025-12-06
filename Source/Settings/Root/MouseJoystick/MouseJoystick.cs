@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick;
 using Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.AbsoluteMode;
+using Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode;
 
 namespace Celeste.Mod.GooberHelper.Settings.Categories.MouseJoystick {
     public static class MouseJoystick {
@@ -58,12 +59,12 @@ namespace Celeste.Mod.GooberHelper.Settings.Categories.MouseJoystick {
         // private static void updateVirtualPosition() {
         //     if(!GooberHelperModule.Settings.MouseJoystick.Enabled)
         //         return;
-        
+
         //     IntegratedMousePosition += MInput.Mouse.Position - new Vector2(Engine.Viewport.Bounds.Width, Engine.Viewport.Bounds.Height) / 2;
 
         //     // Console.WriteLine(MInput.Mouse.Position);
         //     // Console.WriteLine(MInput.Mouse.Position - new Vector2(Engine.Viewport.Bounds.Width, Engine.Viewport.Bounds.Height) / 2);
-            
+
         //     Mouse.SetPosition(Engine.Viewport.Bounds.Center.X, Engine.Viewport.Bounds.Center.Y);
 
         //     var fromCenter = IntegratedMousePosition - Center;
@@ -76,37 +77,12 @@ namespace Celeste.Mod.GooberHelper.Settings.Categories.MouseJoystick {
         //     VirtualPosition = transformedPosition;
         // }
 
-        // [OnHook]
-        // private static float patch_Binding_Axis(On.Monocle.Binding.orig_Axis orig, Binding self, int gamepadIndex, float threshold) {
-        //     if(!GooberHelperModule.Settings.MouseJoystick.Enabled)
-        //         return orig(self, gamepadIndex, threshold);
-
-        //     var settings = global::Celeste.Settings.Instance; //what the fuck??
-    
-        //     var virtualPositionIsInRange = VirtualPosition.Length() >= MouseThreshold;
-
-        //     return 
-        //         self == settings.Right
-        //             ? virtualPositionIsInRange && VirtualPosition.X > threshold
-        //                 ? Math.Max(VirtualPosition.X, 0)
-        //                 : 0
-
-        //         : self == settings.Left
-        //             ? virtualPositionIsInRange && VirtualPosition.X < -threshold
-        //                 ? Math.Max(-VirtualPosition.X, 0)
-        //                 : 0
-                
-        //         : self == settings.Down
-        //             ? virtualPositionIsInRange && VirtualPosition.Y > threshold
-        //                 ? Math.Max(VirtualPosition.Y, 0)
-        //                 : 0
-
-        //         : self == settings.Up
-        //             ? virtualPositionIsInRange && VirtualPosition.Y < -threshold
-        //                 ? Math.Max(-VirtualPosition.Y, 0)
-        //                 : 0
-                
-        //         : orig(self, gamepadIndex, threshold);
-        // }
+        [OnHook]
+        private static float patch_Binding_Axis(On.Monocle.Binding.orig_Axis orig, Binding self, int gamepadIndex, float threshold)
+            => GooberHelperModule.Settings.MouseJoystick.Mode switch {
+                Mode.MouseJoystickMode.Absolute => AbsoluteMode.OverrideAxis(orig, self, gamepadIndex, threshold),
+                Mode.MouseJoystickMode.Relative => RelativeMode.OverrideAxis(orig, self, gamepadIndex, threshold),
+                _ => orig(self, gamepadIndex, threshold)
+            };
     }
 }

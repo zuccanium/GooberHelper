@@ -1,3 +1,4 @@
+using System;
 using Celeste.Mod.GooberHelper.Attributes;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,6 +12,44 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.AbsoluteMode {
         public static void LoadContent() {
             largeCircle = GFX.Gui["GooberHelper/largeCircle"];
             largeCircleMask = GFX.Gui["GooberHelper/largeCircleMask"];
+        }
+
+        public static float OverrideAxis(On.Monocle.Binding.orig_Axis orig, Binding self, int gamepadIndex, float threshold) {
+            var settings = global::Celeste.Settings.Instance; //what the fuck??
+    
+            var circle = GooberHelperModule.Settings.MouseJoystick.AbsoluteMode.Circle.ToCircle();
+            var toCircleCenter = MInput.Mouse.Position - new Vector2(Engine.Viewport.Width, Engine.Viewport.Height) / 2f - circle.Center;
+
+            if(MInput.Mouse.Position == -Engine.Viewport.Bounds.Location.ToVector2())
+                toCircleCenter = Vector2.Zero;
+
+            if(toCircleCenter.Length() < circle.Radius)
+                return orig(self, gamepadIndex, threshold);
+
+            var normalizedVector = toCircleCenter.SafeNormalize();
+
+            return 
+                self == settings.Right
+                    ? normalizedVector.X > threshold
+                        ? Math.Max(normalizedVector.X, 0)
+                        : 0
+
+                : self == settings.Left
+                    ? normalizedVector.X < -threshold
+                        ? Math.Max(-normalizedVector.X, 0)
+                        : 0
+                
+                : self == settings.Down
+                    ? normalizedVector.Y > threshold
+                        ? Math.Max(normalizedVector.Y, 0)
+                        : 0
+
+                : self == settings.Up
+                    ? normalizedVector.Y < -threshold
+                        ? Math.Max(-normalizedVector.Y, 0)
+                        : 0
+                
+                : orig(self, gamepadIndex, threshold);
         }
 
         public static void Render() {
