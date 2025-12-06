@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractFloat : AbstractSetting {
