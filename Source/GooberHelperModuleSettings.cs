@@ -34,7 +34,7 @@ namespace Celeste.Mod.GooberHelper {
             public RelativeModeSubMenu RelativeMode { get; set; } = new(); public class RelativeModeSubMenu() {
                 public DummyCircle Circle { get; set; } = new DummyCircle(100, 0, 0);
                 public float DeadzoneRadius { get; set; } = 50f;
-                public float Margin { get; set; } = 5f;
+                public bool UseRegularMouse { get; set; } = false;
             }
         }
 

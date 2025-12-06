@@ -87,7 +87,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             => GooberHelperModule.Settings.OptionsProfiles.ContainsKey(name);
 
         public string Serialize() {
-            List<byte> data = [];
+            var data = new List<byte>();
             var nameBytes = Encoding.UTF8.GetBytes(Name);
 
             for(var i = 0; i < nameBytes.Length; i++) {
@@ -121,8 +121,8 @@ namespace Celeste.Mod.GooberHelper.Options {
         }
 
         public static OptionsProfile Deserialize(string str) {
-            OptionsProfile profile = new("", new Dictionary<Option, float>());
-            byte[] data;
+            var profile = new OptionsProfile("", []);
+            var data = default(byte[]);
 
             using(var compressedStream = new MemoryStream(Convert.FromBase64String(str))) {
                 using(var gzipStream = new GZipStream(compressedStream, CompressionMode.Decompress)) {

@@ -9,6 +9,7 @@ namespace Celeste.Mod.GooberHelper.UI {
             public class ScreenCircleMover : Entity {
                 public static readonly Color CircleColor = Color.Red;
                 public static readonly Color EdgeColor = Color.Cyan;
+                public static readonly Color PaddingColor = Color.DeepPink * 0.5f;
                 public static readonly Color CornerColor = Color.DeepSkyBlue;
                 public static readonly Color ScalingOriginColor = Color.Lime;
                 public static readonly Color SelectionHighlightColor = Color.White * 0.2f;
@@ -26,6 +27,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                 private int selectedSide = -1;
                 private int selectedCorner = -1;
                 private List<Vector2> vertices;
+                private List<Vector2> paddedVertices;
                 
                 private Vector2 draggingOffset;
                 private bool dragging = false;
@@ -38,6 +40,8 @@ namespace Celeste.Mod.GooberHelper.UI {
                 private bool isScalingFromCorner = false;
                 private int scalingCorner = -1;
                 private int scalingSide = -1;
+
+                private float padding = 0;
 
                 //cached
                 private static Circle circle;
@@ -95,12 +99,19 @@ namespace Celeste.Mod.GooberHelper.UI {
                 }
 
                 private void setVertices() {
-                    vertices = new List<Vector2>() {
+                    vertices = [
                         circle.TopLeft,
                         circle.TopRight,
                         circle.BottomRight,
                         circle.BottomLeft
-                    };
+                    ];
+
+                    paddedVertices = [
+                        circle.TopLeft + new Vector2(-padding, -padding),
+                        circle.TopRight + new Vector2(padding, -padding),
+                        circle.BottomRight + new Vector2(padding, padding),
+                        circle.BottomLeft + new Vector2(-padding, padding)
+                    ];
                 }
 
                 private bool trySnapCirclePositionVertical(out float? snapLine) {
@@ -113,8 +124,8 @@ namespace Celeste.Mod.GooberHelper.UI {
                     foreach(var line in lines) {
                         snapLine = line;
 
-                        if(Math.Abs(circle.Left - line) < PositionSnapThreshold) {
-                            circle.Left = line;
+                        if(Math.Abs(circle.Left - padding - line) < PositionSnapThreshold) {
+                            circle.Left = line + padding;
 
                             return true;
                         }
@@ -125,8 +136,8 @@ namespace Celeste.Mod.GooberHelper.UI {
                             return true;
                         }
 
-                        if(Math.Abs(circle.Right - line) < PositionSnapThreshold) {
-                            circle.Right = line;
+                        if(Math.Abs(circle.Right + padding - line) < PositionSnapThreshold) {
+                            circle.Right = line - padding;
 
                             return true;
                         }
@@ -147,8 +158,8 @@ namespace Celeste.Mod.GooberHelper.UI {
                     foreach(var line in lines) {
                         snapLine = line;
 
-                        if(Math.Abs(circle.Top - line) < PositionSnapThreshold) {
-                            circle.Top = line;
+                        if(Math.Abs(circle.Top - padding - line) < PositionSnapThreshold) {
+                            circle.Top = line + padding;
 
                             return true;
                         }
@@ -159,8 +170,8 @@ namespace Celeste.Mod.GooberHelper.UI {
                             return true;
                         }
 
-                        if(Math.Abs(circle.Bottom - line) < PositionSnapThreshold) {
-                            circle.Bottom = line;
+                        if(Math.Abs(circle.Bottom + padding - line) < PositionSnapThreshold) {
+                            circle.Bottom = line - padding;
 
                             return true;
                         }
@@ -191,6 +202,9 @@ namespace Celeste.Mod.GooberHelper.UI {
                         trySnapCirclePositionVertical(out verticalSnapLine);
                     }
                 }
+
+                private void handlePadding()
+                    => padding = Math.Max(padding + MInput.Mouse.WheelDelta * Engine.DeltaTime, 0);
 
                 private void handleScaling() {
                     if(!dragging && MInput.Mouse.CheckLeftButton && !scaling) {
@@ -278,6 +292,8 @@ namespace Celeste.Mod.GooberHelper.UI {
 
                     setCache();
 
+                    handlePadding();
+
                     handleScaling();
                     handleDragging();
 
@@ -341,6 +357,14 @@ namespace Celeste.Mod.GooberHelper.UI {
 
                         Draw.Line(start + screenCenter, end + screenCenter, EdgeColor, thickness);
                     }
+
+                    if(padding > 0)
+                        for(var i = 0; i < paddedVertices.Count; i++) {
+                            var start = paddedVertices[i];
+                            var end = paddedVertices[(i + 1) % 4];
+
+                            Draw.Line(start + screenCenter, end + screenCenter, PaddingColor, 3);
+                        }
 
                     for(var i = 0; i < vertices.Count; i++) {
                         var vertex = vertices[i];

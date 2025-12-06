@@ -1,10 +1,10 @@
 using System;
 using Celeste.Mod.GooberHelper.Attributes;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.AbsoluteMode {
-    public static class AbsoluteMode {
-        public static readonly float BorderResolutionScaling = 0.2f;
+    public class AbsoluteMode : Mode.MouseJoystickModeHandler {
+        public static readonly AbsoluteMode Instance = new();
+
         private static MTexture largeCircle;
         private static MTexture largeCircleMask;
 
@@ -14,45 +14,20 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.AbsoluteMode {
             largeCircleMask = GFX.Gui["GooberHelper/largeCircleMask"];
         }
 
-        public static float OverrideAxis(On.Monocle.Binding.orig_Axis orig, Binding self, int gamepadIndex, float threshold) {
-            var settings = global::Celeste.Settings.Instance; //what the fuck??
-    
+        public override void Update() {
             var circle = GooberHelperModule.Settings.MouseJoystick.AbsoluteMode.Circle.ToCircle();
-            var toCircleCenter = MInput.Mouse.Position - new Vector2(Engine.Viewport.Width, Engine.Viewport.Height) / 2f - circle.Center;
+            var fromCircle = MInput.Mouse.Position - new Vector2(Engine.Viewport.Width, Engine.Viewport.Height) / 2f - circle.Center;
 
             if(MInput.Mouse.Position == -Engine.Viewport.Bounds.Location.ToVector2())
-                toCircleCenter = Vector2.Zero;
+                fromCircle = Vector2.Zero;
 
-            if(toCircleCenter.Length() < circle.Radius)
-                return orig(self, gamepadIndex, threshold);
+            if(fromCircle.Length() < circle.Radius)
+                JoystickPosition = Vector2.Zero;
 
-            var normalizedVector = toCircleCenter.SafeNormalize();
-
-            return 
-                self == settings.Right
-                    ? normalizedVector.X > threshold
-                        ? Math.Max(normalizedVector.X, 0)
-                        : 0
-
-                : self == settings.Left
-                    ? normalizedVector.X < -threshold
-                        ? Math.Max(-normalizedVector.X, 0)
-                        : 0
-                
-                : self == settings.Down
-                    ? normalizedVector.Y > threshold
-                        ? Math.Max(normalizedVector.Y, 0)
-                        : 0
-
-                : self == settings.Up
-                    ? normalizedVector.Y < -threshold
-                        ? Math.Max(-normalizedVector.Y, 0)
-                        : 0
-                
-                : orig(self, gamepadIndex, threshold);
+            JoystickPosition = fromCircle.SafeNormalize();
         }
 
-        public static void Render() {
+        public override void Render() {
             var absoluteModeSettings = GooberHelperModule.Settings.MouseJoystick.AbsoluteMode;
 
             var circle = absoluteModeSettings.Circle.ToCircle();
@@ -115,7 +90,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.AbsoluteMode {
                 outerColor
             );
 
-            Draw.Circle(position, radius, borderColor, borderThickness, (int)(radius * BorderResolutionScaling));
+            Utils.DrawHollowCircle(position, radius, borderColor, borderThickness);
         }
     }
 }
