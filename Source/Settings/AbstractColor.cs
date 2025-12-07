@@ -1,27 +1,15 @@
 using System;
+using Celeste.Mod.GooberHelper.Settings.Toggles;
 using Celeste.Mod.GooberHelper.UI;
 
 namespace Celeste.Mod.GooberHelper.Settings {
-    public abstract class AbstractColor : AbstractSetting {
-        public virtual void OnValueChange(Color value)
-            => SettingProperty.SetValue(ContainerObject, value);
+    public abstract class AbstractColor : AbstractValuedSetting<Color, Color> {
+        public override TextMenu.Item CreateItem(Color value) {
+            var item = new TextMenuGooberExt.ColorInput(GetName(), value);
 
-        public override void CreateEntry(object container, bool inGame) {
-            base.CreateEntry(container, inGame);
-
-            Utils.Log($"creating color for {GetType()}");
-
-            if(SettingProperty.GetValue(ContainerObject) is not Color value)
-                throw new Exception("NOT THE CORRECT TYPE");
-
-            var colorInput = new TextMenuGooberExt.ColorInput(GetName(), value);
+            item.OnValueChange += OnValueChange;
             
-            colorInput.OnValueChange += OnValueChange;
-            
-            Entry = colorInput;
-
-            AddToContainer();
-            AddDescription();
+            return item;
         }
     }
 }

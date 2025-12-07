@@ -4,14 +4,12 @@ using Celeste.Mod.GooberHelper.Settings.Toggles;
 
 namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
     [GooberHelperSetting]
-    public class ClampBehavior : AbstractEnum {
+    public class ClampBehavior : AbstractEnum<ClampBehavior.ClampBehaviorValue> {
         public enum ClampBehaviorValue {
             None,
-            Circle,
             Screen,
+            Circle,
         }
-
-        public override Type EnumType { get; set; } = typeof(ClampBehaviorValue);
 
         public static void ModifyVirtualMousePosition(Monocle.Circle circle, ref bool needsReset, ref Vector2 fromCircle) {
             var mode = GooberHelperModule.Settings.MouseJoystick.RelativeMode.ClampBehavior;

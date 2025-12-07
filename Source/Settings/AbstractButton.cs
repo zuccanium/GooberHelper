@@ -1,23 +1,17 @@
-using System;
-using System.Reflection;
-
 namespace Celeste.Mod.GooberHelper.Settings.Buttons {
     public abstract class AbstractButton : AbstractSetting {
         public virtual void OnPressed() {}
 
         public override void CreateEntry(object container, bool inGame) {
-            base.CreateEntry(container, inGame);
+            var item = new TextMenu.Button(GetName());
 
-            Utils.Log($"creating button for {GetType()}");
+            item.OnPressed += OnPressed;
 
-            var button = new TextMenu.Button(GetName());
-
-            button.OnPressed += OnPressed;
-
-            Entry = button;
+            Entry = item;
 
             AddToContainer();
             AddDescription();
+            AddStandardDescription();
         }
     }
 }

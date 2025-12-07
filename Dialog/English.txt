@@ -1,3 +1,7 @@
+# STANDARD DESCRIPTIONS
+    menu_gooberhelper_ui_description_ColorInput=press confirm to modify the color; press left/right to cycle through formats
+    menu_gooberhelper_ui_description_ScreenCircle=press confirm start editing the circle position and radius; scroll to increase/decrease the padding used for snapping
+
 # SETTINGS
     # SUBMENUS
         menu_gooberhelper_setting_submenu_MouseJoystick=Mouse Joystick
@@ -37,6 +41,16 @@
         menu_gooberhelper_setting_description_DebugMapPhysics=adds really janky physics simulations to the debug map{n}press f5 in the debug map to see instructions
         menu_gooberhelper_setting_description_FastMenuing=reduces the time needed for menu inputs to repeat and speeds up the postcard animation
         menu_gooberhelper_setting_description_CustomSwimmingAnimation=gives Options/Physics/Other/CustomSwimming its own animation
+        
+        # MOUSE JOYSTICK
+            menu_gooberhelper_setting_description_Mode=Absolute = based on the raw mouse position on the screen{n}Relative = not based on the raw mouse position and more versatile
+
+            # ABSOLUTE MODE
+            
+            # RELATIVE MODE
+                menu_gooberhelper_setting_description_DeadzoneRadius=percentage of circle radius that will nullify inputs
+                menu_gooberhelper_setting_description_UseRegularMouse=this is really jank because of Technical Limitations
+                menu_gooberhelper_setting_description_ClampBehavior=icl the only reason this option exists is to make 2 lines of my code{n}slightly cleaner but someone might have a use case for it lmao
 
 # CUSTOM MENU
     menu_gooberhelper_title=GooberHelper

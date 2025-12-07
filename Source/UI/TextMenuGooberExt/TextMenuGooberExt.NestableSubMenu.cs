@@ -307,7 +307,7 @@ namespace Celeste.Mod.GooberHelper.UI {
 
             /// <inheritdoc cref="TextMenu.GetYOffsetOf(TextMenu.Item)"/>
             public float GetYOffsetOf(TextMenu.Item item) {
-                float offset = Container.GetYOffsetOf(this) - Height() * 0.5f;
+                float offset = (ParentSubMenu is not null ? ParentSubMenu.GetYOffsetOf(this) : Container.GetYOffsetOf(this)) - Height() * 0.5f;
                 if (item == null) {
                     // common case is all items in submenu are disabled when item is null
                     return offset + TitleHeight * 0.5f;
@@ -332,6 +332,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                 
                 if(ParentSubMenu is not null) {
                     ParentSubMenu.InNestedSubMenu = false;
+                    ParentSubMenu.containerAutoScroll = containerAutoScroll;
                 } else {
                     Container.AutoScroll = containerAutoScroll;
                     Container.Focused = true;
@@ -352,6 +353,8 @@ namespace Celeste.Mod.GooberHelper.UI {
 
                     if(ParentSubMenu is not null) {
                         ParentSubMenu.InNestedSubMenu = true;
+                        containerAutoScroll = ParentSubMenu.containerAutoScroll;
+                        ParentSubMenu.containerAutoScroll = false;
                     } else {
                         containerAutoScroll = Container.AutoScroll;
                         Container.Focused = false;
