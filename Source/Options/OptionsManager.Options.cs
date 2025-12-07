@@ -79,6 +79,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             //visuals
             PlayerShaderMask,
             TheoNuclearReactor,
+            RotatePlayerToSpeed,
 
             //miscellaneous
             AlwaysExplodeSpinners,

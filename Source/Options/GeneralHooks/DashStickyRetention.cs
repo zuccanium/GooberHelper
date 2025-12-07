@@ -16,7 +16,6 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             cursor.EmitDelegate(setDashStickyRetentionOnCollide);
         }
 
-
         [ILHook]
         private static void patch_Player_DashEnd(ILContext il) {
             var cursor = new ILCursor(il);
@@ -38,7 +37,6 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
                 var ext = player.GetExtensionFields();
                 
                 ext.DashStickyRetentionExists = true;
-                ext.DashStickyRetentionDirection = new Vector2(Math.Sign(player.wallSpeedRetained), 0);
                 ext.DashStickyRetentionSpeed = new Vector2(player.wallSpeedRetained, 0);
             }
         }
@@ -49,7 +47,6 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
                 
                 if(!ext.DashStickyRetentionExists) {
                     ext.DashStickyRetentionExists = true;
-                    ext.DashStickyRetentionDirection = data.Direction;
                     ext.DashStickyRetentionSpeed = player.Speed;
                 }
             }

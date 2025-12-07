@@ -10,6 +10,9 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Dashing {
             if(enabled && Math.Sign(originalSpeed.X) == -Math.Sign(originalDashSpeed.X) && Math.Abs(originalSpeed.X) > Math.Abs(originalDashSpeed.X))
                 orig.X = -originalSpeed.X;
 
+            if(!GetOptionBool(Option.VerticalDashSpeedPreservation))
+                return;
+
             if(enabled && Math.Sign(originalSpeed.Y) == -Math.Sign(originalDashSpeed.Y) && Math.Abs(originalSpeed.Y) > Math.Abs(originalDashSpeed.Y))
                 orig.Y = -originalSpeed.Y;
         }

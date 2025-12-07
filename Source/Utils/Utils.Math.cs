@@ -40,5 +40,36 @@ namespace Celeste.Mod.GooberHelper {
 
             return sign * max;
         }
+
+        public static float UnsignedAbsMin(params float[] values) {
+            var min = Math.Abs(values[0]);
+
+            for(var i = 1; i < values.Length; i++) {
+                min = Math.Min(min, Math.Abs(values[i]));
+            }
+
+            return min;
+        }
+
+        public static float SignedAbsMin(params float[] values) {
+            var min = Math.Abs(values[0]);
+            var sign = Math.Sign(values[0]);
+
+            for(var i = 1; i < values.Length; i++) {
+                min = Math.Min(min, Math.Abs(values[i]));
+
+                if(sign == 0f)
+                    sign = Math.Sign(values[i]);
+            }
+
+            return sign * min;
+        }
+
+        //MULTIVARIABLE VECTOR CALC CLASS IS ACTUALLY BECOMING USEFUL IN MY CELESTE MOD
+        //IVE BEEN WAITING FOR SOMETHING LIKE THIS TO HAPPEN
+        //I AM ABSOLUTELY SPEAKING INTO THE VOID RIGHT NOW BUT IM ACTUALLY SO HAPPY
+        //AEIUHRGIUHAERSDILOUGTSHZEDIRLUF5GHISLUZOEDHRGNIULSZER I LOVE MATH
+        public static Vector2 ProjectOnto(this Vector2 v, Vector2 u)
+            => u * Vector2.Dot(u, v) / u.LengthSquared();
     }
 }

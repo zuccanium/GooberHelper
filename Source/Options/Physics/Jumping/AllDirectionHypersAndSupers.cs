@@ -19,7 +19,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
 
             var superJumpLabel = cursor.DefineLabel();
 
-            HookHelper.Begin(cursor, "implementing all direction hypers and supers", true);
+            HookHelper.Begin(cursor, "implementing all direction hypers and supers");
 
             HookHelper.Move("finding where SuperJump is called", () => {
                 cursor.GotoNextBestFit(MoveType.AfterLabel,

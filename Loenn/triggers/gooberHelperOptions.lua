@@ -96,6 +96,7 @@ local options = {
     categoryHeader("Visuals"),
     "PlayerShaderMask: [None|Cover|HairOnly]",
     "TheoNuclearReactor",
+    "RotatePlayerToSpeed",
 
     categoryHeader("Miscellaneous"),
     "AlwaysExplodeSpinners",

@@ -33,15 +33,8 @@ namespace Celeste.Mod.GooberHelper.Options.General {
             }
         }
 
-        [OnLoad]
-        public static void Load()
-            => Everest.Events.Level.OnLoadLevel += addToScene;
-
-        [OnUnload]
-        public static void Unload()
-            => Everest.Events.Level.OnLoadLevel -= addToScene;
-
-        private static void addToScene(Level level, Player.IntroTypes playerIntro, bool isFromLoader) {
+        [OnLoadLevel]
+        public static void LoadLevel(Level level, Player.IntroTypes playerIntro, bool isFromLoader) {
             if(level.Tracker.GetEntity<GooberOptionsList>() is null)
                 level.Add(new GooberOptionsList());
         }

@@ -7,7 +7,7 @@ namespace Celeste.Mod.GooberHelper.Extensions {
         public class SceneExtensionFields {
             public int Counter = 0;
             public int LastPauseCounterValue = 0;
-            public float StunningWatchTimer = 0;
+            public float StunningWatchTimer = 0f;
             public float StunningOffset = 0f;
             public int StunningGroup = 0;
 

@@ -135,15 +135,18 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
             ResolvedTargets.Add(method);
         }
 
-        public void ResolveTargets() {
+        public void ResolveTargets(MethodInfo method) {
+            if(Targets.Length == 0)
+                Logger.Warn("GooberHelper", $"there arent any targets on the hook attribute for method {method.Name} on {method.DeclaringType} :quoggert: is this a mistake?");
+
             foreach(var target in Targets) {
-                if(GetMethod(target.DeclaringType, target.MethodName.Split("_"), 0) is not MethodBase method) {
+                if(GetMethod(target.DeclaringType, target.MethodName.Split("_"), 0) is not MethodBase targetMethod) {
                     Logger.Error("GooberHelper", $"couldnt resolve target method of target {$"({target.DeclaringType}, {target.MethodName})"}");
 
                     return;
                 }
 
-                ResolvedTargets.Add(method);
+                ResolvedTargets.Add(targetMethod);
             }
         }
 
@@ -162,7 +165,7 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
                         if(method.Name.StartsWith("patch_")) {
                             attribute.GetTargetFromMethodName(method.Name);
                         } else {
-                            attribute.ResolveTargets();
+                            attribute.ResolveTargets(method);
                         }
 
                         attribute.ApplyHooks(method);
