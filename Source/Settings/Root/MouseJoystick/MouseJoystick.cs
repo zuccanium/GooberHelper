@@ -58,6 +58,8 @@ namespace Celeste.Mod.GooberHelper.Settings.Categories.MouseJoystick {
             if(!MInput.Active || Engine.Scene is not Level)
                 return;
 
+            MouseHelper.UpdateMouseVisibility();
+
             var mode = GooberHelperModule.Settings.MouseJoystick.Mode;
 
             switch(mode) {

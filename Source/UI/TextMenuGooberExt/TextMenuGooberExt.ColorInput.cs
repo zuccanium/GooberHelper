@@ -1,4 +1,5 @@
 using System;
+using Celeste.Mod.GooberHelper.Helpers;
 
 namespace Celeste.Mod.GooberHelper.UI {
     public static partial class TextMenuGooberExt {
@@ -96,6 +97,8 @@ namespace Celeste.Mod.GooberHelper.UI {
                     Math.Abs(toScreen.X - mousePosition.X) < Texture.Width / 2 + Threshold && Math.Abs(toScreen.Y - mousePosition.Y) < Threshold || Dragging;
             }
 
+            public static bool? MouseVisiblity;
+
             public enum ColorDiplayMode {
                 Rgba,
                 Hex,
@@ -120,8 +123,6 @@ namespace Celeste.Mod.GooberHelper.UI {
             private MTexture sliderMover = GFX.Gui["GooberHelper/sliderMover"];
             private MTexture hueWheelMover = GFX.Gui["GooberHelper/hueWheelMover"];
             
-            private bool wasMouseVisible = false;
-
             private DraggableCircle draggableHueWheel;
             private DraggableSlider draggableBrightnessSlider;
             private DraggableSlider draggableAlphaSlider;
@@ -193,8 +194,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                     draggableAlphaSlider = new DraggableSlider(VectorColor.W, alphaSlider, sliderMover);
                 }
 
-                wasMouseVisible = Engine.Instance.IsMouseVisible;
-                Engine.Instance.IsMouseVisible = true;
+                MouseVisiblity = true;
 
                 Audio.Play(SFX.ui_main_button_select);
             }
@@ -203,7 +203,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                 Editing = false;
                 draggingSomething = false;
 
-                Engine.Instance.IsMouseVisible = wasMouseVisible;
+                MouseVisiblity = null;
             }
 
             public override void Update() {

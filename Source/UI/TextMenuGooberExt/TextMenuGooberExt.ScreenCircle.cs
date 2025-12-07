@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using Celeste.Mod.GooberHelper.Helpers;
 
 namespace Celeste.Mod.GooberHelper.UI {
     public static partial class TextMenuGooberExt {
@@ -63,8 +64,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                     Parent.Container.Visible = false;
                     Parent.Container.Active = false;
 
-                    wasMouseVisible = Engine.Instance.IsMouseVisible;
-                    Engine.Instance.IsMouseVisible = true;
+                    MouseVisibility = true;
 
                     Editing = true;
 
@@ -79,7 +79,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                     Parent.Container.Visible = true;
                     Parent.Container.Active = true;
 
-                    Engine.Instance.IsMouseVisible = wasMouseVisible;
+                    MouseVisibility = null;
                     
                     Editing = false;
 
@@ -382,6 +382,7 @@ namespace Celeste.Mod.GooberHelper.UI {
             }
 
             public static readonly int GapWidth = 25;
+            public static bool? MouseVisibility;
 
             public Color UnselectedColor = Color.White;
             public string Label;

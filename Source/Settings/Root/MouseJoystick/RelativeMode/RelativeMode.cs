@@ -4,6 +4,7 @@ using Celeste.Mod.GooberHelper.Attributes;
 namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
     public class RelativeMode : Mode.MouseJoystickModeHandler {
         public static readonly RelativeMode Instance = new();
+        
         private static MTexture relativeCursor;
 
         public Vector2 VirtualMousePosition = Vector2.Zero;

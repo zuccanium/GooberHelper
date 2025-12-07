@@ -8,7 +8,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
         public enum ClickBehaviorValue {
             None,
             ResetOnClick,
-            RequireToMove,
+            RequiredToMove,
         }
 
         public static void ModifyVirtualMousePosition(Monocle.Circle circle, ref bool needsReset, ref Vector2 fromCircle) {
@@ -24,7 +24,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
 
                     break;
                 
-                case ClickBehaviorValue.RequireToMove:
+                case ClickBehaviorValue.RequiredToMove:
                     if(!MInput.Mouse.CheckLeftButton) {
                         fromCircle = Vector2.Zero;
 

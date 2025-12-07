@@ -84,7 +84,7 @@
     gooberhelper_enum_Relative=Relative
 
     gooberhelper_enum_ResetOnClick=Reset on Click
-    gooberhelper_enum_RequireToMove=Require to Move
+    gooberhelper_enum_RequiredToMove=Require to Move
     
     gooberhelper_enum_Circle=Circle
     gooberhelper_enum_Screen=Screen

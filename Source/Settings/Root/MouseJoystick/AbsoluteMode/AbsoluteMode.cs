@@ -1,6 +1,3 @@
-using System;
-using Celeste.Mod.GooberHelper.Attributes;
-
 namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.AbsoluteMode {
     public class AbsoluteMode : Mode.MouseJoystickModeHandler {
         public static readonly AbsoluteMode Instance = new();
@@ -12,10 +9,10 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.AbsoluteMode {
             if(MInput.Mouse.Position == -Engine.Viewport.Bounds.Location.ToVector2())
                 fromCircle = Vector2.Zero;
 
+            JoystickPosition = fromCircle.SafeNormalize();
+
             if(fromCircle.Length() < circle.Radius)
                 JoystickPosition = Vector2.Zero;
-
-            JoystickPosition = fromCircle.SafeNormalize();
         }
 
         public override void Render() {
