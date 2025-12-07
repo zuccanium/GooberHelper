@@ -5,8 +5,8 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick {
     public class Mode : AbstractEnum<Mode.ModeValue> {
         public enum ModeValue {
             None,
-            Relative,
             Absolute,
+            Relative,
         }
 
         public abstract class MouseJoystickModeHandler {
