@@ -116,6 +116,7 @@
                 gooberhelper_option_HorizontalTurningSpeedInversion=Horizontal Turning Speed Inversion
                 gooberhelper_option_VerticalTurningSpeedInversion=Vertical Turning Speed Inversion
                 gooberhelper_option_DownwardsAirFrictionBehavior=Downwards Air Friction Behavior
+                gooberhelper_option_IgnoreForcemove=Ignore Forcemove
                 
                 gooberhelper_option_UpwardsTransitionSpeedPreservation=UpwardsTransitionSpeedPreservation
 
@@ -206,6 +207,7 @@
                 gooberhelper_option_description_HorizontalTurningSpeedInversion=turn around to invert your horizontal speed whenever
                 gooberhelper_option_description_VerticalTurningSpeedInversion=same as above but vertical and really freaky
                 gooberhelper_option_description_DownwardsAirFrictionBehavior=slows you down less while fastfalling with more than max falling speed
+                gooberhelper_option_description_IgnoreForcemove=overrides the moveX forcemove override in the player update method
 
                 gooberhelper_option_description_UpwardsTransitionSpeedPreservation=buh
             

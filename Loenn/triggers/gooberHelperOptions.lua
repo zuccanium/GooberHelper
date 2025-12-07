@@ -57,6 +57,7 @@ local options = {
     "HorizontalTurningSpeedInversion",
     "VerticalTurningSpeedInversion",
     "DownwardsAirFrictionBehavior",
+    "IgnoreForcemove",
 
     "UpwardsTransitionSpeedPreservation",
 

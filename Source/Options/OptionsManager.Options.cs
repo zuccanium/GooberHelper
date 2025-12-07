@@ -39,6 +39,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             HorizontalTurningSpeedInversion,
             VerticalTurningSpeedInversion,
             DownwardsAirFrictionBehavior,
+            IgnoreForcemove,
 
             UpwardsTransitionSpeedPreservation,
 

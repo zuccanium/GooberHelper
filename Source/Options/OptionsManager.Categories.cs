@@ -56,6 +56,7 @@ namespace Celeste.Mod.GooberHelper.Options {
                 new OptionData(Option.HorizontalTurningSpeedInversion),
                 new OptionData(Option.VerticalTurningSpeedInversion),
                 new OptionData(Option.DownwardsAirFrictionBehavior),
+                new OptionData(Option.IgnoreForcemove),
 
                 new OptionData(Option.UpwardsTransitionSpeedPreservation),
             ]},
