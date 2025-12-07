@@ -77,6 +77,9 @@ namespace Celeste.Mod.GooberHelper.Settings.Categories.MouseJoystick {
                 _ => Vector2.Zero,
             };
 
+            if(joystickPosition == Vector2.Zero)
+                return orig(self, gamepadIndex, threshold);
+
             var settings = global::Celeste.Settings.Instance; //what the fuck??
 
             var result =
