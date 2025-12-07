@@ -15,20 +15,6 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
 
         private static bool shouldLockMouse()
             => !Engine.Scene.Paused;
-        
-        private void clampVirtualPositionIntoCircle(Monocle.Circle circle, out bool wasOutside, out Vector2 fromCircle) {
-            wasOutside = false;
-
-            fromCircle = VirtualMousePosition - circle.Center;
-
-            if(fromCircle.Length() > circle.Radius) {
-                fromCircle = fromCircle.SafeNormalize() * circle.Radius;
-
-                wasOutside = true;
-            }
-
-            VirtualMousePosition = circle.Center + fromCircle;
-        }
 
         private Vector2 getMouseDelta()
             => lastMousePosition is Vector2 lastMousePositionActual
@@ -57,12 +43,19 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
 
 
             //processing the virtual mouse position
-            clampVirtualPositionIntoCircle(circle, out var wasOutside, out var fromCircle);
+            var needsReset = false;
+            var fromCircle = VirtualMousePosition - circle.Center;
+
+            //i love object oriented programming
+            ClampBehavior.ModifyVirtualMousePosition(circle, ref needsReset, ref fromCircle);
+            ClickBehavior.ModifyVirtualMousePosition(circle, ref needsReset, ref fromCircle);
+
+            VirtualMousePosition = fromCircle + circle.Center;
 
             //maybe setting the mouse position and handling lastMousePosition
             var newMousePositionMaybe =
                 shouldLockMouse()
-                    ? relativeModeSettings.UseRegularMouse && wasOutside
+                    ? relativeModeSettings.UseRegularMouse && needsReset
                         ? VirtualMousePosition + center
 
                     : !relativeModeSettings.UseRegularMouse
@@ -79,21 +72,35 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
             var rawJoystickPosition = fromCircle / circle.Radius;
 
             //joystick stuff
-            JoystickPosition = rawJoystickPosition.Length() < relativeModeSettings.DeadzoneRadius / 100
+            JoystickPosition = rawJoystickPosition.Length() < relativeModeSettings.DeadzoneRadius / 100f
                 ? Vector2.Zero
                 : rawJoystickPosition;
         }
 
         public override void Render() {
             var relativeModeSettings = GooberHelperModule.Settings.MouseJoystick.RelativeMode;
+            var center = new Vector2(Engine.Viewport.Width, Engine.Viewport.Height) / 2f;
 
             var circle = relativeModeSettings.Circle.ToCircle();
+            var radius = circle.Radius;
+            var deadzoneRadius = circle.Radius * relativeModeSettings.DeadzoneRadius / 100f;
 
-            var center = new Vector2(Engine.Viewport.Width, Engine.Viewport.Height) / 2;
             var position = center + circle.Center;
 
-            Utils.DrawHollowCircle(position, circle.Radius, Color.Red, 12);
-            Utils.DrawHollowCircle(position, circle.Radius * relativeModeSettings.DeadzoneRadius / 100, Color.Lime, 4);
+            var outerColor = relativeModeSettings.OuterColor.MultiplyByAlpha();
+            var borderColor = relativeModeSettings.BorderColor.MultiplyByAlpha();
+            var innerColor = relativeModeSettings.InnerColor.MultiplyByAlpha();
+            var deadzoneBorderColor = relativeModeSettings.DeadzoneBorderColor.MultiplyByAlpha();
+
+            var borderThickness = relativeModeSettings.BorderThickness;
+            var deadzoneBorderThickness = relativeModeSettings.DeadzoneBorderThickness;
+
+            Utils.DrawTexturedCircleOuter(position, radius, outerColor);
+            Utils.DrawTexturedCircleInner(position, radius, innerColor);
+
+            Utils.DrawHollowCircle(position, radius, borderColor, borderThickness);
+            
+            Utils.DrawHollowCircle(position, deadzoneRadius, deadzoneBorderColor, deadzoneBorderThickness);
             
             if(!relativeModeSettings.UseRegularMouse)
                 relativeCursor.DrawCentered(VirtualMousePosition + center);

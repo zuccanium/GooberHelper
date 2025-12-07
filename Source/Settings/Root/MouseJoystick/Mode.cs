@@ -5,7 +5,7 @@ using Celeste.Mod.GooberHelper.Settings.Toggles;
 namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick {
     [GooberHelperSetting]
     public class Mode : AbstractEnum {
-        public enum MouseJoystickMode {
+        public enum ModeValue {
             None,
             Relative,
             Absolute,
@@ -15,11 +15,8 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick {
             public virtual Vector2 JoystickPosition { get; set; }
             public abstract void Update();
             public abstract void Render();
-        } 
+        }
 
-        public override Type EnumType { get; set; } = typeof(MouseJoystickMode);
-
-        public override void CreateEntry(object container, bool inGame)
-            => base.CreateEntry(container, inGame);
+        public override Type EnumType { get; set; } = typeof(ModeValue);
     }
 }

@@ -16,11 +16,22 @@
             # ABSOLUTE MODE
                 menu_gooberhelper_setting_Circle=Circle
                 menu_gooberhelper_setting_OuterColor=Outer Color
-                menu_gooberhelper_setting_InnerColor=Inner Color
                 menu_gooberhelper_setting_BorderColor=Border Color
+                menu_gooberhelper_setting_InnerColor=Inner Color
                 menu_gooberhelper_setting_BorderThickness=Border Thickness
             
             # RELATIVE MODE
+                menu_gooberhelper_setting_Circle=Circle
+                menu_gooberhelper_setting_DeadzoneRadius=Deadzone Radius
+                menu_gooberhelper_setting_UseRegularMouse=Use Regular Mouse
+                menu_gooberhelper_setting_ClickBehavior=Click Behavior
+                menu_gooberhelper_setting_ClampBehavior=Clamp Behavior
+                menu_gooberhelper_setting_OuterColor=Outer Color
+                menu_gooberhelper_setting_BorderColor=Border Color
+                menu_gooberhelper_setting_InnerColor=Inner Color
+                menu_gooberhelper_setting_DeadzoneBorderColor=Deadzone Border Color
+                menu_gooberhelper_setting_BorderThickness=Border Thickness
+                menu_gooberhelper_setting_DeadzoneBorderThickness=Deadzone Thickness
     
     # DESCRIPTIONS
         menu_gooberhelper_setting_description_DebugMapPhysics=adds really janky physics simulations to the debug map{n}press f5 in the debug map to see instructions
@@ -57,6 +68,12 @@
 # ENUMS
     gooberhelper_enum_Absolute=Absolute
     gooberhelper_enum_Relative=Relative
+
+    gooberhelper_enum_ResetOnClick=Reset on Click
+    gooberhelper_enum_RequireToMove=Require to Move
+    
+    gooberhelper_enum_Circle=Circle
+    gooberhelper_enum_Screen=Screen
 
     gooberhelper_enum_None=None
     gooberhelper_enum_All=All
