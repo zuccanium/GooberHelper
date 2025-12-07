@@ -36,8 +36,6 @@ namespace Celeste.Mod.GooberHelper.Settings {
         public virtual void AddStandardDescription() {
             var key = $"menu_gooberhelper_ui_description_{Entry?.GetType().Name}";
 
-            Console.WriteLine(key);
-
             if(!Dialog.Has(key))
                 return;
 

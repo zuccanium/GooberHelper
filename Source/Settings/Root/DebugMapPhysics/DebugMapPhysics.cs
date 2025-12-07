@@ -17,12 +17,14 @@ namespace Celeste.Mod.GooberHelper.Settings.Root {
         }
 
         public override void CreateEntry(object container, bool inGame) {
-            base.CreateEntry(container, inGame);
-
             if(container is not TextMenu menu)
                 return;
 
-            Entry.AddExplodingDescription(menu, Dialog.Clean("menu_gooberhelper_setting_description_DebugMapPhysics"));
+            Entry = CreateItem(GetValue());
+
+            AddToContainer();
+
+            Entry.AddExplodingDescription(menu, GetDescription());
 
             description = menu.items[^1] as TextMenuGooberExt.ExplodingDescription;
         }

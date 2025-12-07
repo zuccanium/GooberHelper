@@ -10,8 +10,8 @@ namespace Celeste.Mod.GooberHelper.Helpers {
                 ?? TextMenuGooberExt.ColorInput.MouseVisiblity
                 ?? TextMenuGooberExt.ScreenCircle.MouseVisibility
                 ?? (Engine.Scene.Paused || Engine.Scene is not Level ? false as bool? : null)
-                ?? (settings.MouseJoystick.Mode == Mode.ModeValue.Absolute ? true as bool? : null)
-                ?? (settings.MouseJoystick.Mode == Mode.ModeValue.Relative && settings.MouseJoystick.RelativeMode.UseRegularMouse ? true as bool? : null)
+                ?? (settings?.MouseJoystick?.Mode == Mode.ModeValue.Absolute ? true as bool? : null)
+                ?? (settings?.MouseJoystick?.Mode == Mode.ModeValue.Relative && settings?.MouseJoystick?.RelativeMode?.UseRegularMouse == true ? true as bool? : null)
                 ?? null;
 
             if(visibility != null)

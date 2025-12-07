@@ -35,19 +35,13 @@ namespace Celeste.Mod.GooberHelper.Settings.Categories.MouseJoystick {
             }
 
             public override void Render() {
-                var mode = GooberHelperModule.Settings.MouseJoystick.Mode;
+                var mode = GooberHelperModule.Settings?.MouseJoystick?.Mode;
 
                 if(mode == Mode.ModeValue.Absolute)
                     AbsoluteMode.Instance.Render();
 
                 else if(mode == Mode.ModeValue.Relative)
                     RelativeMode.Instance.Render();
-
-                // if(mode == Mode.MouseJoystickMode.Absolute)
-                //     AbsoluteMode.Instance.Update();
-
-                // else if(mode == Mode.MouseJoystickMode.Relative)
-                //     RelativeMode.Instance.Update();
             }
         }
 
@@ -60,7 +54,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Categories.MouseJoystick {
 
             MouseHelper.UpdateMouseVisibility();
 
-            var mode = GooberHelperModule.Settings.MouseJoystick.Mode;
+            var mode = GooberHelperModule.Settings?.MouseJoystick?.Mode;
 
             switch(mode) {
                 case Mode.ModeValue.Absolute:
@@ -77,7 +71,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Categories.MouseJoystick {
 
         [OnHook]
         private static float patch_Binding_Axis(On.Monocle.Binding.orig_Axis orig, Binding self, int gamepadIndex, float threshold) {
-            var joystickPosition = GooberHelperModule.Settings.MouseJoystick.Mode switch {
+            var joystickPosition = GooberHelperModule.Settings?.MouseJoystick?.Mode switch {
                 Mode.ModeValue.Absolute => AbsoluteMode.Instance.JoystickPosition,
                 Mode.ModeValue.Relative => RelativeMode.Instance.JoystickPosition,
                 _ => Vector2.Zero,
