@@ -69,7 +69,7 @@ namespace Celeste.Mod.GooberHelper {
             => $"rgba({color.X * 255:F0}, {color.Y * 255:F0}, {color.Z * 255:F0}, {color.W * 255:F0})";
 
         public static string ToStringHex(this Vector4 color)
-            => $"#{(int)(color.X * 255):X0}{(int)(color.Y * 255):X0}{(int)(color.Z * 255):X0}{(int)(color.W * 255):X0}";
+            => $"#{(int)(color.X * 255):X2}{(int)(color.Y * 255):X2}{(int)(color.Z * 255):X2}{(int)(color.W * 255):X2}";
 
         public static string ToStringHsva(this Vector4 color)
             => $"hsva({color.X * 360:F0}, {color.Y * 100:F0}, {color.Z * 100:F0}, {color.W * 255:F0})";

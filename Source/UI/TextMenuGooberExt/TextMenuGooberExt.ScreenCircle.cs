@@ -22,8 +22,6 @@ namespace Celeste.Mod.GooberHelper.UI {
                 public ScreenCircle Parent;
                 public bool Editing = false;
                 
-                private bool wasMouseVisible = false;
-
                 private bool inRect = false;
                 private int selectedSide = -1;
                 private int selectedCorner = -1;
@@ -390,7 +388,6 @@ namespace Celeste.Mod.GooberHelper.UI {
             
             private float sine;
             private ScreenCircleMover moverEntity;
-            private bool editing = false;
 
             public Action<Circle> OnValueChange;
 
