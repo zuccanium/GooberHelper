@@ -1,14 +1,56 @@
+# STANDARD DESCRIPTIONS
+    menu_gooberhelper_ui_description_ColorInput=press confirm to modify the color; press left/right to cycle through formats
+    menu_gooberhelper_ui_description_ScreenCircle=press confirm start editing the circle position and radius; scroll to increase/decrease the padding used for snapping
+
 # SETTINGS
-    # SETTING TITLES
+    # SUBMENUS
+        menu_gooberhelper_setting_submenu_MouseJoystick=Mouse Joystick
+        menu_gooberhelper_setting_submenu_AbsoluteMode=Absolute Mode
+        menu_gooberhelper_setting_submenu_RelativeMode=Relative Mode
+
+    # TITLES
         menu_gooberhelper_setting_DebugMapPhysics=Debug Map Physics
         menu_gooberhelper_setting_ShowOptionsInGame=Show Options in Game
         menu_gooberhelper_setting_FastMenuing=Fast Menuing
         menu_gooberhelper_setting_CustomSwimmingAnimation=Custom Swimming Animation
+        
+        # MOUSE JOYSTICK
+            menu_gooberhelper_setting_Mode=Mode
+
+            # ABSOLUTE MODE
+                menu_gooberhelper_setting_Circle=Circle
+                menu_gooberhelper_setting_OuterColor=Outer Color
+                menu_gooberhelper_setting_BorderColor=Border Color
+                menu_gooberhelper_setting_InnerColor=Inner Color
+                menu_gooberhelper_setting_BorderThickness=Border Thickness
+            
+            # RELATIVE MODE
+                menu_gooberhelper_setting_Circle=Circle
+                menu_gooberhelper_setting_DeadzoneRadius=Deadzone Radius
+                menu_gooberhelper_setting_UseRegularMouse=Use Regular Mouse
+                menu_gooberhelper_setting_ClickBehavior=Click Behavior
+                menu_gooberhelper_setting_ClampBehavior=Clamp Behavior
+                menu_gooberhelper_setting_OuterColor=Outer Color
+                menu_gooberhelper_setting_BorderColor=Border Color
+                menu_gooberhelper_setting_InnerColor=Inner Color
+                menu_gooberhelper_setting_DeadzoneBorderColor=Deadzone Border Color
+                menu_gooberhelper_setting_BorderThickness=Border Thickness
+                menu_gooberhelper_setting_DeadzoneBorderThickness=Deadzone Thickness
     
-    # SETTING DESCRIPTIONS
+    # DESCRIPTIONS
         menu_gooberhelper_setting_description_DebugMapPhysics=adds really janky physics simulations to the debug map{n}press f5 in the debug map to see instructions
         menu_gooberhelper_setting_description_FastMenuing=reduces the time needed for menu inputs to repeat and speeds up the postcard animation
         menu_gooberhelper_setting_description_CustomSwimmingAnimation=gives Options/Physics/Other/CustomSwimming its own animation
+        
+        # MOUSE JOYSTICK
+            menu_gooberhelper_setting_description_Mode=Absolute = based on the raw mouse position on the screen{n}Relative = not based on the raw mouse position and more versatile
+
+            # ABSOLUTE MODE
+            
+            # RELATIVE MODE
+                menu_gooberhelper_setting_description_DeadzoneRadius=percentage of circle radius that will nullify inputs
+                menu_gooberhelper_setting_description_UseRegularMouse=this is really jank because of Technical Limitations
+                menu_gooberhelper_setting_description_ClampBehavior=icl the only reason this option exists is to make 2 lines of my code{n}slightly cleaner but someone might have a use case for it lmao
 
 # CUSTOM MENU
     menu_gooberhelper_title=GooberHelper
@@ -37,48 +79,57 @@
     menu_gooberhelper_import_profile_success=success!
     menu_gooberhelper_import_create_profile_success=success! imported and created profile "name"
 
+# ENUMS
+    gooberhelper_enum_Absolute=Absolute
+    gooberhelper_enum_Relative=Relative
+
+    gooberhelper_enum_ResetOnClick=Reset on Click
+    gooberhelper_enum_RequiredToMove=Require to Move
+    
+    gooberhelper_enum_Circle=Circle
+    gooberhelper_enum_Screen=Screen
+
+    gooberhelper_enum_None=None
+    gooberhelper_enum_All=All
+
+    gooberhelper_enum_GroundJumps=Ground Jumps
+
+    gooberhelper_enum_RequireGround=Ground
+    gooberhelper_enum_WorkWithCoyoteTimeAndDontRefill=Coyote
+    gooberhelper_enum_WorkWithCoyoteTime=Coyote And Refill
+
+    gooberhelper_enum_OnlyCardinal=Only Cardinal
+
+    gooberhelper_enum_RequireSpeed=Invert Speed
+    gooberhelper_enum_WorkWithRetention=Invert Retention
+
+    gooberhelper_enum_Cover=Cover
+    gooberhelper_enum_HairOnly=Hair Only
+
+    gooberhelper_enum_FakeRCB=Fake RCB
+    gooberhelper_enum_Preserve=Preserve
+    gooberhelper_enum_Invert=Invert
+
+    gooberhelper_enum_DashSpeed=Dash Speed
+
+    gooberhelper_enum_Magnitude=Magnitude
+    gooberhelper_enum_Vertical=Vertical
+    gooberhelper_enum_Horizontal=Horizontal
+    gooberhelper_enum_Both=Both
+
+    gooberhelper_enum_Legacy=Legacy
+    gooberhelper_enum_On=On
+
+    gooberhelper_enum_SkipIntro=Skip Intro
+    gooberhelper_enum_KeepIntro=Keep Intro
+
+    gooberhelper_enum_WhileHoldingUp=While Holding Up
+    gooberhelper_enum_Always=Always
+
+    gooberhelper_enum_Speed=Speed
+    gooberhelper_enum_Velocity=Velocity
+
 # OPTIONS
-    # ENUM VALUES (maybe change this to fit the normal path?)
-        gooberhelper_enum_None=None
-        gooberhelper_enum_All=All
-
-        gooberhelper_enum_GroundJumps=Ground Jumps
-
-        gooberhelper_enum_RequireGround=Ground
-        gooberhelper_enum_WorkWithCoyoteTimeAndDontRefill=Coyote
-        gooberhelper_enum_WorkWithCoyoteTime=Coyote And Refill
-
-        gooberhelper_enum_OnlyCardinal=Only Cardinal
-
-        gooberhelper_enum_RequireSpeed=Invert Speed
-        gooberhelper_enum_WorkWithRetention=Invert Retention
-
-        gooberhelper_enum_Cover=Cover
-        gooberhelper_enum_HairOnly=Hair Only
-
-        gooberhelper_enum_FakeRCB=Fake RCB
-        gooberhelper_enum_Preserve=Preserve
-        gooberhelper_enum_Invert=Invert
-
-        gooberhelper_enum_DashSpeed=Dash Speed
-
-        gooberhelper_enum_Magnitude=Magnitude
-        gooberhelper_enum_Vertical=Vertical
-        gooberhelper_enum_Horizontal=Horizontal
-        gooberhelper_enum_Both=Both
-
-        gooberhelper_enum_Legacy=Legacy
-        gooberhelper_enum_On=On
-
-        gooberhelper_enum_SkipIntro=Skip Intro
-        gooberhelper_enum_KeepIntro=Keep Intro
-
-        gooberhelper_enum_WhileHoldingUp=While Holding Up
-        gooberhelper_enum_Always=Always
-
-        gooberhelper_enum_Speed=Speed
-        gooberhelper_enum_Velocity=Velocity
-
     # TITLES
         # PHYSICS
             # JUMPING
