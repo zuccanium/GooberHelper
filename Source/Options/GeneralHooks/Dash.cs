@@ -65,7 +65,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             if(Math.Abs(normalEndWallSpeedRetained) > Math.Abs(player.wallSpeedRetained) && normalEndWallSpeedRetentionTimer > 0f)
                 extraThing = new Vector2(normalEndWallSpeedRetained, 0);
 
-            player.GetExtensionFields().BeforeDashSpeedConserved = player.GetConservedSpeed(extraThing);
+            player.GetExtensionFields().BeforeDashSpeedConserved = player.GetConservedSpeed(null, extraThing);
         }
 
         private static void setOriginalDashSpeed(Vector2 orig)

@@ -70,41 +70,39 @@ namespace Celeste.Mod.GooberHelper.Settings.Root {
             cursor.EmitDelegate(maybeCreateTrail);
         }
 
-        private static void setPlayerRotation(Player player) {
-            var speedAngle = player.GetConservedSpeed().Angle() + MathF.PI / 2f;
+        private static void setPlayerRotation(Player player, PlayerExtensions.PlayerExtensionFields ext) {
+            var speedAngle = player.GetConservedSpeed(ext).Angle() + MathF.PI / 2f;
 
             player.Sprite.Rate = MathF.Log2(player.Speed.Length() / 64f + 1f) + 1f;
 
-            PlayerRender.PlayerRotationTarget = speedAngle;
+            ext.PlayerRotationTarget = speedAngle;
         }
 
-        public static bool OnUpdateSprite(Player player) {
+        public static bool OnUpdateSprite(Player player, PlayerExtensions.PlayerExtensionFields ext) {
             if(!ShouldDoAnimation(player))
                 return false;
 
             player.Sprite.Rate = 1f;
 
-            if(player.StateMachine.State == Player.StNormal) {
-                var ext = player.GetExtensionFields();
-                
+            if(player.StateMachine.State == Player.StNormal) {                
                 if(ext.IsDolphin) {
                     if((player.Speed / new Vector2(1f, 2f)).Length() > 90f) {
-                        setPlayerRotation(player);
+                        setPlayerRotation(player, ext);
 
                         player.Sprite.Play("spin");
                     } else {
                         ext.IsDolphin = false;
 
-                        PlayerRender.PlayerRotationTarget = 0f;
+                        ext.PlayerRotationTarget = 0f;
                     }
 
                     return true;
                 } else {
-                    PlayerRender.PlayerRotationTarget = 0f;
+                    ext.PlayerRotationTarget = 0f;
                 }
             } else if(player.StateMachine.State == Player.StSwim) {
                 if(Input.Aim != Vector2.Zero) {
-                    setPlayerRotation(player);
+                    setPlayerRotation(player, ext);
 
                     var animationStarted = player.Sprite.CurrentAnimationID == "spin";
 
@@ -115,17 +113,15 @@ namespace Celeste.Mod.GooberHelper.Settings.Root {
                         player.Sprite.SetFrame(player.Sprite.currentAnimation.Frames[player.Sprite.CurrentAnimationFrame]);
                     }
                 } else {
-                    PlayerRender.PlayerRotationTarget = 0f;
+                    ext.PlayerRotationTarget = 0f;
                     
                     player.Sprite.Play("swimIdle");
                 }
 
                 return true;
             } else {
-                var ext = player.GetExtensionFields();
-
-                PlayerRender.PlayerRotationTarget = 0f;
-                PlayerRender.PlayerRotation = 0f;
+                ext.PlayerRotationTarget = 0f;
+                ext.PlayerRotation = 0f;
 
                 ext.IsDolphin = false;
             }

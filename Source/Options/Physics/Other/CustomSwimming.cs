@@ -4,9 +4,7 @@ using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 using Celeste.Mod.GooberHelper.Helpers;
-using Celeste.Mod.GooberHelper.Options.GeneralHooks;
 using Celeste.Mod.GooberHelper.Settings.Root;
-using Celeste.Mod.GooberHelper.Settings.Toggles;
 using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
@@ -25,22 +23,80 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         public static readonly float WaterLaunchSpeedAddition = 80f;
         public static readonly float WaterLaunchSpeedThreshold = -130f;
 
+        [ILHook]
+        private static void patch_Player_Update(ILContext il) {
+            var cursor = new ILCursor(il);
+
+            cursor.EmitLdarg0();
+            cursor.EmitDelegate(updateRetention);
+        }
+
+        [ILHook(typeof(Player), "OnCollideH")]
+        [ILHook(typeof(Player), "OnCollideV")]
+        private static void patchCollisions(ILContext il) {
+            var cursor = new ILCursor(il);
+
+            cursor.EmitLdarg0();
+            cursor.EmitLdarg1();
+            cursor.EmitDelegate(handleCollision);
+        }
+
+        private static void updateRetention(Player player) {
+            var ext = player.GetExtensionFields();
+
+            if(ext.SwimmingRetentionTimer <= 0) {
+                ext.SwimmingRetentionSpeed = Vector2.Zero;
+
+                return;
+            }
+            
+            Utils.Log($"[swimming retention info] speed: {ext.SwimmingRetentionSpeed}, time: {ext.SwimmingRetentionTimer}");
+
+            ext.SwimmingRetentionTimer -= Engine.DeltaTime;
+        }
+
+        private static void handleCollision(Player player, CollisionData data) {
+            if(!GetOptionBool(Option.CustomSwimming) || !player.CollideCheck<Water>())
+                return;
+
+            var ext = player.GetExtensionFields();
+
+            var newCollision = false;
+
+            if(data.Direction.Y == 0 && Math.Abs(player.Speed.X) > Math.Abs(ext.SwimmingRetentionSpeed.X)) {
+                ext.SwimmingRetentionSpeed.X = player.Speed.X;
+                
+                newCollision = true;
+            }
+
+            if(data.Direction.X == 0 && Math.Abs(player.Speed.Y) > Math.Abs(ext.SwimmingRetentionSpeed.Y)) {
+                ext.SwimmingRetentionSpeed.Y = player.Speed.Y;
+                
+                newCollision = true;
+            }
+
+            if(newCollision) {
+                ext.SwimmingRetentionTimer = 0.06f;
+                ext.SwimmingRetentionPlatform = data.Hit;
+            }
+        }
+
         //returns true if it worked
         private static bool trySwimWalljump(Player player, PlayerExtensions.PlayerExtensionFields ext = null) {
             ext ??= player.GetExtensionFields();
 
-            if(!Input.Jump.Pressed || ext.LenientAllDirectionRetentionTimer <= 0f || !GetOptionBool(Option.CustomSwimming))
+            if(!Input.Jump.Pressed || ext.SwimmingRetentionTimer <= 0f || !GetOptionBool(Option.CustomSwimming))
                 return false;
             
             var conservedSpeed = player.GetConservedSpeed();
 
             var swimWallJumpSpeed = new Vector2(
-                Utils.SignedAbsMax(conservedSpeed.X, ext.LenientAllDirectionRetentionSpeed.X),
-                Utils.SignedAbsMax(conservedSpeed.Y, ext.LenientAllDirectionRetentionSpeed.Y)
+                Utils.SignedAbsMax(conservedSpeed.X, ext.SwimmingRetentionSpeed.X),
+                Utils.SignedAbsMax(conservedSpeed.Y, ext.SwimmingRetentionSpeed.Y)
             );
 
             var swimWalljumpSpeed = swimWallJumpSpeed.Length() + SwimWalljumpSpeedAddition;
-            var swimWalljumpDirection = -ext.LenientAllDirectionRetentionSpeed.SafeNormalize();
+            var swimWalljumpDirection = -ext.SwimmingRetentionSpeed.SafeNormalize();
 
             if(swimWalljumpDirection == Vector2.Zero)
                 return false;
@@ -48,7 +104,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
             Input.Jump.ConsumeBuffer();
             player.Speed = swimWalljumpDirection * swimWalljumpSpeed;
 
-            var index = ext.LenientAllDirectionRetentionPlatform.GetWallSoundIndex(player, -Math.Sign(swimWalljumpDirection.X));
+            var index = ext.SwimmingRetentionPlatform.GetWallSoundIndex(player, -Math.Sign(swimWalljumpDirection.X));
 
             Dust.Burst(player.Center + swimWalljumpDirection * player.Collider.Size / 2, swimWalljumpDirection.Angle(), 4, player.DustParticleFromSurfaceIndex(index));
             player.Play(SurfaceIndex.GetPathFromIndex(index) + "/landing", "surface_index", index);
@@ -99,13 +155,13 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
             //lenient all direction retention is used underwater
             player.wallSpeedRetentionTimer = 0f;
 
-            var retention = ext.LenientAllDirectionRetentionSpeed;
+            var retention = ext.SwimmingRetentionSpeed;
 
             if(Math.Abs(retention.X) > Math.Abs(player.Speed.X) && !player.CollideCheck<Solid>(player.Position + Math.Sign(retention.X) * Vector2.UnitX))
-                player.Speed.X = ext.LenientAllDirectionRetentionSpeed.X;
+                player.Speed.X = ext.SwimmingRetentionSpeed.X;
 
             if(Math.Abs(retention.Y) > Math.Abs(player.Speed.Y) && !player.CollideCheck<Solid>(player.Position + Math.Sign(retention.Y) * Vector2.UnitY))
-                player.Speed.Y = ext.LenientAllDirectionRetentionSpeed.Y;
+                player.Speed.Y = ext.SwimmingRetentionSpeed.Y;
 
             if(Input.Jump.Pressed) {
                 if(trySwimWalljump(player, ext))

@@ -94,6 +94,10 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
 
                     if(component is null)
                         continue;
+                    
+                    //i hate you microsoft
+                    if(parameter.ParameterType == typeof(float) && component == "float")
+                        continue;
 
                     if(!parameter.ParameterType.Name.Contains(component, StringComparison.OrdinalIgnoreCase)) {
                         failed = true;

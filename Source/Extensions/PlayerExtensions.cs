@@ -4,9 +4,9 @@ using MonoMod.Utils;
 namespace Celeste.Mod.GooberHelper.Extensions {
     public static class PlayerExtensions {
         public class PlayerExtensionFields {
-            public Vector2 LenientAllDirectionRetentionSpeed = Vector2.Zero;
-            public float LenientAllDirectionRetentionTimer = 0f;
-            public Platform LenientAllDirectionRetentionPlatform;
+            public Vector2 SwimmingRetentionSpeed = Vector2.Zero;
+            public float SwimmingRetentionTimer = 0f;
+            public Platform SwimmingRetentionPlatform;
 
             //i love naming variables
             public bool IsDolphin = false;
@@ -43,9 +43,32 @@ namespace Celeste.Mod.GooberHelper.Extensions {
             DynamicData.For(self).Set(f_Player_GooberHelperExtensionFields, new PlayerExtensionFields());
         }
 
-        public static Vector2 GetConservedSpeed(this Player self, Vector2 extraThing = default) {
-            var ext = self.GetExtensionFields();
+        public static Vector2 GetConservedVisualSpeed(this Player self, PlayerExtensionFields ext) {
+            ext ??= self.GetExtensionFields();
+
+            return new Vector2(
+                Utils.SignedAbsMax(
+                    self.Speed.X,
+                    self.wallSpeedRetentionTimer > 0f
+                        ? self.wallSpeedRetained
+                        : 0f,
+                    ext.SwimmingRetentionTimer > 0f
+                        ? ext.SwimmingRetentionSpeed.X
+                        : 0f
+                ),
+                Utils.SignedAbsMax(
+                    self.Speed.Y,
+                    ext.SwimmingRetentionTimer > 0f
+                        ? ext.SwimmingRetentionSpeed.Y
+                        : 0f
+                )
+            );
+        }
+
+        public static Vector2 GetConservedSpeed(this Player self, PlayerExtensionFields ext = null, Vector2 extraThing = default) {
             var conserveBeforeDashSpeed = self.StateMachine.State == Player.StDash && GetOptionBool(Option.ConserveBeforeDashSpeed);
+            
+            ext ??= self.GetExtensionFields();
 
             return new Vector2(
                 Utils.SignedAbsMax(
