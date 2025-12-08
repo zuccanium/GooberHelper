@@ -33,7 +33,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             if(player.Ducking)
                 player.Speed *= new Vector2(1.25f, 0.5f);
 
-            HyperAndSuperSpeedPreservation.SetSpeed(player, originalSpeed);
+            HyperAndSuperSpeedPreservation.InSuperJump(player, originalSpeed);
 
             if(player.Ducking)
                 player.Speed /= new Vector2(1.25f, 0.5f);

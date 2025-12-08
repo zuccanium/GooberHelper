@@ -4,7 +4,7 @@ using Celeste.Mod.GooberHelper.Attributes;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
     [GooberHelperOption(Option.HoldablesInheritSpeedWhenThrown)]
     public static class HoldablesInheritSpeedWhenThrown {
-        public static void Handle(Holdable holdable, Vector2 force, Player player) {
+        public static void AfterRelease(Holdable holdable, Vector2 force, Player player) {
             if(!GetOptionBool(Option.HoldablesInheritSpeedWhenThrown))
                 return;
 

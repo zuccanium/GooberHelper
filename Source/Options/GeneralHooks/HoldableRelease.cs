@@ -12,8 +12,8 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             if(holder is not Player player)
                 return;
 
-            ReverseBackboosts.Handle(self, force, player);
-            HoldablesInheritSpeedWhenThrown.Handle(self, force, player);
+            ReverseBackboosts.AfterRelease(self, force, player);
+            HoldablesInheritSpeedWhenThrown.AfterRelease(self, force, player);
         }
     }
 }

@@ -6,9 +6,11 @@ using Celeste.Mod.GooberHelper.Options.GeneralHooks;
 namespace Celeste.Mod.GooberHelper.Options {
     [GooberHelperOption()]
     public static class RotatePlayerToSpeed {
-        public static bool OnUpdateSprite(Player player, PlayerExtensions.PlayerExtensionFields ext) {
+        public static bool OnUpdateSprite(Player player, PlayerExtensions.PlayerExtensionFields ext, ref bool somethingActive) {
             if(!GetOptionBool(Option.RotatePlayerToSpeed))
                 return false;
+
+            somethingActive = true;
             
             var conservedSpeed = player.GetConservedVisualSpeed(ext);
 

@@ -46,10 +46,11 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             var ext = self.GetExtensionFields();
 
             var shouldCancel = false;
+            var somethingActive = false;
             
             shouldCancel = shouldCancel
-                || CustomSwimmingAnimation.OnUpdateSprite(self, ext)
-                || RotatePlayerToSpeed.OnUpdateSprite(self, ext);
+                || CustomSwimmingAnimation.OnUpdateSprite(self, ext, ref somethingActive)
+                || RotatePlayerToSpeed.OnUpdateSprite(self, ext, ref somethingActive);
             
             if(!shouldCancel) {
                 orig(self);
@@ -57,6 +58,13 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
                 //these are important
                 self.Sprite.Scale.X = Calc.Approach(self.Sprite.Scale.X, 1f, 1.75f * Engine.DeltaTime);
                 self.Sprite.Scale.Y = Calc.Approach(self.Sprite.Scale.Y, 1f, 1.75f * Engine.DeltaTime);
+            }
+
+            if(!somethingActive) {
+                ext.PlayerRotation = 0;
+                ext.PlayerRotationTarget = 0;
+
+                return;
             }
 
             ext.PlayerRotation = Calc.AngleApproach(ext.PlayerRotation, ext.PlayerRotationTarget, 20f * Engine.DeltaTime);

@@ -31,8 +31,8 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             => originalSpeed = player.GetConservedSpeed();
         
         private static void setPlayerSpeed(Player player, int dir) {
-            WalljumpSpeedPreservation.SetSpeed(player, originalSpeed, dir);
-            SwapHorizontalAndVerticalSpeedOnWalljump.SetSpeed(player, originalSpeed, dir);
+            WalljumpSpeedPreservation.InWallJump(player, originalSpeed, dir);
+            SwapHorizontalAndVerticalSpeedOnWalljump.InWallJump(player, originalSpeed, dir);
         }
     }
 }

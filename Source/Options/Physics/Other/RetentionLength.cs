@@ -15,6 +15,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
             }
         }
         
+        //exposed so GeneralHooks/VerticalRetention can use it
         public static float OverrideRetentionLength(float orig) {
             var retentionLength = GetOptionValue(Option.RetentionLength);
 

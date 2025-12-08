@@ -3,7 +3,7 @@ using Celeste.Mod.GooberHelper.Attributes;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
     [GooberHelperOption(Option.WallbounceSpeedPreservation)]
     public static class WallbounceSpeedPreservation {
-        public static void SetSpeed(Player player, Vector2 originalSpeed) {
+        public static void InSuperWallJump(Player player, Vector2 originalSpeed) {
             if(!GetOptionBool(Option.WallbounceSpeedPreservation))
                 return;
             

@@ -78,9 +78,11 @@ namespace Celeste.Mod.GooberHelper.Settings.Root {
             ext.PlayerRotationTarget = speedAngle;
         }
 
-        public static bool OnUpdateSprite(Player player, PlayerExtensions.PlayerExtensionFields ext) {
+        public static bool OnUpdateSprite(Player player, PlayerExtensions.PlayerExtensionFields ext, ref bool somethingActive) {
             if(!ShouldDoAnimation(player))
                 return false;
+
+            somethingActive = true;
 
             player.Sprite.Rate = 1f;
 
