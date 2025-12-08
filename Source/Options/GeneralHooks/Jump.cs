@@ -9,9 +9,9 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             var originalSpeed = self.Speed;
 
             if(!isClimbjump)
-                VerticalToHorizontalSpeedOnGroundJump.HandleVerticalSpeedToHorizontal(self, originalSpeed);
+                VerticalToHorizontalSpeedOnGroundJump.BeforeJump(self, originalSpeed);
 
-            JumpInversion.Handle(self, isClimbjump);
+            JumpInversion.BeforeJump(self, isClimbjump);
 
             orig(self, particles, playSfx);
         }

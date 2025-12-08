@@ -14,6 +14,9 @@ namespace Celeste.Mod.GooberHelper.Extensions {
 
             public bool DashStickyRetentionExists = false;
             public Vector2 DashStickyRetentionSpeed = Vector2.Zero;
+
+            public float VerticalRetentionSpeed;
+            public float VerticalRetentionTimer;
             
             public Vector2 BeforeDashSpeedConserved = Vector2.Zero;
             

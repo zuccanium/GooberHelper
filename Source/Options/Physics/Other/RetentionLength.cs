@@ -11,11 +11,11 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
             var cursor = new ILCursor(il);
 
             if(cursor.TryGotoNextBestFit(MoveType.After, instr => instr.MatchLdcR4(0.06f))) {
-                cursor.EmitDelegate(overrideRetentionLength);
+                cursor.EmitDelegate(OverrideRetentionLength);
             }
         }
-
-        private static float overrideRetentionLength(float orig) {
+        
+        public static float OverrideRetentionLength(float orig) {
             var retentionLength = GetOptionValue(Option.RetentionLength);
 
             return retentionLength != 4

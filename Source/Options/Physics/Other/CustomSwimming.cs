@@ -44,7 +44,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         private static void updateRetention(Player player) {
             var ext = player.GetExtensionFields();
 
-            if(ext.SwimmingRetentionTimer <= 0) {
+            if(ext.SwimmingRetentionTimer <= 0f) {
                 ext.SwimmingRetentionSpeed = Vector2.Zero;
 
                 return;

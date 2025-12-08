@@ -1,35 +1,36 @@
 using System;
 using Celeste.Mod.GooberHelper.Attributes;
+using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
+using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
     [GooberHelperOption(Option.VerticalToHorizontalSpeedOnGroundJump)]
     public static class VerticalToHorizontalSpeedOnGroundJump {
-        public static void HandleVerticalSpeedToHorizontal(Player player, Vector2 originalSpeed) {
-            // var verticalToHorizontalSpeedOnGroundJumpValue = GetOptionEnum<VerticalToHorizontalSpeedOnGroundJumpValue>(Option.VerticalToHorizontalSpeedOnGroundJump);
+        public static void BeforeJump(Player player, Vector2 originalSpeed) {
+            var verticalToHorizontalSpeedOnGroundJumpValue = GetOptionEnum<VerticalToHorizontalSpeedOnGroundJumpValue>(Option.VerticalToHorizontalSpeedOnGroundJump);
             
-            // if(verticalToHorizontalSpeedOnGroundJumpValue != VerticalToHorizontalSpeedOnGroundJumpValue.None) {
-            //     var ext = player.GetExtensionFields();
+            if(verticalToHorizontalSpeedOnGroundJumpValue != VerticalToHorizontalSpeedOnGroundJumpValue.None) {
+                var ext = player.GetExtensionFields();
 
-            //     var retainedVerticalSpeed = !ext.AwesomeRetentionWasInWater && ext.LenientAllDirectionRetentionTimer > 0 && ext.AwesomeRetentionDirection.X == 0
-            //         ? Math.Abs(ext.LenientAllDirectionRetentionSpeed.Y)
-            //         : 0;
+                var dir = Utils.FirstNonZero(
+                    Math.Sign(player.Speed.X),
+                    player.moveX,
+                    (int)player.Facing
+                );
 
-            //     float dir = Math.Sign(player.Speed.X);
-
-            //     if(dir == 0)
-            //         dir = player.moveX;
+                var speedToConvert = Utils.UnsignedAbsMax(
+                    originalSpeed.Y,
+                    ext.VerticalRetentionTimer > 0
+                        ? Math.Abs(ext.VerticalRetentionSpeed)
+                        : 0
+                );
                 
-            //     if(dir == 0)
-            //         dir = (int)player.Facing;
+                if(verticalToHorizontalSpeedOnGroundJumpValue == VerticalToHorizontalSpeedOnGroundJumpValue.Magnitude)
+                    speedToConvert = new Vector2(speedToConvert, originalSpeed.X).Length();
 
-            //     var speedToConvert = Math.Max(Math.Abs(originalSpeed.Y), retainedVerticalSpeed);
-                
-            //     if(verticalToHorizontalSpeedOnGroundJumpValue == VerticalToHorizontalSpeedOnGroundJumpValue.Magnitude)
-            //         speedToConvert = new Vector2(speedToConvert, originalSpeed.X).Length();
-
-            //     player.Speed.X = dir * Math.Max(speedToConvert, Math.Abs(player.Speed.X));
-            // }
+                player.Speed.X = dir * Math.Max(speedToConvert, Math.Abs(player.Speed.X));
+            }
         }
     }
 }

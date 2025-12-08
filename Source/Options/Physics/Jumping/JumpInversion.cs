@@ -4,7 +4,7 @@ using Celeste.Mod.GooberHelper.Attributes;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
     [GooberHelperOption(Option.JumpInversion)]
     public static class JumpInversion {
-        public static void Handle(Player player, bool isClimbjump) {
+        public static void BeforeJump(Player player, bool isClimbjump) {
             var jumpInversionValue = GetOptionEnum<JumpInversionValue>(Option.JumpInversion);
 
             if(
