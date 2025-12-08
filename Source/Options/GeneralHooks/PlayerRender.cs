@@ -171,19 +171,19 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         //oh my god dude
         [OnHook]
         private static TrailManager.Snapshot patch_TrailManager_Add_Vector2_Image_PlayerHair_Vector2_Color_int_float_bool_bool(On.Celeste.TrailManager.orig_Add_Vector2_Image_PlayerHair_Vector2_Color_int_float_bool_bool orig, Vector2 position, Image sprite, PlayerHair hair, Vector2 scale, Color color, int depth, float duration, bool frozenUpdate, bool useRawDeltaTime) {
-            var result = orig(position, sprite, hair, scale, color, depth, duration, frozenUpdate, useRawDeltaTime);
+            var res = orig(position, sprite, hair, scale, color, depth, duration, frozenUpdate, useRawDeltaTime);
 
             // Utils.Log($"GOT A RESULT!! ITS {result}");
 
-            if(result != null && nextTrailSnapshotRotation != 0) {
-                trailManagerSnapshotIndexRotations[result.Index] = nextTrailSnapshotRotation;
+            if(res != null && nextTrailSnapshotRotation != 0) {
+                trailManagerSnapshotIndexRotations[res.Index] = nextTrailSnapshotRotation;
 
                 // Utils.Log($"{result.Index} -> {nextTrailSnapshotRotation}");
             }
 
             nextTrailSnapshotRotation = 0;
 
-            return result;
+            return res;
         }
 
         [ILHook]

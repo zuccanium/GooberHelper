@@ -8,7 +8,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
             var jumpInversionValue = GetOptionEnum<JumpInversionValue>(Option.JumpInversion);
 
             if(
-                Input.MoveX == -Math.Sign(player.Speed.X) &&
+                player.moveX == -Math.Sign(player.Speed.X) &&
                 (
                     jumpInversionValue == JumpInversionValue.All ||
                     !isClimbjump && jumpInversionValue == JumpInversionValue.GroundJumps

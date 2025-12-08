@@ -20,16 +20,17 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
             cursor.TryGotoNext(MoveType.After, instr => instr.MatchStfld<Player>("Speed"));
             cursor.TryGotoNext(MoveType.Before, instr => instr.MatchStfld<Player>("Speed"));
 
+            cursor.EmitLdloc1();
             cursor.EmitDelegate(overrideSpeed);
         }
 
-        private static Vector2 overrideSpeed(Vector2 orig)
-            => GetOptionBool(Option.PickupSpeedInversion) && orig.X == -Input.MoveX
+        private static Vector2 overrideSpeed(Vector2 orig, Player player)
+            => GetOptionBool(Option.PickupSpeedInversion) && orig.X == -player.moveX
                 ? orig * Utils.InvertX
                 : orig;
 
         private static void setFacingMaybe(Player player) {
-            if(player.StateMachine.State == Player.StPickup && Input.MoveX == -(int)player.Facing) 
+            if(player.StateMachine.State == Player.StPickup && player.moveX == -(int)player.Facing) 
                 player.Facing = (Facings)(-(int)player.Facing);
         }
     }

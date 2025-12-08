@@ -15,7 +15,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Moving {
         }
 
         private static void setSpeed(Player player) {
-            if(GetOptionBool(Option.HorizontalTurningSpeedInversion) && Input.MoveX == -Math.Sign(player.Speed.X))
+            if(GetOptionBool(Option.HorizontalTurningSpeedInversion) && player.moveX == -Math.Sign(player.Speed.X))
                 player.Speed.X *= -1;
         }
     }

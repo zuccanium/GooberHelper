@@ -5,6 +5,7 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
     public static class Cobwob {
         private static float originalSpeed;
+        private static float originalCobwobSpeed;
 
         [ILHook]
         private static void patch_Player_Update(ILContext il) {
@@ -12,7 +13,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
 
             if(cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(130f))) {
                 cursor.EmitLdarg0();
-                cursor.EmitDelegate(storeSpeed);
+                cursor.EmitDelegate(storeSpeeds);
             }
 
             if(cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(27.5f))) {
@@ -21,12 +22,18 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             }
         }
 
-        private static void storeSpeed(Player player)
-            => originalSpeed = player.Speed.X;
+        private static float storeSpeeds(float orig, Player player) {
+            originalSpeed = player.Speed.X;
+            originalCobwobSpeed = orig;
+
+            return orig;
+        }
 
         private static float overrideSpeed(float orig, Player player) {
+            var cobwobSpeedInversionValue = GetOptionEnum<CobwobSpeedInversionValue>(Option.CobwobSpeedInversion);
+
             if(
-                GetOptionValue(Option.CobwobSpeedInversion) == (int)CobwobSpeedInversionValue.None &&
+                cobwobSpeedInversionValue == CobwobSpeedInversionValue.None &&
                 !GetOptionBool(Option.WallboostSpeedIsOppositeSpeed)
             ) return orig;
 
@@ -34,7 +41,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
                 return orig;
 
             var dir = Math.Sign(player.Speed.X);
-            var newAbsoluteSpeed = Math.Max(130f, Math.Abs(originalSpeed));
+            var newAbsoluteSpeed = Math.Max(originalCobwobSpeed, Math.Abs(originalSpeed));
 
             if(
                 GetOptionBool(Option.WallboostSpeedIsOppositeSpeed) &&
@@ -44,10 +51,10 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
                 dir = -Math.Sign(originalSpeed);
             }
             
-            if(player.wallSpeedRetentionTimer > 0.0 && GetOptionValue(Option.CobwobSpeedInversion) == (int)CobwobSpeedInversionValue.WorkWithRetention) {
+            if(player.wallSpeedRetentionTimer > 0.0 && cobwobSpeedInversionValue == CobwobSpeedInversionValue.WorkWithRetention) {
                 var retainedSpeed = player.wallSpeedRetained;
 
-                newAbsoluteSpeed = Math.Max(130f, Math.Abs(retainedSpeed));
+                newAbsoluteSpeed = Math.Max(originalCobwobSpeed, Math.Abs(retainedSpeed));
             }
 
             player.Speed.X = dir * newAbsoluteSpeed;

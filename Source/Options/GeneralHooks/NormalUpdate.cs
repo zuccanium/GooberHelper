@@ -13,11 +13,11 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         public static int RunNormalUpdateJustForClimbing(Player player) {  
             RunningNormalUpdateJustForClimbing = true;
 
-            var result = player.NormalUpdate();
+            var res = player.NormalUpdate();
 
             RunningNormalUpdateJustForClimbing = false;
 
-            return result;
+            return res;
         }
         
 

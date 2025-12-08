@@ -10,7 +10,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
             if(wallJumpSpeedPreservationValue == WalljumpSpeedPreservationValue.None)
                 return;
 
-            var result = wallJumpSpeedPreservationValue switch {
+            var res = wallJumpSpeedPreservationValue switch {
                 WalljumpSpeedPreservationValue.Invert => Math.Abs(originalSpeed.X),
                 WalljumpSpeedPreservationValue.None => 0f,
                 
@@ -19,11 +19,11 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
             };
 
             if(wallJumpSpeedPreservationValue == WalljumpSpeedPreservationValue.FakeRCB && player.moveX != 0)
-                result -= 40f;
+                res -= 40f;
 
             player.Speed.X = Utils.SignedAbsMax(
                 player.Speed.X,
-                result
+                res
             );
         }
     }
