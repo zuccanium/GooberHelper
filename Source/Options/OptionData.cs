@@ -5,12 +5,13 @@ namespace Celeste.Mod.GooberHelper.Options {
         public Option Id;
         public string Name;
         public OptionType Type;
-        public string Category;
+        public OptionCategory Category;
         public float DefaultValue;
         public float Min = 0;
         public float Max = 100;
         public float Step = 1;
         public bool ExponentialIncrease = true;
+        public bool IgnoreZero;
         public string MaxLabel;
         public string Suffix;
         public Type EnumType;

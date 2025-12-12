@@ -22,8 +22,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
                         needsReset = true;
                     }
 
-                    break;
-                
+                break;
                 case ClampBehaviorValue.Screen:
                     var screenPos = fromCircle + circle.Center;
                     
@@ -38,8 +37,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
                         needsReset = true;
                     }
 
-                    break;
-                
+                break;
                 case ClampBehaviorValue.None: break;
             }            
         }

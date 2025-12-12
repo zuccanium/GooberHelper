@@ -131,7 +131,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             }
         }
 
-        public static void ResetCategory(string category, OptionSetter setter) {
+        public static void ResetCategory(OptionCategory category, OptionSetter setter) {
             if(setter != OptionSetter.User)
                 return;
 
@@ -139,7 +139,7 @@ namespace Celeste.Mod.GooberHelper.Options {
                 GooberHelperModule.Settings.UserDefinedOptions.Remove(optionData.Id);
         }
 
-        public static Color GetCategoryColor(string category) {
+        public static Color GetCategoryColor(OptionCategory category) {
             var color = DefaultColor;
 
             if(!Categories.TryGetValue(category, out var categoryOptions))
@@ -167,7 +167,7 @@ namespace Celeste.Mod.GooberHelper.Options {
 
         public static bool GetUserEnabledEvilOption()
             => GooberHelperModule.Settings.UserDefinedOptions.Any(a =>
-                Options[a.Key].Category != "Visuals" &&
+                Options[a.Key].Category != OptionCategory.Visuals &&
                 a.Key != Option.GoldenBlocksAlwaysLoad &&
                 a.Key != Option.ShowActiveOptions
             );

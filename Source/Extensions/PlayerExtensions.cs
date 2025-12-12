@@ -1,3 +1,4 @@
+using System;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Utils;
 
@@ -32,12 +33,31 @@ namespace Celeste.Mod.GooberHelper.Extensions {
 
             public float PlayerRotationTarget = 0f;
             public float PlayerRotation = 0f;
+
+            public PlayerExtensionFields()
+                => Utils.Log("CREATING EXTENSION FIELDS!!!");
         }
 
         private static readonly string f_Player_GooberHelperExtensionFields = nameof(f_Player_GooberHelperExtensionFields);
 
+//prevent the game from crashing on mod reload
+#if DEBUG
+        public static PlayerExtensionFields GetExtensionFields(this Player player) {
+            if(DynamicData.For(player).Get(f_Player_GooberHelperExtensionFields) is PlayerExtensionFields fields)
+                return fields;
+            
+            Utils.Log($"etrange??? it was a {DynamicData.For(player).Get(f_Player_GooberHelperExtensionFields)}");
+            
+            var newFields = new PlayerExtensionFields();
+
+            DynamicData.For(player).Set(f_Player_GooberHelperExtensionFields, newFields);
+
+            return newFields;
+        }
+#else
         public static PlayerExtensionFields GetExtensionFields(this Player player)
             => DynamicData.For(player).Get<PlayerExtensionFields>(f_Player_GooberHelperExtensionFields);
+#endif
 
         [OnHook]
         private static void patch_Player_ctor(On.Celeste.Player.orig_ctor orig, Player self, Vector2 position, PlayerSpriteMode spriteMode) {

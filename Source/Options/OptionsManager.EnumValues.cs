@@ -1,5 +1,10 @@
 namespace Celeste.Mod.GooberHelper.Options {
     public static partial class OptionsManager {
+        //jank as hell
+        //i need nobody to ever use this as an actual value
+        public const int ReservedHybridEnumConstant = -899405; //thank you sparky
+        public const int ReservedHybridEnumSize = 10; //minimize the chances of a collision
+
         public enum JumpInversionValue {
             None,
             GroundJumps,
@@ -14,8 +19,8 @@ namespace Celeste.Mod.GooberHelper.Options {
         }
 
         public enum VerticalJumpSpeedPreservationHybridValue {
-            None = -1,
-            DashSpeed = -2,
+            None = ReservedHybridEnumConstant + 0,
+            DashSpeed = ReservedHybridEnumConstant + 1,
         }
 
         public enum AllDirectionHypersAndSupersValue {
@@ -93,6 +98,11 @@ namespace Celeste.Mod.GooberHelper.Options {
             None,
             WhileHoldingUp,
             Always
+        }
+
+        public enum HoldableSpeedInheritanceHybridValue {
+            None = ReservedHybridEnumConstant + 0,
+            MatchPlayer = ReservedHybridEnumConstant + 1
         }
     }
 }

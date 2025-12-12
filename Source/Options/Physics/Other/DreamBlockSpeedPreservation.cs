@@ -32,20 +32,25 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
 
         [OnHook]
         private static int patch_Player_DreamDashUpdate(On.Celeste.Player.orig_DreamDashUpdate orig, Player self) {
-            if(GetOptionBool(Option.DreamBlockSpeedPreservation)) {
-                var correctSpeed = self.GetExtensionFields().PreservedDreamBlockSpeedMagnitude;
+            if(!GetOptionBool(Option.DreamBlockSpeedPreservation))
+                return orig(self);
 
-                if(self.Speed.X == -correctSpeed.X && Math.Abs(self.Speed.X) > 0) correctSpeed.X *= -1; else 
-                if(self.Speed.Y == -correctSpeed.Y && Math.Abs(self.Speed.Y) > 0) correctSpeed.Y *= -1; else
-                {
-                    var dreamBlockType = self.dreamBlock.GetType().Name;
-                    var data = DynamicData.For(self.dreamBlock);
+            var correctSpeed = self.GetExtensionFields().PreservedDreamBlockSpeedMagnitude;
 
-                    //i know this is evil but also putting code to update the player speed to anything constant is evil too so it cancels out and its fine
-                    self.Speed = dreamBlockType == "ConnectedDreamBlock" && data.Get<bool>("FeatherMode")
-                        ? self.Speed.SafeNormalize() * correctSpeed.Length()
-                        : correctSpeed;
-                }
+            if(self.Speed.X == -correctSpeed.X && Math.Abs(self.Speed.X) > 0f)
+                correctSpeed.X *= -1f;
+            
+            else if(self.Speed.Y == -correctSpeed.Y && Math.Abs(self.Speed.Y) > 0f)
+                correctSpeed.Y *= -1f;
+            
+            else {
+                var dreamBlockType = self.dreamBlock.GetType().Name;
+                var data = DynamicData.For(self.dreamBlock);
+
+                //i know this is evil but also putting code to update the player speed to anything constant is evil too so it cancels out and its fine
+                self.Speed = dreamBlockType == "ConnectedDreamBlock" && data.Get<bool>("FeatherMode")
+                    ? self.Speed.SafeNormalize() * correctSpeed.Length()
+                    : correctSpeed;
             }
 
             return orig(self);

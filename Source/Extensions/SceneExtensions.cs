@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Options.Miscellaneous;
 using MonoMod.Utils;
@@ -13,6 +14,10 @@ namespace Celeste.Mod.GooberHelper.Extensions {
 
             public bool FreezeFrameFrozen = false;
             public RefillFreezeGameSuspension.InputState FreezeFrameFrozenInputs;
+
+            public Stack<TextMenu> MenuStack = [];
+            public TextMenu RootMenu;
+            public TextMenu CurrentMenu;
         }
 
         private static readonly string f_Scene_GooberHelperExtensionFields = nameof(f_Scene_GooberHelperExtensionFields);

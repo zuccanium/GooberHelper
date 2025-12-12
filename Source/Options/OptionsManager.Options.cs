@@ -51,6 +51,8 @@ namespace Celeste.Mod.GooberHelper.Options {
             DreamBlockSpeedPreservation,
             SpringSpeedPreservation,
             ReboundSpeedPreservation,
+            PointBounceSpeedPreservation,
+            ReflectBounceSpeedPreservation,
             ExplodeLaunchSpeedPreservation,
             PickupSpeedInversion,
             BubbleSpeedPreservation,
@@ -61,7 +63,8 @@ namespace Celeste.Mod.GooberHelper.Options {
             CustomSwimming,
             RemoveNormalEnd,
             LenientStunning,
-            HoldablesInheritSpeedWhenThrown,
+            HoldableSpeedInheritanceHorizontal,
+            HoldableSpeedInheritanceVertical,
             FastFallHitboxSquish,
 
             AllowCrouchedHoldableGrabbing,

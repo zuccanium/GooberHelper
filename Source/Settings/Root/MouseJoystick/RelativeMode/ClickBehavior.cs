@@ -22,8 +22,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
                         needsReset = true;
                     }
 
-                    break;
-                
+                break;
                 case ClickBehaviorValue.RequiredToMove:
                     if(!MInput.Mouse.CheckLeftButton) {
                         fromCircle = Vector2.Zero;
@@ -31,8 +30,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.RelativeMode {
                         needsReset = true;
                     }
 
-                    break;
-                
+                break;
                 case ClickBehaviorValue.None: break;
             }            
         }

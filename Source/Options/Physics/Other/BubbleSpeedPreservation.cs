@@ -12,8 +12,11 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         private static void modifyDashSpeedThing(ILContext il) {
             var cursor = new ILCursor(il);
 
-            if(cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(240f))) {
-                cursor.EmitLdarg0();
+            cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(240f));
+
+            //i really dont want this going before extvars code sorry
+            if(cursor.TryGotoNext(MoveType.AfterLabel, instr => instr.MatchCall<Vector2>("op_Multiply"))) {
+                cursor.EmitLdloc1(); //<--- ASSHOLE
                 cursor.EmitDelegate(overrideSpeed);
             }
         }

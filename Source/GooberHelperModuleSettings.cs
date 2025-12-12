@@ -52,8 +52,8 @@ namespace Celeste.Mod.GooberHelper {
         //theyre not private because my ide will get mad at me for having private members with PascalCase names
         //first ever use of protected
         //awesome
-        protected object GooberHelperOptionsButton;
-        protected object ResetAllOptionsButton;
+        protected object GooberHelperOptionsButton { get; }
+        protected object ResetAllOptionsButton { get; }
 
         //binds (the single one)
         [DefaultButtonBinding(Buttons.LeftTrigger, Keys.Tab)]

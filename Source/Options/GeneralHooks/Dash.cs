@@ -74,8 +74,6 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         private static Vector2 overrideDashSpeed(Vector2 orig, Player player) {
             var beforeDashSpeedConserved = player.GetExtensionFields().BeforeDashSpeedConserved;
 
-            Console.WriteLine(beforeDashSpeedConserved);
-
             if(MagnitudeBasedDashSpeed.OverrideDashSpeed(player, originalDashSpeed, beforeDashSpeedConserved, ref orig))
                 return orig;
 

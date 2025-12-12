@@ -13,8 +13,8 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
             if(verticalToHorizontalSpeedOnGroundJumpValue != VerticalToHorizontalSpeedOnGroundJumpValue.None) {
                 var ext = player.GetExtensionFields();
 
-                var dir = Utils.FirstNonZero(
-                    Math.Sign(player.Speed.X),
+                var dir = Utils.FirstSign(
+                    player.Speed.X,
                     player.moveX,
                     (int)player.Facing
                 );

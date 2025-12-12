@@ -13,8 +13,18 @@ namespace Celeste.Mod.GooberHelper.Options {
         //preservation = it preserves speed
         //inversion -> it preserves speed AND the player can decide which direction to go 
 
-        public static readonly Dictionary<string, List<OptionData>> Categories = new() {
-            { "Jumping", [
+        public enum OptionCategory {
+            Jumping,
+            Dashing,
+            Moving,
+            Other,
+            Visuals,
+            Miscellaneous,
+            General
+        }
+
+        public static readonly Dictionary<OptionCategory, List<OptionData>> Categories = new() {
+            { OptionCategory.Jumping, [
                 //goodbye buhbu 💗 i will love you forever
                 // new OptionData(Option.buhbu, OptionType.Float, 0) { min = 0, max = 10, growthFactor = 10, suffix = " frames" },
                 // new OptionData(Option.zonmgle),
@@ -23,8 +33,8 @@ namespace Celeste.Mod.GooberHelper.Options {
                 new OptionData(Option.WalljumpSpeedPreservation, typeof(WalljumpSpeedPreservationValue), WalljumpSpeedPreservationValue.None),
                 new OptionData(Option.WallbounceSpeedPreservation),
                 new OptionData(Option.HyperAndSuperSpeedPreservation),
-                new OptionData(Option.UpwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Integer, -1) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
-                new OptionData(Option.DownwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Integer, -1) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
+                new OptionData(Option.UpwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Integer, (int)VerticalJumpSpeedPreservationHybridValue.None) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
+                new OptionData(Option.DownwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Integer, (int)VerticalJumpSpeedPreservationHybridValue.None) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
                 new OptionData(Option.BounceHelperBounceSpeedPreservation),
 
                 new OptionData(Option.GetClimbjumpSpeedInRetention),
@@ -38,7 +48,7 @@ namespace Celeste.Mod.GooberHelper.Options {
                 new OptionData(Option.AllDirectionDreamJumps),
                 new OptionData(Option.AllowHoldableClimbjumping),
             ]},
-            { "Dashing", [
+            { OptionCategory.Dashing, [
                 new OptionData(Option.VerticalDashSpeedPreservation),
                 new OptionData(Option.ReverseDashSpeedPreservation),
 
@@ -48,7 +58,7 @@ namespace Celeste.Mod.GooberHelper.Options {
                 new OptionData(Option.KeepDashAttackOnCollision),
                 new OptionData(Option.DownDemoDashing),
             ]},
-            { "Moving", [
+            { OptionCategory.Moving, [
                 new OptionData(Option.CobwobSpeedInversion, typeof(CobwobSpeedInversionValue), CobwobSpeedInversionValue.None),
                 
                 new OptionData(Option.WallboostDirectionIsOppositeSpeed),
@@ -60,7 +70,7 @@ namespace Celeste.Mod.GooberHelper.Options {
 
                 new OptionData(Option.UpwardsTransitionSpeedPreservation),
             ]},
-            { "Other", [
+            { OptionCategory.Other, [
                 new OptionData(Option.RefillFreezeLength, OptionType.Float, 3) { Min = 0, Max = 10000, Step = 1, Suffix = "f", ExponentialIncrease = true },
                 new OptionData(Option.RetentionLength, OptionType.Float, 4) { Min = 0, Max = 10000, Step = 1, Suffix = "f", ExponentialIncrease = true },
                 
@@ -68,6 +78,8 @@ namespace Celeste.Mod.GooberHelper.Options {
                 new OptionData(Option.DreamBlockSpeedPreservation, typeof(DreamBlockSpeedPreservationValue), DreamBlockSpeedPreservationValue.None),
                 new OptionData(Option.SpringSpeedPreservation, typeof(SpringSpeedPreservationValue), SpringSpeedPreservationValue.None),
                 new OptionData(Option.ReboundSpeedPreservation),
+                new OptionData(Option.PointBounceSpeedPreservation),
+                new OptionData(Option.ReflectBounceSpeedPreservation),
                 new OptionData(Option.ExplodeLaunchSpeedPreservation, typeof(ExplodeLaunchSpeedPreservationValue), ExplodeLaunchSpeedPreservationValue.None),
                 new OptionData(Option.PickupSpeedInversion),
                 new OptionData(Option.BubbleSpeedPreservation),
@@ -78,7 +90,8 @@ namespace Celeste.Mod.GooberHelper.Options {
                 new OptionData(Option.CustomSwimming),
                 new OptionData(Option.RemoveNormalEnd),
                 new OptionData(Option.LenientStunning),
-                new OptionData(Option.HoldablesInheritSpeedWhenThrown),
+                new OptionData(Option.HoldableSpeedInheritanceHorizontal, typeof(HoldableSpeedInheritanceHybridValue), OptionType.Float, (int)HoldableSpeedInheritanceHybridValue.None) { Min = -200, Max = 200, Step = 5, Suffix = "%" },
+                new OptionData(Option.HoldableSpeedInheritanceVertical, typeof(HoldableSpeedInheritanceHybridValue), OptionType.Float, (int)HoldableSpeedInheritanceHybridValue.None) { Min = -200, Max = 200, Step = 5, Suffix = "%" },
                 new OptionData(Option.FastFallHitboxSquish, OptionType.Float, 0) { Min = 0, Max = 100, Step = 5, Suffix = "%" },
 
                 new OptionData(Option.AllowCrouchedHoldableGrabbing),
@@ -93,19 +106,19 @@ namespace Celeste.Mod.GooberHelper.Options {
                 new OptionData(Option.AdvantageousLiftBoost),
                 new OptionData(Option.ReverseBackboosts),
             ]},
-            { "Visuals", [
+            { OptionCategory.Visuals, [
                 new OptionData(Option.PlayerShaderMask, typeof(PlayerShaderMaskValue), PlayerShaderMaskValue.None),
                 new OptionData(Option.TheoNuclearReactor),
                 new OptionData(Option.RotatePlayerToSpeed),
             ]},
-            { "Miscellaneous", [
+            { OptionCategory.Miscellaneous, [
                 new OptionData(Option.AlwaysExplodeSpinners),
                 new OptionData(Option.GoldenBlocksAlwaysLoad),
                 new OptionData(Option.RefillFreezeGameSuspension),
                 new OptionData(Option.BufferDelayVisualization),
                 new OptionData(Option.Ant),
             ]},
-            { "General", [
+            { OptionCategory.General, [
                 new OptionData(Option.ShowActiveOptions),
             ]},
         };

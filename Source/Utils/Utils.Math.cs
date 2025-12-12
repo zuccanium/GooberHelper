@@ -6,15 +6,6 @@ namespace Celeste.Mod.GooberHelper {
         public static readonly Vector2 InvertY = new(1, -1);
         public static readonly Vector2 Invert = new(1, 1);
 
-        public static float FirstNonZero(params float[] values) {
-            for(var i = 0; i < values.Length; i++) {
-                if(values[i] != 0)
-                    return values[i];
-            }
-
-            return 0f;
-        }
-
         public static float FirstSign(params float[] values) {
             for(var i = 0; i < values.Length; i++) {
                 var sign = Math.Sign(values[i]);

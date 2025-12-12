@@ -1,3 +1,4 @@
+using System;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Cil;
@@ -25,12 +26,12 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         }
 
         private static Vector2 overrideSpeed(Vector2 orig, Player player)
-            => GetOptionBool(Option.PickupSpeedInversion) && orig.X == -player.moveX
+            => GetOptionBool(Option.PickupSpeedInversion) && Math.Sign(orig.X) == -Input.MoveX
                 ? orig * Utils.InvertX
                 : orig;
 
         private static void setFacingMaybe(Player player) {
-            if(player.StateMachine.State == Player.StPickup && player.moveX == -(int)player.Facing) 
+            if(player.StateMachine.State == Player.StPickup && Input.MoveX == -(int)player.Facing) 
                 player.Facing = (Facings)(-(int)player.Facing);
         }
     }

@@ -1,6 +1,7 @@
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Settings.Toggles;
 using Celeste.Mod.GooberHelper.UI;
+using Celeste.Mod.GooberHelper.UI.OptionsMenu;
 
 namespace Celeste.Mod.GooberHelper.Settings.Root {
     [GooberHelperSetting]
@@ -21,7 +22,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root {
                 return;
 
             var index = menu.items.FindIndex(item => item is TextMenu.Button && (item as TextMenu.Button).Label == Dialog.Clean("menu_pause_options"));
-            menu.Insert(index, OuiGooberHelperOptions.CreateOptionsButton(menu, true));
+            menu.Insert(index, new PauseMenuOptionsButton(menu));
         }
     }
 }
