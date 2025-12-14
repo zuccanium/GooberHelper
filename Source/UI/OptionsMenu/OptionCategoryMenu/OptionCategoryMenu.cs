@@ -25,8 +25,10 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu.OptionCategoryMenu {
             Add(new ResetCategoryButton(Category));
         }
 
-        private void onLeave()
-            => MenuManager.GoBack();
+        private void onLeave() {
+            MenuManager.GoBack();
+            Audio.Play(SFX.ui_main_button_back);
+        }
         
         private void onPause() {
             GooberHelperModule.Instance.SaveSettings();

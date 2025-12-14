@@ -33,8 +33,8 @@ namespace Celeste.Mod.GooberHelper.Options {
                 new OptionData(Option.WalljumpSpeedPreservation, typeof(WalljumpSpeedPreservationValue), WalljumpSpeedPreservationValue.None),
                 new OptionData(Option.WallbounceSpeedPreservation),
                 new OptionData(Option.HyperAndSuperSpeedPreservation),
-                new OptionData(Option.UpwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Integer, (int)VerticalJumpSpeedPreservationHybridValue.None) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
-                new OptionData(Option.DownwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Integer, (int)VerticalJumpSpeedPreservationHybridValue.None) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
+                new OptionData(Option.UpwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Float, (int)VerticalJumpSpeedPreservationHybridValue.None) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
+                new OptionData(Option.DownwardsJumpSpeedPreservationThreshold, typeof(VerticalJumpSpeedPreservationHybridValue), OptionType.Float, (int)VerticalJumpSpeedPreservationHybridValue.None) { Max = 240, Step = 10, ExponentialIncrease = false, Suffix = "px/s" },
                 new OptionData(Option.BounceHelperBounceSpeedPreservation),
 
                 new OptionData(Option.GetClimbjumpSpeedInRetention),

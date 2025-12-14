@@ -46,7 +46,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             => Dialog.Clean($"gooberhelper_option_{Name}");
 
         public string GetDialogDescription() {
-            var id = $"gooberhelper_option_description_{this.Name}";
+            var id = $"gooberhelper_option_description_{Name}";
 
             return Dialog.Has(id)
                 ? Dialog.Clean(id)

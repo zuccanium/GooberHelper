@@ -21,6 +21,9 @@ namespace Celeste.Mod.GooberHelper {
         private static int logColorCycle = 0;
 
 #if DEBUG
+        public static void Log(object obj)
+            => Log(obj.ToString());
+
         public static void Log(DefaultInterpolatedStringHandler str) {
             var stringifiedStr = str.ToString();
 
@@ -56,6 +59,9 @@ namespace Celeste.Mod.GooberHelper {
                     )
             );
 #else
+        public static void Log(object obj)
+            => Log(obj.ToString());
+
         public static void Log(DefaultInterpolatedStringHandler str)
             => Logger.Verbose("GooberHelper", str);
 

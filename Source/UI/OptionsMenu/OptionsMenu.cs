@@ -95,6 +95,7 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu {
             GooberHelperModule.Instance.SaveSettings();
 
             MenuManager.GoBack();
+            Audio.Play(SFX.ui_main_button_back);
         }
 
         private void onPause() {

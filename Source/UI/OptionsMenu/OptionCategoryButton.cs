@@ -18,8 +18,12 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu {
             Refresh();
         }
 
-        private void onPressed()
-            => MenuManager.OpenMenu<OptionCategoryMenu.OptionCategoryMenu>(Category);
+        private void onPressed() {
+            MenuManager.OpenMenu<OptionCategoryMenu.OptionCategoryMenu>(Category);
+            
+            //dont immediately trigger the dynamic slider speed increase thing when opening onto an option
+            Input.Jump.ConsumeBuffer();
+        }
 
         public void Refresh() {
             TextColor = GetCategoryColor(Category);

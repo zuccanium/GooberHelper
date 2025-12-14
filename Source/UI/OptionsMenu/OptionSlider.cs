@@ -1,18 +1,14 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Celeste.Mod.GooberHelper.Options;
 using Celeste.Mod.GooberHelper.UI.OptionSliderContent;
 
 namespace Celeste.Mod.GooberHelper.UI {
-    public class OptionSlider : TextMenuExt.EnumerableSlider<float> {
+    public class OptionSlider : TextMenuGooberExt.DynamicOption<float> {
         public Option Option;
         private OptionData optionData;
         
-        //the base call is garbage data on purpose
-        //fill it manually later
-        public OptionSlider(Option option) : base("", new List<float>(), 0) {
+        public OptionSlider(Option option) : base() {
+            Option = option;
             optionData = OptionsManager.Options[option];
             
             var optionValue = GetOptionValue(option);
@@ -30,37 +26,23 @@ namespace Celeste.Mod.GooberHelper.UI {
 
             Label = optionData.GetDialogName();
 
-            //i swear on my life i will never use explicit typing for variables ever again
-            //i know this is stupid as hell but i will not let one of those fuckers slip into my precious codebase ever again
-            //sorry for the rude language
-            //i have absolutely no idea whos gonna be reading this if anyone, but if youre my employer or something, my bad lmao
-            var sliderOptions = default(IEnumerable<KeyValuePair<float, string>>);
-
-            sliderOptions =
-                optionData.Type == OptionType.Boolean
-                    ? new BooleanSliderOptions()
-                
-                : optionData.Type == OptionType.Enum
-                    ? new EnumSliderOptions(optionData.EnumType)
-
-                : new NumericSliderOptions(optionData);
-
-            var caughtOptionValue = false;
-
-            foreach(var sliderOptionPair in sliderOptions) {
-                if(!caughtOptionValue && sliderOptionPair.Key > optionValue)
-                    Add(optionValue + optionData.Suffix, optionValue, caughtOptionValue |= true);
-
-                var equal = sliderOptionPair.Key == optionValue;
-                caughtOptionValue |= equal;
-
-                Add(sliderOptionPair.Value, sliderOptionPair.Key, equal);
+            if(optionData.Type == OptionType.Boolean)
+                AddEnumerable(new BooleanSliderOptions(), optionValue);
+        
+            else if(optionData.EnumType is Type enumType)
+                AddEnumerable(new EnumSliderOptions(optionData.EnumType), optionValue);
+            
+            if(optionData.Type == OptionType.Float || optionData.Type == OptionType.Integer) {
+                LeftMin = optionData.Min;
+                LeftMax = 0;
+                RightMin = 0;
+                RightMax = optionData.Max;
+                Step = optionData.Step;
+                Suffix = optionData.Suffix;
             }
 
-            var description = optionData.GetDialogDescription();
-
-            if(description != "")
-                this.AddDescription(MenuManager.CurrentMenu, description);
+            Current = optionValue;
+            RecalculateCachedRightWidth();
             
             UnselectedColor = GetOptionColor(optionData.Id);
 
@@ -70,6 +52,15 @@ namespace Celeste.Mod.GooberHelper.UI {
             IncludeWidthInMeasurement = false;
         }
 
+        public override void Added() {
+            base.Added();
+
+            var description = optionData.GetDialogDescription();
+
+            if(description != "")
+                this.AddDescription(MenuManager.CurrentMenu, description);
+        }
+
         private void onValueChange(float value) {
             SetOptionValue(optionData.Id, value, OptionSetter.User);
 
@@ -77,7 +68,7 @@ namespace Celeste.Mod.GooberHelper.UI {
         }
 
         private void onAltPressed() {
-            ResetOptionValue(optionData.Id, OptionSetter.User);
+            ResetOptionValue(Option, OptionSetter.User);
 
             Audio.Play(SFX.ui_main_button_toggle_on);
 
@@ -88,45 +79,9 @@ namespace Celeste.Mod.GooberHelper.UI {
             var newValue = GetOptionValue(Option);
 
             UnselectedColor = GetOptionColor(Option);
+            Current = newValue;
 
-            if(optionData.Type == OptionType.Boolean) {
-                if(newValue < 0 || newValue > 1) { //qhat the fuck this isnt a boolean
-                    Index = PreviousIndex = newValue >= 1 ? 1 : 0;
-
-                    return;
-                }
-            }
-
-            if(Values.Last().Item2 < newValue) {
-                Add(newValue.ToString() + optionData.Suffix, newValue, true);
-
-                return;
-            }
-
-            var min = 0;
-            var max = Values.Count - 1;
-
-            while(min <= max) {
-                var mid = (int)Math.Floor((min + max) / 2f);
-                var value = Values[mid].Item2;
-                
-                if(value <= ReservedHybridEnumConstant && value > ReservedHybridEnumConstant - ReservedHybridEnumSize)
-                    value = 0;
-
-                if(value > newValue) {
-                    max = mid - 1;
-                } else if(value < newValue) {
-                    min = mid + 1;
-                } else {
-                    Index = PreviousIndex = mid;
-
-                    return;
-                }
-            }
-
-            Values.Insert(min, new Tuple<string, float>(newValue.ToString() + optionData.Suffix, newValue));
-
-            Index = PreviousIndex = min;
+            RecalculateCachedRightWidth();
         }
     }
 }
