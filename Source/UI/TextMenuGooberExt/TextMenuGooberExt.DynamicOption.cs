@@ -22,6 +22,9 @@ namespace Celeste.Mod.GooberHelper.UI {
             public T? RightMax;
             public T Step;
             public string Suffix = "";
+
+            public bool SkipLeftMax;
+            public bool SkipRightMin;
             
             public T? DynamicValue;
             public int MovementSpeed = 0;
@@ -44,6 +47,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                             Utils.Log($"found a match! {item} matches {value}");
 
                             Index = i;
+                            DynamicValue = null;
 
                             return;
                         }
@@ -54,6 +58,14 @@ namespace Celeste.Mod.GooberHelper.UI {
                     Utils.Log($"setting the dynamic value to {value}");
 
                     DynamicValue = value;
+                    Index = 
+                        RightMin is T rightMin && DynamicValue >= rightMin
+                            ? Values.Count
+
+                        : LeftMax is T leftMax && DynamicValue <= leftMax
+                            ? -1
+
+                        : 0; //what
                 }
             }
 
@@ -157,15 +169,18 @@ namespace Celeste.Mod.GooberHelper.UI {
                 OnValueChange?.Invoke(Current);
             }
 
+            private T getRealStep(int dir)
+                => Step * T.CreateChecked(dir * MathF.Pow(2, MovementSpeed));
+
             private bool maybeInitializeDynamicValue(int dir) {
                 if(DynamicValue is not null)
                     return false;
 
-                if(dir == 1 && Index == Values.Count - 1 && RightMin is T rightMin)
-                    DynamicValue = rightMin;
+                if(dir == 1 && Index == Values.Count - 1 && RightMin is T)
+                    DynamicValue = RightMin + (SkipRightMin ? getRealStep(dir) : T.Zero);
                 
-                else if(dir == -1 && Index == 0 && LeftMax is T leftMax)
-                    DynamicValue = leftMax;
+                else if(dir == -1 && Index == 0 && LeftMax is T)
+                    DynamicValue = LeftMax + (SkipLeftMax ? getRealStep(dir) : T.Zero);
 
                 return DynamicValue is not null;
             }
@@ -173,7 +188,7 @@ namespace Celeste.Mod.GooberHelper.UI {
             public void MoveInDirection(int dir) {
                 //initialization
                 if(maybeInitializeDynamicValue(dir)) {
-                    Utils.Log("initialized!");
+                    Utils.Log($"initialized to {DynamicValue}!");
 
                     PreviousIndex = Index;
                     Index += dir;
@@ -198,58 +213,59 @@ namespace Celeste.Mod.GooberHelper.UI {
                     return;
                 }
 
-                Utils.Log("updating the dynamic value");
-
                 //dynamic value update
                 var oldDynamicValue = DynamicValue;
 
-                DynamicValue += Step * T.CreateChecked(dir * MathF.Pow(2, MovementSpeed));
+                DynamicValue += getRealStep(dir);
+                
+                Utils.Log($"updating the dynamic value {oldDynamicValue} -> {DynamicValue}");
 
                 //high bounds enforcement
-                if(RightMax is T rightMax && DynamicValue > rightMax)
-                    DynamicValue = rightMax;
+                if(RightMax is T && DynamicValue > RightMax)
+                    DynamicValue = RightMax;
 
-                if(LeftMin is T leftMin && DynamicValue < leftMin)
-                    DynamicValue = leftMin;
+                if(LeftMin is T && DynamicValue < LeftMin)
+                    DynamicValue = LeftMin;
+
+                //low bounds enforcement
+                var crossedRightBoundary = 
+                    RightMin is T
+                    && oldDynamicValue >= RightMin
+                    && (DynamicValue < RightMin || SkipRightMin && DynamicValue == RightMin)
+                    && Index == Values.Count;
+                
+                var crossedLeftBoundary =
+                    LeftMax is T
+                    && oldDynamicValue <= LeftMax
+                    && (DynamicValue > LeftMax || SkipLeftMax && DynamicValue == LeftMax)
+                    && Index == -1;
+
+                if(crossedRightBoundary || crossedLeftBoundary) {
+                    Utils.Log($"crossed over the {Utils.JoinList(new List<string>() {crossedLeftBoundary ? "left" : "", crossedRightBoundary ? "right" : ""}.Where(str => str is not ""), "and")} boundary!");
+
+                    if(Values.Count > 0) {
+                        DynamicValue = null;
+
+                        PreviousIndex = Index;
+                        Index += dir;
+                    }
+
+                    else if(RightMin == LeftMax)
+                        {}
+
+                    else if(crossedRightBoundary)
+                        DynamicValue = RightMin;
+
+                    else if(crossedLeftBoundary)
+                        DynamicValue = LeftMax;
+                }
 
                 //dont update if nothing changed
                 if(DynamicValue == oldDynamicValue)
                     return;
 
-                //low bounds enforcement
-                if(
-                    RightMin is T rightMin && oldDynamicValue > rightMin && DynamicValue < rightMin ||
-                    LeftMax is T leftMax && oldDynamicValue < leftMax && DynamicValue > leftMax
-                ) {
-                    Utils.Log("going back into the normal values range");
-
-                    DynamicValue = null;
-
-                    PreviousIndex = Index;
-                    Index += dir;
-                }
-
                 updateValue(dir);
             }
-
-            // public override void ConfirmPressed() {
-            //     if(Values.Count != 2)
-            //         return;
-                
-            //     Audio.Play(
-            //         Index == 0
-            //             ? SFX.ui_main_button_toggle_on
-            //             : SFX.ui_main_button_toggle_off
-            //     );
-
-            //     PreviousIndex = Index;
-            //     Index = 1 - Index;
-            //     lastDir = Index == 1 ? 1 : -1;
-
-            //     ValueWiggler.Start();
-                
-            //     OnValueChange?.Invoke(Values[Index].Item2);
-            // }
 
             public override void Update() {
                 sine += Engine.RawDeltaTime;

@@ -7,11 +7,13 @@ namespace Celeste.Mod.GooberHelper.Options {
         public OptionType Type;
         public OptionCategory Category;
         public float DefaultValue;
-        public float Min = 0;
-        public float Max = 100;
+        public float? LeftMin;
+        public float? LeftMax;
+        public float? RightMin;
+        public float? RightMax;
+        public bool SkipLeftMax = false;
+        public bool SkipRightMin = false;
         public float Step = 1;
-        public bool ExponentialIncrease = true;
-        public bool IgnoreZero;
         public string MaxLabel;
         public string Suffix;
         public Type EnumType;

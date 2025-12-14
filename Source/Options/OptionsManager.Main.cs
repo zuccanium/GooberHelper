@@ -48,12 +48,10 @@ namespace Celeste.Mod.GooberHelper.Options {
         public static T GetOptionEnum<T>(Option option) where T : Enum
             => (T)Enum.ToObject(typeof(T), (int)GetOptionValue(option));
 
-        public static string GetOptionEnumName(Option option) {
-            var type = Options[option].EnumType;
-            var value = MathF.Floor(Math.Max(GetOptionValue(option), -Options[option].EnumMax));
-
-            return Dialog.Clean($"gooberhelper_enum_{type.GetEnumName((int)(value > Options[option].Max ? 0 : value))}");
-        }
+        public static string GetOptionEnumName(Option option)
+            => Options[option].EnumType.GetEnumName((int)GetOptionValue(option)) is string enumName
+                ? Dialog.Clean($"gooberhelper_enum_{enumName}")
+                : "[unknown enum value]";
 
         public static OptionSetter GetOptionSetter(Option option)
             => GooberHelperModule.Settings.UserDefinedOptions.ContainsKey(option)

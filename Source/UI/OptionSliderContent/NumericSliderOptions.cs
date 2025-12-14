@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Celeste.Mod.GooberHelper.Options;
 
+//obsolete with TextMenuGooberExt.DynamicOption<T>
 namespace Celeste.Mod.GooberHelper.UI.OptionSliderContent {
     public class NumericSliderOptions : IEnumerable<KeyValuePair<float, string>> {
         public float Min;
@@ -13,15 +13,7 @@ namespace Celeste.Mod.GooberHelper.UI.OptionSliderContent {
         public string Suffix;
         public Type EnumType;
 
-        public NumericSliderOptions(OptionData optionData) {
-            Min = optionData.Min;
-            Max = optionData.Max;
-            Step = optionData.Step;
-            ExponentialIncrease = optionData.ExponentialIncrease;
-            IgnoreZero = optionData.IgnoreZero;
-            Suffix = optionData.Suffix;
-            EnumType = optionData.EnumType;
-        }
+        public NumericSliderOptions() {}
 
         public IEnumerator<KeyValuePair<float, string>> GetSideEnumerator(int dir, float start) {
             var n = start;

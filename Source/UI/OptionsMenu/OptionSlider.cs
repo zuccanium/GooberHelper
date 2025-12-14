@@ -33,11 +33,13 @@ namespace Celeste.Mod.GooberHelper.UI {
                 AddEnumerable(new EnumSliderOptions(optionData.EnumType), optionValue);
             
             if(optionData.Type == OptionType.Float || optionData.Type == OptionType.Integer) {
-                LeftMin = optionData.Min;
-                LeftMax = 0;
-                RightMin = 0;
-                RightMax = optionData.Max;
+                LeftMin = optionData.LeftMin;
+                LeftMax = optionData.LeftMax;
+                RightMin = optionData.RightMin;
+                RightMax = optionData.RightMax;
                 Step = optionData.Step;
+                SkipLeftMax = optionData.SkipLeftMax;
+                SkipRightMin = optionData.SkipRightMin;
                 Suffix = optionData.Suffix;
             }
 
