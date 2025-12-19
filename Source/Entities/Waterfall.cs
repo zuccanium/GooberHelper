@@ -26,6 +26,9 @@ namespace Celeste.Mod.GooberHelper.Entities {
         
         private float speed;
 
+        private Color backgroundWaterColor;
+        private float backgroundWaterOpacity;
+
         private Color waterColor;
         private List<Texture2D> waterTextureLayers;
         private float waterLayerDistance;
@@ -48,6 +51,9 @@ namespace Celeste.Mod.GooberHelper.Entities {
             Depth = data.Int("depth", -9999);
             
             speed = data.Float("speed", 200f);
+
+            backgroundWaterColor = data.HexColor("backgroundWaterColor", Color.LightSkyBlue);
+            backgroundWaterOpacity = data.Float("backgroundWaterOpacity", 0.3f);
             
             waterColor = data.HexColor("waterColor", Color.White);
             waterTextureLayers = [..
@@ -90,6 +96,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
 
             for(var i = 0f; i < 1f; i += 1f / (splashDensity * Width))
                 splashes.Add(new Splash(i));
+
+            FillColor = backgroundWaterColor * backgroundWaterOpacity;
         }
 
         public override void Update() {

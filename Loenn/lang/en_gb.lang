@@ -23,15 +23,21 @@ entities.GooberHelper/FluidSimulation.attributes.description.doExplosionShockwav
 entities.GooberHelper/FluidSimulation.attributes.description.onlyDyeWhileDashing=weather the player should only dye the simulation while dashing
 entities.GooberHelper/FluidSimulation.attributes.description.onlyInfluenceWhileDashing=weather the player should only influence the simulation while dashing
 
-triggers.GooberHelper/GooberHelperOptions.placements.name.gooberHelperOptions=GooberHelper Options
-
 entities.GooberHelper/GameSuspensionIgnore.placements.name.gameSuspensionIgnore=Game Suspension Ignore
 entities.GooberHelper/GameSuspensionIgnore.attributes.description.types=the types of entities that are ignored
 entities.GooberHelper/GameSuspensionIgnore.placements.description.gameSuspensionIgnore=makes specific entities not be suspended by the RefillFreezeGameSuspension option
 
+# read the crashout in entities/waterfall.lua
+entities.GooberHelper/Waterfall.placements.name.waterfall=Waterfall
+# entities.GooberHelper/Waterfall.placements.description.waterfall=another waterfall entity (CREATE A NEW NODE TO REDRAW IT AFTER MAKING CHANGES!!!!)
+entities.GooberHelper/Waterfall.attributes.description.waterPadding=how far the water hitbox should extend below the bottom
+entities.GooberHelper/Waterfall.attributes.description.waterLayerDistance=used for layer parallax
+
+triggers.GooberHelper/GooberHelperOptions.placements.name.gooberHelperOptions=GooberHelper Options
+
 triggers.GooberHelper/ZeroFrameProtector.placements.name.zeroFrameProtector=Zero Frame Protector
-triggers.GooberHelper/ZeroFrameProtector.attributes.description.mode=the direction from which the player will enter the trigger
 triggers.GooberHelper/ZeroFrameProtector.placements.description.zeroFrameProtector=protects the player from zero-framing certain inputs by teleporting them just outside of the trigger. works for rcbs, demos, etc...
+triggers.GooberHelper/ZeroFrameProtector.attributes.description.mode=the direction from which the player will enter the trigger
 
 triggers.GooberHelper/GooberPhysics.placements.name.GooberPhysics=Goober Physics [deprecated]
 
