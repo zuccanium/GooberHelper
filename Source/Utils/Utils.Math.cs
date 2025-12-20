@@ -71,5 +71,8 @@ namespace Celeste.Mod.GooberHelper {
         //AEIUHRGIUHAERSDILOUGTSHZEDIRLUF5GHISLUZOEDHRGNIULSZER I LOVE MATH
         public static Vector2 ProjectOnto(this Vector2 v, Vector2 u)
             => u * Vector2.Dot(u, v) / u.LengthSquared();
+
+        public static Vector2 MaxLengthInclusive(this Vector2 vector, params float[] values)
+            => vector.SafeNormalize() * UnsignedAbsMax([vector.Length(), ..values]);
     }
 }

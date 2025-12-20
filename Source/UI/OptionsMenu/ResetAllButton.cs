@@ -13,8 +13,7 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu {
         private void onPressed() {
             ResetAll(OptionSetter.User);
 
-            if(MenuManager.CurrentMenu is OptionsMenu optionsMenu)
-                optionsMenu.Refresh();
+            MenuManager.RefreshAll();
         }
     }
 }

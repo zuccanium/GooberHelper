@@ -28,6 +28,7 @@ namespace Celeste.Mod.GooberHelper.UI {
             
             public T? DynamicValue;
             public int MovementSpeed = 0;
+            public bool AllowFastMovement = false;
 
             private float cachedRightWidth = 0f;
 
@@ -271,6 +272,9 @@ namespace Celeste.Mod.GooberHelper.UI {
                 sine += Engine.RawDeltaTime;
 
                 if(Container.Current != this)
+                    return;
+
+                if(!AllowFastMovement)
                     return;
 
                 if(Input.Jump.Pressed) {

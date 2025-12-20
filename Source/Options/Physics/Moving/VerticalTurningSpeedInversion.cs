@@ -16,7 +16,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Moving {
 
         private static void setSpeed(Player player) {
             //weird as hell
-            if(GetOptionBool(Option.VerticalTurningSpeedInversion) && Input.MoveY != -Math.Sign(player.Speed.Y)) {
+            if(GetOptionBool(Option.VerticalTurningSpeedInversion) && Input.MoveY == -Math.Sign(player.Speed.Y)) {
                 if(player.varJumpTimer > 0 && player.Speed.Y < 0f)
                     player.varJumpTimer = 0f;
 

@@ -177,7 +177,7 @@
                 gooberhelper_option_DownwardsAirFrictionBehavior=Downwards Air Friction Behavior
                 gooberhelper_option_IgnoreForcemove=Ignore Forcemove
                 
-                gooberhelper_option_UpwardsTransitionSpeedPreservation=UpwardsTransitionSpeedPreservation
+                gooberhelper_option_UpwardsTransitionSpeedPreservation=Upwards Transition Speed Preservation
 
             # OTHER
                 gooberhelper_option_RefillFreezeLength=Refill Freeze Length

@@ -11,7 +11,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root {
             if(container is not TextMenu menu)
                 return;
             
-            menu.Add(Entry = new PauseMenuOptionsButton(menu));
+            menu.Add(Entry = new PauseMenuOptionsButton(menu, inGame));
         }
     }
 }

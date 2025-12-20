@@ -19,7 +19,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
             };
 
             if(wallJumpSpeedPreservationValue == WalljumpSpeedPreservationValue.FakeRCB && player.moveX != 0)
-                res -= 40f;
+                res -= 40f; //this should really support modification from other sources (e.g. extvars), but i really dont see a realistic way of doing that which isnt terrible
 
             player.Speed.X = Utils.SignedAbsMax(
                 player.Speed.X,

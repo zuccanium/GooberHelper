@@ -24,24 +24,8 @@ namespace Celeste.Mod.GooberHelper {
         public static void Log(object obj)
             => Log(obj.ToString());
 
-        public static void Log(DefaultInterpolatedStringHandler str) {
-            var stringifiedStr = str.ToString();
-
-            Console.WriteLine(
-                stringifiedStr
-                    .PadRight((int)MathF.Ceiling((float)stringifiedStr.Length / Console.WindowWidth) * Console.WindowWidth, ' ')
-                    .Color(
-                        GetAnsiColorCode(Calc.HsvToColor(
-                            new System.Diagnostics.StackTrace().FrameCount * 0.8236f % 1,
-                            1,
-                            1
-                        )),
-                        logColorCycle++ % 2 == 0
-                            ? LogBackgroundColor1
-                            : LogBackgroundColor2
-                    )
-            );
-        }
+        public static void Log(DefaultInterpolatedStringHandler str)
+            => Log(str.ToString());
 
         public static void Log(string str)
             => Console.WriteLine(
@@ -49,9 +33,9 @@ namespace Celeste.Mod.GooberHelper {
                     .PadRight((int)MathF.Ceiling((float)str.Length / Console.WindowWidth) * Console.WindowWidth, ' ')
                     .Color(
                         GetAnsiColorCode(Calc.HsvToColor(
-                            new System.Diagnostics.StackTrace().FrameCount * 0.8236f % 1,
-                            1,
-                            1
+                            new System.Diagnostics.StackTrace().FrameCount * 0.8236f % 1f, //arbitrary number for effectively hashing
+                            1f,
+                            1f
                         )),
                         logColorCycle++ % 2 == 0
                             ? LogBackgroundColor1

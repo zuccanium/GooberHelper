@@ -3,7 +3,7 @@ using Celeste.Mod.GooberHelper.Options;
 using Celeste.Mod.GooberHelper.UI.OptionSliderContent;
 
 namespace Celeste.Mod.GooberHelper.UI {
-    public class OptionSlider : TextMenuGooberExt.DynamicOption<float> {
+    public class OptionSlider : TextMenuGooberExt.DynamicOption<float>, IRefreshable {
         public Option Option;
         private OptionData optionData;
         
@@ -41,6 +41,7 @@ namespace Celeste.Mod.GooberHelper.UI {
                 SkipLeftMax = optionData.SkipLeftMax;
                 SkipRightMin = optionData.SkipRightMin;
                 Suffix = optionData.Suffix;
+                AllowFastMovement = true;
             }
 
             Current = optionValue;
@@ -66,7 +67,8 @@ namespace Celeste.Mod.GooberHelper.UI {
         private void onValueChange(float value) {
             SetOptionValue(optionData.Id, value, OptionSetter.User);
 
-            UnselectedColor = GetOptionColor(optionData.Id);
+            Refresh();
+            MenuManager.RefreshAll();
         }
 
         private void onAltPressed() {
@@ -75,13 +77,12 @@ namespace Celeste.Mod.GooberHelper.UI {
             Audio.Play(SFX.ui_main_button_toggle_on);
 
             Refresh();
+            MenuManager.RefreshAll();
         }
 
         public void Refresh() {
-            var newValue = GetOptionValue(Option);
-
             UnselectedColor = GetOptionColor(Option);
-            Current = newValue;
+            Current = GetOptionValue(Option);
 
             RecalculateCachedRightWidth();
         }

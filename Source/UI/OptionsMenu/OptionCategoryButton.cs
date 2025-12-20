@@ -1,5 +1,5 @@
 namespace Celeste.Mod.GooberHelper.UI.OptionsMenu {
-    public class OptionCategoryButton : TextMenuExt.ButtonExt {
+    public class OptionCategoryButton : TextMenuExt.ButtonExt, IRefreshable {
         public OptionCategory Category;
 
         public OptionCategoryButton(OptionCategory category) : base(Dialog.Clean($"menu_gooberhelper_category_{category}")) {

@@ -36,7 +36,6 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
 
             HookHelper.Move("finding where the method returns after calling SuperJump", () => {
                 cursor.GotoNext(MoveType.After, instr => instr.MatchRet());
-                // cursor.Index++;
                 cursor.MoveAfterLabels();
             });
 

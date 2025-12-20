@@ -65,16 +65,6 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu {
                 Add(new OptionsProfileButton(optionProfileName));
         }
 
-        public override void Refresh() {
-            foreach(var item in Items) {
-                if(item is OptionSlider optionSlider)
-                    optionSlider.Refresh();
-                
-                if(item is OptionCategoryButton optionCategoryButton)
-                    optionCategoryButton.Refresh();
-            }
-        }
-
         public override void Removed(Scene scene) {
             if(Engine.Scene is not Level level)
                 return;

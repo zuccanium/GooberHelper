@@ -39,38 +39,41 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
 
             //down and vertical bounces
             if(orig.Y == 210 || orig.Y == 200)
-                orig.Y = Math.Max(
-                    Math.Max(
-                        Math.Abs(ext.DashStickyRetentionExists ? ext.DashStickyRetentionSpeed.Y : 0f),
-                        Math.Abs(beforeUpdateSpeed.Y)
-                    ),
+                orig.Y = Utils.UnsignedAbsMax(
+                    ext.DashStickyRetentionExists
+                        ? ext.DashStickyRetentionSpeed.Y
+                        : 0f,
+                    beforeUpdateSpeed.Y,
                     orig.Y
                 );
 
             //horizontal bounces
             else if(orig.X == 320)
-                orig.X = Math.Max(
-                    Math.Max(
-                        Math.Abs(ext.DashStickyRetentionExists ? ext.DashStickyRetentionSpeed.X : 0f),
-                        Math.Abs(beforeUpdateSpeed.X)
-                    ),
+                orig.X = Utils.UnsignedAbsMax(
+                    ext.DashStickyRetentionExists
+                        ? ext.DashStickyRetentionSpeed.X 
+                        : 0f,
+                    beforeUpdateSpeed.X,
                     orig.X
                 );
             
             //diagonal bounces
             else
-                orig = orig.SafeNormalize() * Math.Max(
+                orig = orig.MaxLengthInclusive(
                     new Vector2(
-                        Math.Max(
-                            Math.Abs(ext.DashStickyRetentionExists ? ext.DashStickyRetentionSpeed.X : 0f),
-                            Math.Abs(beforeUpdateSpeed.X)
+                        Utils.UnsignedAbsMax(
+                            ext.DashStickyRetentionExists
+                                ? ext.DashStickyRetentionSpeed.X 
+                                : 0f,
+                            beforeUpdateSpeed.X
                         ),
-                        Math.Max(
-                            Math.Abs(ext.DashStickyRetentionExists ? ext.DashStickyRetentionSpeed.Y : 0f),
-                            Math.Abs(beforeUpdateSpeed.Y)
+                        Utils.UnsignedAbsMax(
+                            ext.DashStickyRetentionExists
+                                ? ext.DashStickyRetentionSpeed.Y
+                                : 0f,
+                            beforeUpdateSpeed.Y
                         )
-                    ).Length(),
-                    orig.Length()
+                    ).Length()
                 );
 
             return orig * sign;

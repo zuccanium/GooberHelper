@@ -1,5 +1,3 @@
-using Celeste.Mod.GooberHelper.Options;
-
 namespace Celeste.Mod.GooberHelper.UI.OptionsMenu.OptionCategoryMenu {
     public class ResetCategoryButton : TextMenuExt.ButtonExt {
         public OptionCategory Category;
@@ -15,9 +13,7 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu.OptionCategoryMenu {
         private void onPressed() {
             ResetCategory(Category, OptionSetter.User);
 
-            foreach(var item in MenuManager.CurrentMenu.Items)
-                if(item is OptionSlider optionSlider)
-                    optionSlider.Refresh();
+            MenuManager.RefreshAll();
         }
     }
 }

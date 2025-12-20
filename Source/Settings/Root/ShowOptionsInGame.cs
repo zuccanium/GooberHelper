@@ -22,7 +22,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root {
                 return;
 
             var index = menu.items.FindIndex(item => item is TextMenu.Button && (item as TextMenu.Button).Label == Dialog.Clean("menu_pause_options"));
-            menu.Insert(index, new PauseMenuOptionsButton(menu));
+            menu.Insert(index, new PauseMenuOptionsButton(menu, true));
         }
     }
 }

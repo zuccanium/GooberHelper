@@ -1,6 +1,7 @@
 using System;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
+using Celeste.Mod.GooberHelper.Options.Physics.Jumping;
 using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
@@ -78,15 +79,22 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
                 player.Speed /= new Vector2(1.25f, 0.5f);
         }
 
-        //maybe change this
         [OnHook]
         private static void patch_Player_NormalBegin(On.Celeste.Player.orig_NormalBegin orig, Player self) {
             var originalMaxFall = self.maxFall;
             
             orig(self);
 
-            if(GetOptionValue(Option.DownwardsJumpSpeedPreservationThreshold) != -1)
+            var downwardsOptionValue = GetOptionValue(Option.DownwardsJumpSpeedPreservationThreshold);
+
+            if(
+                downwardsOptionValue != (int)VerticalJumpSpeedPreservationHybridValue.None &&
+                self.varJumpSpeed > 0f &&
+                self.Speed.Y == self.varJumpSpeed &&
+                self.varJumpTimer > 0f
+            ) {
                 self.maxFall = originalMaxFall;
+            }
         }
 
         [ILHook]
@@ -106,15 +114,15 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         private static void setOriginalSpeed(Player player)
             => originalSpeed = player.GetConservedSpeed();
 
-        private static float overrideVarJumpSpeed(float value, Player player) {
+        private static float overrideVarJumpSpeed(float orig, Player player) {
             if(GetOptionValue(Option.DownwardsJumpSpeedPreservationThreshold) == (int)VerticalJumpSpeedPreservationHybridValue.None)
-                return value;
+                return orig;
 
             var varJumpSpeed = player.varJumpSpeed;
 
             return varJumpSpeed > 0 && !player.onGround
                 ? varJumpSpeed
-                : value;
+                : orig;
         }
     }
 }

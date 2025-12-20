@@ -7,10 +7,10 @@ namespace Celeste.Mod.GooberHelper.Options.General {
     public static class ShowActiveOptions {
         [Tracked(false)]
         public class GooberOptionsList : Entity {
-            public readonly float Padding = 8f;
-            public readonly float Scale = 0.4f;
-            public readonly Color Color = new(1f, 1f, 1f, 0.8f);
-            public readonly float Stroke = 2f;
+            public static readonly float Padding = 8f;
+            public static readonly float Scale = 0.4f;
+            public static readonly Color Color = new(1f, 1f, 1f, 0.8f);
+            public static readonly float Stroke = 2f;
 
             public GooberOptionsList() {
                 Tag = Tags.HUD | Tags.Global;

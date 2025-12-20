@@ -44,6 +44,18 @@ namespace Celeste.Mod.GooberHelper.UI {
         public static void OpenMenu<T>(params object[] constructorArguments) where T : AbstractGooberMenu
             => OpenMenu(typeof(T), constructorArguments);
 
+        public static void RefreshAll() {
+            var ext = Engine.Scene.GetExtensionFields();
+            var menus = ext.MenuStack;
+
+            for(var i = menus.Count - 1; i >= 0; i--) {
+                var menu = menus.ElementAt(i);
+
+                if(menu is AbstractGooberMenu abstractMenu)
+                    abstractMenu.Refresh();
+            }
+        }
+
         public static void GoBack() {
             var ext = Engine.Scene.GetExtensionFields();
 
