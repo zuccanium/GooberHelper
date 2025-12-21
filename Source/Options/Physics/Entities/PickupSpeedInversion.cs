@@ -3,7 +3,7 @@ using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Cil;
 
-namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
+namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
     [GooberHelperOption(Option.PickupSpeedInversion)]
     public static class PickupSpeedInversion {
         [ILHook]

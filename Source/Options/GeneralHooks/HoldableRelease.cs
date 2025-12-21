@@ -1,5 +1,5 @@
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
-using Celeste.Mod.GooberHelper.Options.Physics.Other;
+using Celeste.Mod.GooberHelper.Options.Physics.Entities;
 
 namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
     public static class HoldableRelease {

@@ -5,7 +5,7 @@ using Celeste.Mod.GooberHelper.Extensions;
 using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
-namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
+namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
     [GooberHelperOption(Option.ExplodeLaunchSpeedPreservation)]
     public static class ExplodeLaunchSpeedPreservation {
         private static Vector2 originalSpeed;

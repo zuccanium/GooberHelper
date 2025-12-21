@@ -76,7 +76,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             AllowWindWhileDashing,
             LiftboostAdditionHorizontal,
             LiftboostAdditionVertical,
-            AdvantageousLiftBoost,
+            AdvantageousLiftboost,
             ReverseBackboosts,
 
             //visuals

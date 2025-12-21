@@ -6,7 +6,7 @@ using Celeste.Mod.Helpers;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
-namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
+namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
     [GooberHelperOption(Option.CustomFeathers)]
     public static class CustomFeathers {
         [ILHook(typeof(Player), "OnCollideH")]

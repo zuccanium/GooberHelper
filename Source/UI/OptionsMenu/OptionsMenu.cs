@@ -45,10 +45,12 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu {
                 Add(new OptionCategoryButton(OptionCategory.Jumping));
                 Add(new OptionCategoryButton(OptionCategory.Dashing));
                 Add(new OptionCategoryButton(OptionCategory.Moving));
+                Add(new OptionCategoryButton(OptionCategory.Entities));
                 Add(new OptionCategoryButton(OptionCategory.Other));
 
             Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_visuals")));
                 Add(new OptionCategoryButton(OptionCategory.Visuals));
+
             Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_miscellaneous")));
                 Add(new OptionCategoryButton(OptionCategory.Miscellaneous));
 

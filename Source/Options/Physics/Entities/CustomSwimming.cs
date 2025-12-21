@@ -8,7 +8,7 @@ using Celeste.Mod.GooberHelper.Settings.Root;
 using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
-namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
+namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
     [GooberHelperOption(Option.CustomSwimming)]
     public static class CustomSwimming {
         //look at me putting all my constants at the top of the file instead of just scattering magic numbers everywhere

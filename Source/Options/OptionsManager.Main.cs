@@ -129,34 +129,36 @@ namespace Celeste.Mod.GooberHelper.Options {
             }
         }
 
-        public static void ResetCategory(OptionCategory category, OptionSetter setter) {
-            if(setter != OptionSetter.User)
-                return;
+        // public static void ResetCategory(OptionCategory category, OptionSetter setter) {
+        //     if(setter != OptionSetter.User)
+        //         return;
 
-            foreach(var optionData in Categories[category])
-                GooberHelperModule.Settings.UserDefinedOptions.Remove(optionData.Id);
-        }
+        //     foreach(var optionData in Categories[category])
+        //         GooberHelperModule.Settings.UserDefinedOptions.Remove(optionData.Id);
+        // }
 
-        public static Color GetCategoryColor(OptionCategory category) {
-            var color = DefaultColor;
+        // public static Color GetCategoryColor(OptionCategory category) {
+        //     var color = DefaultColor;
 
-            if(!Categories.TryGetValue(category, out var categoryOptions))
-                return color;
+        //     if(!Categories.TryGetValue(category, out var subgroupToOptions))
+        //         return color;
 
-            foreach(var optionData in categoryOptions) {
-                if(GooberHelperModule.Settings.UserDefinedOptions.ContainsKey(optionData.Id)) {
-                    if(optionData.Id != Option.GoldenBlocksAlwaysLoad)
-                        return UserDefinedEvilColor;
+        //     foreach(var options in subgroupToOptions) {
+        //         foreach(var optionData in options.Value) {
+        //             if(GooberHelperModule.Settings.UserDefinedOptions.ContainsKey(optionData.Id)) {
+        //                 if(optionData.Id != Option.GoldenBlocksAlwaysLoad)
+        //                     return UserDefinedEvilColor;
 
-                    color = UserDefinedCoolColor;
-                }
+        //                 color = UserDefinedCoolColor;
+        //             }
 
-                if(GooberHelperModule.Session?.MapDefinedOptions.ContainsKey(optionData.Id) == true && color == DefaultColor)
-                    color = MapDefinedColor;
-            }
+        //             if(GooberHelperModule.Session?.MapDefinedOptions.ContainsKey(optionData.Id) == true && color == DefaultColor)
+        //                 color = MapDefinedColor;
+        //         }
+        //     }
 
-            return color;
-        }
+        //     return color;
+        // }
 
         public static void ResetAll(OptionSetter setter) {
             if(setter == OptionSetter.User)
@@ -184,20 +186,6 @@ namespace Celeste.Mod.GooberHelper.Options {
                 ? MapDefinedColor
 
             : DefaultColor;
-
-        private static Dictionary<Option, OptionData> createOptionsFromCategories() {
-            var dict = new Dictionary<Option, OptionData>();
-
-            foreach(var pair in Categories) {
-                foreach(var option in pair.Value) {
-                    dict[option.Id] = option;
-
-                    option.Category = pair.Key;
-                }
-            }
-
-            return dict;
-        }
 
         public static readonly Dictionary<Option, OptionData> Options = createOptionsFromCategories();
     }

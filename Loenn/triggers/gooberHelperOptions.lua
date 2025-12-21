@@ -61,11 +61,9 @@ local options = {
 
     "UpwardsTransitionSpeedPreservation",
 
-    categoryHeader("Other"),
+    categoryHeader("Entities"),
     "RefillFreezeLength: [number]",
-    "RetentionLength: [number]",
 
-    "ConserveBeforeDashSpeed",
     "DreamBlockSpeedPreservation: [None|Horizontal|Vertical|Both|Magnitude]",
     "SpringSpeedPreservation: [None|Preserve|Invert]",
     "ReboundSpeedPreservation",
@@ -79,22 +77,30 @@ local options = {
 
     "CustomFeathers: [None|KeepIntro|SkipIntro]",
     "CustomSwimming",
-    "RemoveNormalEnd",
     "LenientStunning",
     "HoldableSpeedInheritanceHorizontal: [None|MatchPlayer|number]",
     "HoldableSpeedInheritanceVertical: [None|MatchPlayer|number]",
+    "ReverseBackboosts",
 
     "AllowCrouchedHoldableGrabbing",
-    "AllowUpwardsClimbGrabbing: [None|WhileHoldingUp|Always]",
-    "AllowCrouchedClimbGrabbing",
-    "ClimbingSpeedPreservation",
-    "AllowClimbingInDashState",
     "CoreBlockAllDirectionActivation",
-    "AllowWindWhileDashing",
+
+    categoryHeader("Other"),
+    "RetentionLength: [number]",
+
+    "ConserveBeforeDashSpeed",
+    "ClimbingSpeedPreservation",
+
+    "RemoveNormalEnd",
+    "FastFallHitboxSquish: [number]",
     "LiftboostAdditionHorizontal: [number]",
     "LiftboostAdditionVertical: [number]",
     "AdvantageousLiftboost",
-    "ReverseBackboosts",
+
+    "AllowUpwardsClimbGrabbing: [None|WhileHoldingUp|Always]",
+    "AllowCrouchedClimbGrabbing",
+    "AllowClimbingInDashState",
+    "AllowWindWhileDashing",
 
     categoryHeader("Visuals"),
     "PlayerShaderMask: [None|Cover|HairOnly]",

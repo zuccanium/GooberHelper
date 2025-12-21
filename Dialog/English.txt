@@ -60,6 +60,7 @@
     menu_gooberhelper_category_jumping=Jumping
     menu_gooberhelper_category_dashing=Dashing
     menu_gooberhelper_category_moving=Moving
+    menu_gooberhelper_category_entities=Entities
     menu_gooberhelper_category_other=Other
     menu_gooberhelper_category_visuals=Visuals
     menu_gooberhelper_category_miscellaneous=Miscellaneous
@@ -179,11 +180,9 @@
                 
                 gooberhelper_option_UpwardsTransitionSpeedPreservation=Upwards Transition Speed Preservation
 
-            # OTHER
+            # ENTITIES
                 gooberhelper_option_RefillFreezeLength=Refill Freeze Length
-                gooberhelper_option_RetentionLength=Retention Length
-                
-                gooberhelper_option_ConserveBeforeDashSpeed=Conserve Before Dash Speed
+
                 gooberhelper_option_DreamBlockSpeedPreservation=Dream Block Speed Preservation
                 gooberhelper_option_SpringSpeedPreservation=Spring Speed Preservation
                 gooberhelper_option_ReboundSpeedPreservation=Rebound Speed Preservation
@@ -197,23 +196,31 @@
                 
                 gooberhelper_option_CustomFeathers=Custom Feathers
                 gooberhelper_option_CustomSwimming=Custom Swimming
-                gooberhelper_option_RemoveNormalEnd=Remove Normal End
                 gooberhelper_option_LenientStunning=Lenient Stunning
                 gooberhelper_option_HoldableSpeedInheritanceHorizontal=Holdable Speed Inheritance Horizontal
                 gooberhelper_option_HoldableSpeedInheritanceVertical=Holdable Speed Inheritance Vertical
+                gooberhelper_option_ReverseBackboosts=Reverse Backboosts
+ 
+                gooberhelper_option_AllowCrouchedHoldableGrabbing=Allow Crouched Holdable Grabbing
+                gooberhelper_option_CoreBlockAllDirectionActivation=Core Block All Direction Activation
+
+            # OTHER
+                gooberhelper_option_RetentionLength=Retention Length
+                
+                gooberhelper_option_ConserveBeforeDashSpeed=Conserve Before Dash Speed
+                gooberhelper_option_RemoveNormalEnd=Remove Normal End
+
                 gooberhelper_option_FastFallHitboxSquish=Fast Fall Hitbox Squish
 
-                gooberhelper_option_AllowCrouchedHoldableGrabbing=Allow Crouched Holdable Grabbing
                 gooberhelper_option_AllowUpwardsClimbGrabbing=Allow Upwards Climb Grabbing
                 gooberhelper_option_AllowCrouchedClimbGrabbing=Allow Crouched Climb Grabbing
                 gooberhelper_option_ClimbingSpeedPreservation=Climbing Speed Preservation
                 gooberhelper_option_AllowClimbingInDashState=Allow Climbing in Dash State
-                gooberhelper_option_CoreBlockAllDirectionActivation=Core Block All Direction Activation
+
                 gooberhelper_option_AllowWindWhileDashing=Allow Wind While Dashing
-                gooberhelper_option_LiftboostAdditionHorizontal=LiftBoost Addition Horizontal
-                gooberhelper_option_LiftboostAdditionVertical=LiftBoost Addition Vertical
+                gooberhelper_option_LiftboostAdditionHorizontal=Liftboost Addition Horizontal
+                gooberhelper_option_LiftboostAdditionVertical=Liftboost Addition Vertical
                 gooberhelper_option_AdvantageousLiftboost=Advantageous Liftboost
-                gooberhelper_option_ReverseBackboosts=Reverse Backboosts
 
         # VISUALS
             gooberhelper_option_PlayerShaderMask=Player Shader Mask
@@ -274,11 +281,9 @@
 
                 gooberhelper_option_description_UpwardsTransitionSpeedPreservation=buh
             
-            # OTHER
+            # ENTITIES
                 gooberhelper_option_description_RefillFreezeLength=hi clantis
-                gooberhelper_option_description_RetentionLength=more lenient cornerboosts
                 
-                gooberhelper_option_description_ConserveBeforeDashSpeed=accounts for the player's speed before dashing when handling speed general conservation stuff in this mod
                 gooberhelper_option_description_DreamBlockSpeedPreservation=yeah{n}Horizontal = only preserves horizontal speed{n}Vertical = only preserves vertical speed{n}Both = preserves both{n}Magnitude = preserves the magnitude of your speed before entering{n}the dream block but aligns it to the original dream block dash direction
                 gooberhelper_option_description_SpringSpeedPreservation=yeah{n}Preserve = they will preserve your speed{n}Invert = they can invert your speed if you hold in the opposite direction
                 gooberhelper_option_description_ReboundSpeedPreservation=you can reverse speed off of anything that calls the Rebound() (dash blocks, kevins, breaker boxes, etc)
@@ -292,23 +297,30 @@
                 
                 gooberhelper_option_description_CustomFeathers=they preserve speed and rounce{n}Keep Intro = they will preserve your speed but not skip the slowdown intro{n}Skip Intro = they will skip the slowdown intro
                 gooberhelper_option_description_CustomSwimming=the effects of aquaculture on our industrialized society
-                gooberhelper_option_description_RemoveNormalEnd=doesnt reset your retention or wallboost timer when you exit stNormal
                 gooberhelper_option_description_LenientStunning=removes the 1/3 from spinner/lightning stunning
                 gooberhelper_option_description_HoldableSpeedInheritanceHorizontal=percent of player horizontal speed that a holdable should inherit when thrown
                 gooberhelper_option_description_HoldableSpeedInheritanceVertical=percent of player vertical speed that a holdable should inherit when thrown
-                gooberhelper_option_description_FastFallHitboxSquish=really really weird
+                gooberhelper_option_description_ReverseBackboosts=reverses the player's speed when throwing a holdable in the same direction as the player's speed
                 
                 gooberhelper_option_description_AllowCrouchedHoldableGrabbing=yeah
+                gooberhelper_option_description_CoreBlockAllDirectionActivation=you can activate core blocks from every state (idk why i made this)
+
+            # OTHER
+                gooberhelper_option_description_RetentionLength=more lenient cornerboosts
+                
+                gooberhelper_option_description_ConserveBeforeDashSpeed=accounts for the player's speed before dashing when handling speed general conservation stuff in this mod
+                gooberhelper_option_description_ClimbingSpeedPreservation=seiuedhrfgiotsedrofhgn
+
+                gooberhelper_option_description_RemoveNormalEnd=doesnt reset your retention or wallboost timer when you exit stNormal
+                gooberhelper_option_description_FastFallHitboxSquish=really really weird                
                 gooberhelper_option_description_AllowUpwardsClimbGrabbing=jdfnhijukhniujfkngb{n}None = none{n}While Holding Up = while holding up{n}Always = always
                 gooberhelper_option_description_AllowCrouchedClimbGrabbing=edsiurufhgiuserdfhgt
-                gooberhelper_option_description_ClimbingSpeedPreservation=seiuedhrfgiotsedrofhgn
                 gooberhelper_option_description_AllowClimbingInDashState=sdjifhgkljsdhglikesdhrg
-                gooberhelper_option_description_CoreBlockAllDirectionActivation=you can activate core blocks from every state (idk why i made this)
+
                 gooberhelper_option_description_AllowWindWhileDashing=💨💨💨💨{n}Velocity = adds the wind offset to your position even in dash state{n}Speed = actually adds the wind speed to the player's speed when initiating a dash
                 gooberhelper_option_description_LiftboostAdditionHorizontal=uncapped
                 gooberhelper_option_description_LiftboostAdditionVertical=also uncapped
                 gooberhelper_option_description_AdvantageousLiftboost=checks which direction (both x and y) of liftboost will maximize the absolute value of the player's speed
-                gooberhelper_option_description_ReverseBackboosts=reverses the player's speed when throwing a holdable in the same direction as the player's speed
 
         # VISUALS
             gooberhelper_option_description_PlayerShaderMask=masks the player sprite with a cool shader{n}Hair Only = only applies to hair and cateline/foxeline tails{n}Cover = covers the entire player sprite and all components

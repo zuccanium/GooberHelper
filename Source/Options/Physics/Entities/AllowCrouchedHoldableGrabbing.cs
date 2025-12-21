@@ -7,7 +7,7 @@ using Celeste.Mod.GooberHelper.Options.GeneralHooks;
 using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
-namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
+namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
     [GooberHelperOption(Option.AllowCrouchedHoldableGrabbing)]
     public static class AllowCrouchedHoldableGrabbing {
         [ILHook]

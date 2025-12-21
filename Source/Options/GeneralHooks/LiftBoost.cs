@@ -17,7 +17,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         private static Vector2 overrideLiftboost(Vector2 liftboost, Player player) {
             liftboost += new Vector2(GetOptionValue(Option.LiftboostAdditionHorizontal), GetOptionValue(Option.LiftboostAdditionVertical));
 
-            if(GetOptionBool(Option.AdvantageousLiftBoost)) {
+            if(GetOptionBool(Option.AdvantageousLiftboost)) {
                 if(Math.Abs(player.Speed.X - liftboost.X) > Math.Abs(player.Speed.X + liftboost.X))
                     liftboost.X *= -1;
 

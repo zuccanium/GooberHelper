@@ -4,7 +4,7 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 using MonoMod.Cil;
 
-namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
+namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
     [GooberHelperOption(Option.BadelineBossSpeedPreservation)]
     public static class BadelineBossSpeedPreservation {
         [ILHook]

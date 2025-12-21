@@ -3,12 +3,12 @@ using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 
-namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
-    [GooberHelperOption(Option.ReflectBounceSpeedPreservation)]
-    public static class ReflectBounceSpeedPreservation {
+namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
+    [GooberHelperOption(Option.ReboundSpeedPreservation)]
+    public static class ReboundSpeedPreservation {
         [OnHook]
         private static void patch_Player_Rebound(On.Celeste.Player.orig_Rebound orig, Player self, int direction = 0) {
-            if(!GetOptionBool(Option.ReflectBounceSpeedPreservation)) {
+            if(!GetOptionBool(Option.ReboundSpeedPreservation)) {
                 orig(self, direction);
 
                 return;
