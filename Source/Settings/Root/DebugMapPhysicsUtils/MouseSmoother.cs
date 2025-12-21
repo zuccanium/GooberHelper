@@ -19,7 +19,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.DebugMapPhysicsUtils {
             mouseSmoothingBufferIndex %= mouseSmoothingBuffer.Length;
         }
 
-        public Vector2 GetOffset() {
+        public static Vector2 GetOffset() {
             var sum = Vector2.Zero;
 
             foreach(var vector in mouseSmoothingBuffer)
