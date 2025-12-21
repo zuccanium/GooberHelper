@@ -6,8 +6,8 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
-    [GooberHelperOption(Option.AllowUpwardsCoyote)]
-    public static class AllowUpwardsCoyote {
+    [GooberHelperOption]
+    public class AllowUpwardsCoyote : AbstractOption {
         private static bool upwardsCoyote = false;
         private static FieldInfo f_AllowUpwardsCoyote_upwardsCoyote = typeof(AllowUpwardsCoyote).GetField(nameof(upwardsCoyote), Utils.BindingFlagsAll);
 

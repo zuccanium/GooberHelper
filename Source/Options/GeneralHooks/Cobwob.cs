@@ -1,5 +1,6 @@
 using System;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
+using Celeste.Mod.GooberHelper.Options.Physics.Moving;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
@@ -30,10 +31,10 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         }
 
         private static float overrideSpeed(float orig, Player player) {
-            var cobwobSpeedInversionValue = GetOptionEnum<CobwobSpeedInversionValue>(Option.CobwobSpeedInversion);
+            var cobwobSpeedInversionValue = GetOptionEnum<CobwobSpeedInversion.Value>(Option.CobwobSpeedInversion);
 
             if(
-                cobwobSpeedInversionValue == CobwobSpeedInversionValue.None &&
+                cobwobSpeedInversionValue == CobwobSpeedInversion.Value.None &&
                 !GetOptionBool(Option.WallboostSpeedIsOppositeSpeed)
             ) return orig;
 
@@ -51,7 +52,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
                 dir = -Math.Sign(originalSpeed);
             }
             
-            if(player.wallSpeedRetentionTimer > 0.0 && cobwobSpeedInversionValue == CobwobSpeedInversionValue.WorkWithRetention) {
+            if(player.wallSpeedRetentionTimer > 0.0 && cobwobSpeedInversionValue == CobwobSpeedInversion.Value.WorkWithRetention) {
                 var retainedSpeed = player.wallSpeedRetained;
 
                 newAbsoluteSpeed = Math.Max(originalCobwobSpeed, Math.Abs(retainedSpeed));

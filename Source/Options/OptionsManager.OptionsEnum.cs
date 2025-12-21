@@ -1,3 +1,6 @@
+//this file is literally just for the enum
+//lmao
+
 namespace Celeste.Mod.GooberHelper.Options {
     public static partial class OptionsManager {
         public enum Option {

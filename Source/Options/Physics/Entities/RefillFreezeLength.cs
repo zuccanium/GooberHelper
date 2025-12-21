@@ -1,8 +1,14 @@
 using Celeste.Mod.GooberHelper.Attributes;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.RefillFreezeLength)]
-    public static class RefillFreezeLength {
+    [GooberHelperOption]
+    public class RefillFreezeLength : AbstractOption {
+        public override OptionType Type { get; set; } = OptionType.Integer;
+        public override float DefaultValue { get; set; } = 3f;
+        public override float? RightMin { get; set; } = 0f;
+        public override float Step { get; set; } = 1f;
+        public override string Suffix { get; set; } = "f";
+
         //implemented in GeneralHooks/RefillFreeze
     }
 }

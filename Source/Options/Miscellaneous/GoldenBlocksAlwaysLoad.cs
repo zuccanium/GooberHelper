@@ -6,8 +6,8 @@ using MonoMod.RuntimeDetour;
 //todo: make this bgettert ioaejiojaeogaze si mtired
 
 namespace Celeste.Mod.GooberHelper.Options.Miscellaneous {
-    [GooberHelperOption(Option.GoldenBlocksAlwaysLoad)]
-    public static class GoldenBlocksAlwaysLoad {
+    [GooberHelperOption]
+    public class GoldenBlocksAlwaysLoad : AbstractOption {
         [ILHook(typeof(GoldenBlock), "Awake")]
         [ILHook("PlatinumStrawberry", "Celeste.Mod.PlatinumStrawberry.Entities.PlatinumBlock", "Awake")]
         [ILHook("CollabUtils2", "Celeste.Mod.CollabUtils2.Entities.SilverBlock", "Awake")]

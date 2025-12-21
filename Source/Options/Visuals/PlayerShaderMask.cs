@@ -1,21 +1,25 @@
-using System;
 using Celeste.Mod.GooberHelper.Attributes;
-using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.ModImports;
 using Celeste.Mod.GooberHelper.Options.GeneralHooks;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Celeste.Mod.GooberHelper.Options.Visuals {
-    [GooberHelperOption(Option.PlayerShaderMask)]
-    public static class PlayerShaderMask {
+    [GooberHelperOption]
+    public class PlayerShaderMask : AbstractOption {
+        public enum Value {
+            None,
+            HairOnly,
+            Cover,
+        }
+        
         private static Color maskColor;
 
         public static void BeforeRender(Entity playerMaybe, Level level, PlayerRender.RenderSource source, ref Effect effect, ref Matrix matrix) {
-            var playerShaderMaskValue = GetOptionEnum<PlayerShaderMaskValue>(Option.PlayerShaderMask);
+            var playerShaderMaskValue = GetOptionEnum<Value>(Option.PlayerShaderMask);
 
             var ableToRender = playerShaderMaskValue switch {
-                PlayerShaderMaskValue.Cover => true,
-                PlayerShaderMaskValue.HairOnly => source == PlayerRender.RenderSource.Hair,
+                Value.Cover => true,
+                Value.HairOnly => source == PlayerRender.RenderSource.Hair,
                 _ => false
             };
 
@@ -34,7 +38,7 @@ namespace Celeste.Mod.GooberHelper.Options.Visuals {
             effect.Parameters["HairColor"].SetValue(maskColor.ToVector4());
             effect.Parameters["TextureSize"].SetValue(new Vector2(tex.Width, tex.Height));
             effect.Parameters["Time"].SetValue(Engine.Scene.TimeActive);
-            effect.Parameters["KeepOutlines"].SetValue(source == PlayerRender.RenderSource.Hair && playerShaderMaskValue == PlayerShaderMaskValue.HairOnly);
+            effect.Parameters["KeepOutlines"].SetValue(source == PlayerRender.RenderSource.Hair && playerShaderMaskValue == Value.HairOnly);
             Engine.Graphics.GraphicsDevice.Textures[1] = tex;
         }
 

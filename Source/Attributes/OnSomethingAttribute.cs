@@ -6,7 +6,7 @@ namespace Celeste.Mod.GooberHelper.Attributes {
         public static void InvokeOnTargets() {
             foreach(var type in typeof(GooberHelperModule).Assembly.GetTypes()) {
                 foreach(var method in type.GetMethods(Utils.BindingFlagsAll)) {
-                    if(!IsDefined(method, typeof(T)))
+                    if(!method.IsDefined(typeof(T), false))
                         continue;
                 
                     method.Invoke(null, []);

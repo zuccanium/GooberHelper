@@ -1,9 +1,11 @@
 using System;
+using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
-    public static class ClimbingSpeedPreservation {
+    [GooberHelperOption]
+    public class ClimbingSpeedPreservation : AbstractOption {
         [ILHook]
         private static void patch_Player_ClimbBegin(ILContext il) {
             var cursor = new ILCursor(il);

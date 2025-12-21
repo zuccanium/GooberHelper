@@ -5,8 +5,8 @@ using Celeste.Mod.GooberHelper.ModImports;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Celeste.Mod.GooberHelper.Options.Visuals {
-    [GooberHelperOption(Option.TheoNuclearReactor)]
-    public static class TheoNuclearReactor {
+    [GooberHelperOption]
+    public class TheoNuclearReactor : AbstractOption {
         [Tracked(false)]
         public class NuclearReactorComponent : Component {
             public NuclearReactorComponent() : base(true, true) {}

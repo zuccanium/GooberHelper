@@ -5,49 +5,49 @@ using Celeste.Mod.GooberHelper.UI.OptionSliderContent;
 namespace Celeste.Mod.GooberHelper.UI {
     public class OptionSlider : TextMenuGooberExt.DynamicOption<float>, IRefreshable {
         public Option Option;
-        private OptionData optionData;
+        private AbstractOption optionInstance;
         
         public OptionSlider(Option option) : base() {
             Option = option;
-            optionData = OptionsManager.Options[option];
+            optionInstance = OptionToInstance[option];
             
             var optionValue = GetOptionValue(option);
 
             //do this but for enums
-            if(optionData.Type == OptionType.Boolean)
+            if(optionInstance.Type == OptionType.Boolean)
                 optionValue = optionValue >= 1
                     ? 1
                     : 0;
             
-            if(optionData.Type == OptionType.Enum)
-                optionValue = Enum.IsDefined(optionData.EnumType, (int)optionValue)
+            if(optionInstance.Type == OptionType.Enum)
+                optionValue = Enum.IsDefined(optionInstance.EnumType, (int)optionValue)
                     ? optionValue
-                    : optionData.DefaultValue;
+                    : optionInstance.DefaultValue;
 
-            Label = optionData.GetDialogName();
+            Label = optionInstance.GetName();
 
-            if(optionData.Type == OptionType.Boolean)
+            if(optionInstance.Type == OptionType.Boolean)
                 AddEnumerable(new BooleanSliderOptions(), optionValue);
         
-            else if(optionData.EnumType is Type enumType)
-                AddEnumerable(new EnumSliderOptions(optionData.EnumType), optionValue);
+            else if(optionInstance.EnumType is Type enumType)
+                AddEnumerable(new EnumSliderOptions(optionInstance.EnumType), optionValue);
             
-            if(optionData.Type == OptionType.Float || optionData.Type == OptionType.Integer) {
-                LeftMin = optionData.LeftMin;
-                LeftMax = optionData.LeftMax;
-                RightMin = optionData.RightMin;
-                RightMax = optionData.RightMax;
-                Step = optionData.Step;
-                SkipLeftMax = optionData.SkipLeftMax;
-                SkipRightMin = optionData.SkipRightMin;
-                Suffix = optionData.Suffix;
+            if(optionInstance.Type == OptionType.Float || optionInstance.Type == OptionType.Integer) {
+                LeftMin = optionInstance.LeftMin;
+                LeftMax = optionInstance.LeftMax;
+                RightMin = optionInstance.RightMin;
+                RightMax = optionInstance.RightMax;
+                Step = optionInstance.Step;
+                SkipLeftMax = optionInstance.SkipLeftMax;
+                SkipRightMin = optionInstance.SkipRightMin;
+                Suffix = optionInstance.Suffix;
                 AllowFastMovement = true;
             }
 
             Current = optionValue;
             RecalculateCachedRightWidth();
             
-            UnselectedColor = GetOptionColor(optionData.Id);
+            UnselectedColor = GetOptionColor(Option);
 
             OnValueChange += onValueChange;
             OnAltPressed += onAltPressed;
@@ -58,14 +58,14 @@ namespace Celeste.Mod.GooberHelper.UI {
         public override void Added() {
             base.Added();
 
-            var description = optionData.GetDialogDescription();
+            var description = optionInstance.GetDescription();
 
             if(description != "")
                 this.AddDescription(MenuManager.CurrentMenu, description);
         }
 
         private void onValueChange(float value) {
-            SetOptionValue(optionData.Id, value, OptionSetter.User);
+            SetOptionValue(Option, value, OptionSetter.User);
 
             Refresh();
             MenuManager.RefreshAll();

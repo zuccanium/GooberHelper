@@ -4,8 +4,8 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Moving {
-    [GooberHelperOption(Option.VerticalTurningSpeedInversion)]
-    public static class VerticalTurningSpeedInversion {
+    [GooberHelperOption]
+    public class VerticalTurningSpeedInversion : AbstractOption {
         [ILHook]
         private static void patch_Player_Update(ILContext il) {
             var cursor = new ILCursor(il);

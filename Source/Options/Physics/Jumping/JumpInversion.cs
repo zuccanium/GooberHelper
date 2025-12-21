@@ -2,16 +2,22 @@ using System;
 using Celeste.Mod.GooberHelper.Attributes;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
-    [GooberHelperOption(Option.JumpInversion)]
-    public static class JumpInversion {
+    [GooberHelperOption]
+    public class JumpInversion : AbstractOption {
+        public enum Value {
+            None,
+            GroundJumps,
+            All
+        }
+
         public static void BeforeJump(Player player, bool isClimbjump) {
-            var jumpInversionValue = GetOptionEnum<JumpInversionValue>(Option.JumpInversion);
+            var jumpInversionValue = GetOptionEnum<Value>(Option.JumpInversion);
 
             if(
                 player.moveX == -Math.Sign(player.Speed.X) &&
                 (
-                    jumpInversionValue == JumpInversionValue.All ||
-                    !isClimbjump && jumpInversionValue == JumpInversionValue.GroundJumps
+                    jumpInversionValue == Value.All ||
+                    !isClimbjump && jumpInversionValue == Value.GroundJumps
                 )
             ) {
                 player.Speed.X *= -1;

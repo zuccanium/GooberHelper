@@ -7,8 +7,14 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.CustomFeathers)]
-    public static class CustomFeathers {
+    [GooberHelperOption]
+    public class CustomFeathers : AbstractOption {
+        public enum Value {
+            None,
+            KeepIntro,
+            SkipIntro
+        }
+
         [ILHook(typeof(Player), "OnCollideH")]
         [ILHook(typeof(Player), "OnCollideV")]
         private static void boyoyoyoing(ILContext il) { //boyoyoyoyoing
@@ -118,7 +124,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
 
         private static void setInitialFeatherSpeed(Player player) {
             if(GetOptionBool(Option.CustomFeathers)) {
-                var direction = GetOptionValue(Option.CustomFeathers) == (int)CustomFeathersValue.KeepIntro
+                var direction = GetOptionValue(Option.CustomFeathers) == (int)Value.KeepIntro
                     ? player.Speed
                     : player.GetExtensionFields().StarFlySpeedPreserved;
 
@@ -127,7 +133,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
         }
         
         private static bool maybeSkipIntoAndPlayAnimation(Player player) {
-            if(GetOptionValue(Option.CustomFeathers) == (int)CustomFeathersValue.SkipIntro) {
+            if(GetOptionValue(Option.CustomFeathers) == (int)Value.SkipIntro) {
                 player.Sprite.Play("starFly", false, false);
 
                 return true;

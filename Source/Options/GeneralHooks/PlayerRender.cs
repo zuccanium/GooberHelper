@@ -14,10 +14,10 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         private static bool startedRendering = false;
 
         public static bool ShouldCustomRenderBody(Player player)
-            => CustomSwimmingAnimation.ShouldDoAnimation(player) || GetOptionBool(Option.RotatePlayerToSpeed) || GetOptionEnum<PlayerShaderMaskValue>(Option.PlayerShaderMask) == PlayerShaderMaskValue.Cover;
+            => CustomSwimmingAnimation.ShouldDoAnimation(player) || GetOptionBool(Option.RotatePlayerToSpeed) || GetOptionEnum<PlayerShaderMask.Value>(Option.PlayerShaderMask) == PlayerShaderMask.Value.Cover;
         
         public static bool ShouldCustomRenderHair(Player player)
-            => GetOptionEnum<PlayerShaderMaskValue>(Option.PlayerShaderMask) == PlayerShaderMaskValue.HairOnly;
+            => GetOptionEnum<PlayerShaderMask.Value>(Option.PlayerShaderMask) == PlayerShaderMask.Value.HairOnly;
 
         private static FieldInfo f_RasterizerState_CullNone = typeof(RasterizerState).GetField("CullNone");
         private static FieldInfo f_SpriteBatch_transformMatrix = typeof(SpriteBatch).GetField("transformMatrix", Utils.BindingFlagsAll);

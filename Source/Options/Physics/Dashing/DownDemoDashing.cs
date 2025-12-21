@@ -4,8 +4,8 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Dashing {
-    [GooberHelperOption(Option.DownDemoDashing)]
-    public static class DownDemoDashing {
+    [GooberHelperOption]
+    public class DownDemoDashing : AbstractOption {
         [ILHook]
         private static void patch_Player_Update(ILContext il) {
             var cursor = new ILCursor(il);

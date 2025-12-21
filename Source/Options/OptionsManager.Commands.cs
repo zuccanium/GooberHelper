@@ -8,7 +8,7 @@ namespace Celeste.Mod.GooberHelper.Options {
         public static bool TryParseOptionValue(Option option, string value, out float result, out List<string> possibleEnumKeys) {
             possibleEnumKeys = [];
 
-            var optionData = Options[option];
+            var optionData = OptionToInstance[option];
             var enumType = optionData.EnumType;
             var underlyingEnumType = Enum.GetUnderlyingType(enumType);
 
@@ -82,7 +82,7 @@ namespace Celeste.Mod.GooberHelper.Options {
                 return;
             }
 
-            var optionEnum = Options[option].EnumType;
+            var optionEnum = OptionToInstance[option].EnumType;
 
             void logEnumKeys() {
                 var builder = new StringBuilder($"[GooberHelper] the valid enum keys for {option} are\n");

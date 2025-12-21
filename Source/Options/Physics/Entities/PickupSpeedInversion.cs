@@ -4,8 +4,8 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.PickupSpeedInversion)]
-    public static class PickupSpeedInversion {
+    [GooberHelperOption]
+    public class PickupSpeedInversion : AbstractOption {
         [ILHook]
         private static void patch_Player_Update(ILContext il) {
             var cursor = new ILCursor(il);

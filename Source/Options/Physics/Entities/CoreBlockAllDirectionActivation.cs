@@ -4,8 +4,8 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.CoreBlockAllDirectionActivation)]
-    public static class CoreBlockAllDirectionActivation {
+    [GooberHelperOption]
+    public class CoreBlockAllDirectionActivation : AbstractOption {
         [ILHook]
         private static void patch_BounceBlock_WindUpPlayerCheck(ILContext il) {
             var cursor = new ILCursor(il);

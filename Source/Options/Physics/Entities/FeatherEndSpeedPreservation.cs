@@ -4,8 +4,8 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.FeatherEndSpeedPreservation)]
-    public static class FeatherEndSpeedPreservation {
+    [GooberHelperOption]
+    public class FeatherEndSpeedPreservation : AbstractOption {
         [ILHook]
         private static void patch_Player_StarFlyUpdate(ILContext il) {
             var cursor = new ILCursor(il);

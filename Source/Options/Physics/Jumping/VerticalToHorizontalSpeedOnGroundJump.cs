@@ -1,16 +1,20 @@
 using System;
 using Celeste.Mod.GooberHelper.Attributes;
-using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
-using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
-    [GooberHelperOption(Option.VerticalToHorizontalSpeedOnGroundJump)]
-    public static class VerticalToHorizontalSpeedOnGroundJump {
+    [GooberHelperOption]
+    public class VerticalToHorizontalSpeedOnGroundJump : AbstractOption {
+        public enum Value {
+            None,
+            Vertical,
+            Magnitude
+        }
+
         public static void BeforeJump(Player player, Vector2 originalSpeed) {
-            var verticalToHorizontalSpeedOnGroundJumpValue = GetOptionEnum<VerticalToHorizontalSpeedOnGroundJumpValue>(Option.VerticalToHorizontalSpeedOnGroundJump);
+            var verticalToHorizontalSpeedOnGroundJumpValue = GetOptionEnum<Value>(Option.VerticalToHorizontalSpeedOnGroundJump);
             
-            if(verticalToHorizontalSpeedOnGroundJumpValue != VerticalToHorizontalSpeedOnGroundJumpValue.None) {
+            if(verticalToHorizontalSpeedOnGroundJumpValue != Value.None) {
                 var ext = player.GetExtensionFields();
 
                 var dir = Utils.FirstSign(
@@ -26,7 +30,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
                         : 0
                 );
                 
-                if(verticalToHorizontalSpeedOnGroundJumpValue == VerticalToHorizontalSpeedOnGroundJumpValue.Magnitude)
+                if(verticalToHorizontalSpeedOnGroundJumpValue == Value.Magnitude)
                     speedToConvert = new Vector2(speedToConvert, originalSpeed.X).Length();
 
                 player.Speed.X = dir * Math.Max(speedToConvert, Math.Abs(player.Speed.X));

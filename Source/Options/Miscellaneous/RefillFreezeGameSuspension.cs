@@ -6,8 +6,8 @@ using Celeste.Mod.GooberHelper.Entities;
 using Celeste.Mod.GooberHelper.Extensions;
 
 namespace Celeste.Mod.GooberHelper.Options.Miscellaneous {
-    [GooberHelperOption(Option.RefillFreezeGameSuspension)]
-    public static class RefillFreezeGameSuspension {
+    [GooberHelperOption]
+    public class RefillFreezeGameSuspension : AbstractOption {
         public class InputState {
             private bool jump;
             private bool grab;

@@ -4,8 +4,8 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Moving {
-    [GooberHelperOption(Option.DownwardsAirFrictionBehavior)]
-    public static class DownwardsAirFrictionBehavior {
+    [GooberHelperOption]
+    public class DownwardsAirFrictionBehavior : AbstractOption {
         [ILHook]
         private static void patch_Player_NormalUpdate(ILContext il) {
             var cursor = new ILCursor(il);

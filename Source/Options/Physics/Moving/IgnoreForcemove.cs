@@ -4,8 +4,8 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Moving {
-    [GooberHelperOption(Option.IgnoreForcemove)]
-    public static class IgnoreForcemove {
+    [GooberHelperOption]
+    public class IgnoreForcemove : AbstractOption {
         [ILHook]
         private static void patch_Player_Update(ILContext il) {
             var cursor = new ILCursor(il);

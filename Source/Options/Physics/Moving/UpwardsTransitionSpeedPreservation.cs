@@ -2,8 +2,8 @@ using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Moving {
-    [GooberHelperOption(Option.UpwardsTransitionSpeedPreservation)]
-    public static class UpwardsTransitionSpeedPreservation {
+    [GooberHelperOption]
+    public class UpwardsTransitionSpeedPreservation : AbstractOption {
         [OnHook]
         private static void patch_Player_BeforeUpTransition(On.Celeste.Player.orig_BeforeUpTransition orig, Player self) {
             if(!GetOptionBool(Option.UpwardsTransitionSpeedPreservation)) {

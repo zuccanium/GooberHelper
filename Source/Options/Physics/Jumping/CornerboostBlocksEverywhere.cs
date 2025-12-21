@@ -7,8 +7,8 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
-    [GooberHelperOption(Option.CornerboostBlocksEverywhere)]
-    public static class CornerboostBlocksEverywhere {
+    [GooberHelperOption]
+    public class CornerboostBlocksEverywhere : AbstractOption {
         private static int redoLogicThreshold = 0;
         private static FieldInfo f_CornerboostBlocksEverywhere_redoLogicThreshold = typeof(CornerboostBlocksEverywhere).GetField(nameof(redoLogicThreshold), Utils.BindingFlagsAll);
 

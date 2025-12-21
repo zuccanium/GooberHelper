@@ -3,7 +3,7 @@ using Celeste.Mod.GooberHelper.Options;
 
 //i hate everything
 
-namespace Celeste.Mod.GooberHelper.Triggers.LegacySquaredOptionTrigger {
+namespace Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers.LegacySquaredOptionTrigger {
     [CustomEntity("GooberHelper/GooberPhysics")]
     public class GooberPhysics : Trigger {
         public bool CobwobSpeedInversionValue;
@@ -100,7 +100,7 @@ namespace Celeste.Mod.GooberHelper.Triggers.LegacySquaredOptionTrigger {
             SetOptionValue(Option.ShowActiveOptions, ShowActiveSettings ? 1 : 0, OptionSetter.Map);
 
             //backwards compatibility!!!!
-            SetOptionValue(Option.UpwardsJumpSpeedPreservationThreshold, VerticalDashSpeedPreservationValue ? 240 : OptionsManager.Options[Option.UpwardsJumpSpeedPreservationThreshold].DefaultValue, OptionSetter.Map);
+            SetOptionValue(Option.UpwardsJumpSpeedPreservationThreshold, VerticalDashSpeedPreservationValue ? 240 : OptionsManager.OptionToInstance[Option.UpwardsJumpSpeedPreservationThreshold].DefaultValue, OptionSetter.Map);
         }
     }
 }

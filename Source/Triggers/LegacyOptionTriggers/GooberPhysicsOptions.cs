@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using Celeste.Mod.Entities;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Options;
+using Celeste.Mod.GooberHelper.Options.Physics.Entities;
+using Celeste.Mod.GooberHelper.Options.Physics.Jumping;
+using Celeste.Mod.GooberHelper.Options.Physics.Moving;
 
 namespace Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers {
     [CustomEntity("GooberHelper/GooberPhysicsOptions")]
@@ -52,25 +55,25 @@ namespace Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers {
             //backwards compatibility!!!!
             SettingValues[Option.UpwardsJumpSpeedPreservationThreshold] = data.Bool("verticalDashSpeedPreservation")
                 ? 240f
-                : OptionsManager.Options[Option.UpwardsJumpSpeedPreservationThreshold].DefaultValue;
+                : OptionsManager.OptionToInstance[Option.UpwardsJumpSpeedPreservationThreshold].DefaultValue;
             
             if(data.Bool("cobwobSpeedInversion") && data.Bool("allowRetentionReverse"))
-                SettingValues[Option.CobwobSpeedInversion] = (float)CobwobSpeedInversionValue.WorkWithRetention;
+                SettingValues[Option.CobwobSpeedInversion] = (float)CobwobSpeedInversion.Value.WorkWithRetention;
             
             if(data.Bool("jumpInversion") && data.Bool("allowClimbJumpInversion"))
-                SettingValues[Option.JumpInversion] = (float)JumpInversionValue.All;
+                SettingValues[Option.JumpInversion] = (float)JumpInversion.Value.All;
             
             if(data.Bool("allDirectionHypersAndSupers") && data.Bool("allDirectionHypersAndSupersWorkWithCoyoteTime"))
-                SettingValues[Option.AllDirectionHypersAndSupers] = (float)AllDirectionHypersAndSupersValue.WorkWithCoyoteTime;
+                SettingValues[Option.AllDirectionHypersAndSupers] = (float)AllDirectionHypersAndSupers.Value.WorkWithCoyoteTime;
             
             if(data.Bool("wallJumpSpeedInversion"))
-                SettingValues[Option.WalljumpSpeedPreservation] = (float)WalljumpSpeedPreservationValue.Invert;
+                SettingValues[Option.WalljumpSpeedPreservation] = (float)WalljumpSpeedPreservation.Value.Invert;
             
             if(data.Bool("customFeathers"))
-                SettingValues[Option.CustomFeathers] = (float)CustomFeathersValue.SkipIntro;
+                SettingValues[Option.CustomFeathers] = (float)CustomFeathers.Value.SkipIntro;
             
             if(data.Bool("springSpeedPreservation"))
-                SettingValues[Option.SpringSpeedPreservation] = (float)SpringSpeedPreservationValue.Invert;
+                SettingValues[Option.SpringSpeedPreservation] = (float)SpringSpeedPreservation.Value.Invert;
         }
 
         [OnLoad]

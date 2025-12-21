@@ -4,13 +4,19 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.SpringSpeedPreservation)]
-    public static class SpringSpeedPreservation {
+    [GooberHelperOption]
+    public class SpringSpeedPreservation : AbstractOption {
+        public enum Value {
+            None,
+            Preserve,
+            Invert
+        }
+
         [OnHook]
         private static void patch_Player_SuperBounce(On.Celeste.Player.orig_SuperBounce orig, Player self, float fromY) {
-            var springSpeedPreservationValue = GetOptionEnum<SpringSpeedPreservationValue>(Option.SpringSpeedPreservation);
+            var springSpeedPreservationValue = GetOptionEnum<Value>(Option.SpringSpeedPreservation);
 
-            if(springSpeedPreservationValue == SpringSpeedPreservationValue.None) {
+            if(springSpeedPreservationValue == Value.None) {
                 orig(self, fromY);
 
                 return;
@@ -22,7 +28,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
 
             self.Speed.X = originalSpeed.X;
 
-            if(springSpeedPreservationValue == SpringSpeedPreservationValue.Invert && self.moveX == -Math.Sign(self.Speed.X))
+            if(springSpeedPreservationValue == Value.Invert && self.moveX == -Math.Sign(self.Speed.X))
                 self.Speed.X *= -1;
         }
 

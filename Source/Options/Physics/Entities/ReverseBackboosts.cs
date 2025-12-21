@@ -2,8 +2,8 @@ using System;
 using Celeste.Mod.GooberHelper.Attributes;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.ReverseBackboosts)]
-    public static class ReverseBackboosts {
+    [GooberHelperOption]
+    public class ReverseBackboosts : AbstractOption {
         public static void AfterRelease(Holdable holdable, Vector2 force, ref Vector2 speed, Player player) {
             if(GetOptionBool(Option.ReverseBackboosts) && Math.Sign(force.X) == Math.Sign(player.Speed.X))
                 player.Speed.X *= -1;

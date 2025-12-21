@@ -44,8 +44,8 @@ namespace Celeste.Mod.GooberHelper.Options {
 
                         if(float.TryParse(valueString, out var floatValue)) {
                             value = floatValue;
-                        } else if(OptionsManager.Options[option].EnumType != null) {
-                            if(Enum.TryParse(OptionsManager.Options[option].EnumType, valueString, true, out var enumValue)) {
+                        } else if(OptionsManager.OptionToInstance[option].EnumType != null) {
+                            if(Enum.TryParse(OptionsManager.OptionToInstance[option].EnumType, valueString, true, out var enumValue)) {
                                 value = (int)enumValue;
                             } else {
                                 Logger.Warn("GooberHelper", $"Failed to parse {valueString} as an option enum value!");

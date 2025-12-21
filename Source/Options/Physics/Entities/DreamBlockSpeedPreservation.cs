@@ -5,24 +5,32 @@ using Celeste.Mod.GooberHelper.Extensions;
 using MonoMod.Utils;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.DreamBlockSpeedPreservation)]
-    public static class DreamBlockSpeedPreservation {
+    [GooberHelperOption]
+    public class DreamBlockSpeedPreservation : AbstractOption {
+        public enum Value {
+            None,
+            Horizontal,
+            Vertical,
+            Both,
+            Magnitude,
+        }
+
         [OnHook]
         private static void patch_Player_DreamDashBegin(On.Celeste.Player.orig_DreamDashBegin orig, Player self) {
             var originalSpeed = self.GetConservedSpeed();
 
             orig(self);
 
-            var optionValue = GetOptionEnum<DreamBlockSpeedPreservationValue>(Option.DreamBlockSpeedPreservation);
+            var optionValue = GetOptionEnum<Value>(Option.DreamBlockSpeedPreservation);
 
-            if(optionValue != DreamBlockSpeedPreservationValue.None) {
+            if(optionValue != Value.None) {
                 var componentMax = self.Speed.Sign() * Vector2.Max(self.Speed.Abs(), originalSpeed.Abs());
 
                 object _ = optionValue switch {
-                    DreamBlockSpeedPreservationValue.Horizontal => self.Speed.X = componentMax.X,
-                    DreamBlockSpeedPreservationValue.Vertical => self.Speed.Y = componentMax.Y,
-                    DreamBlockSpeedPreservationValue.Both => self.Speed = componentMax,
-                    DreamBlockSpeedPreservationValue.Magnitude => self.Speed = self.Speed.SafeNormalize() * Math.Max(originalSpeed.Length(), self.Speed.Length()),
+                    Value.Horizontal => self.Speed.X = componentMax.X,
+                    Value.Vertical => self.Speed.Y = componentMax.Y,
+                    Value.Both => self.Speed = componentMax,
+                    Value.Magnitude => self.Speed = self.Speed.SafeNormalize() * Math.Max(originalSpeed.Length(), self.Speed.Length()),
                     _ => null
                 };
                 

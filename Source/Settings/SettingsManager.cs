@@ -13,16 +13,18 @@ namespace Celeste.Mod.GooberHelper.Settings {
         public static void Load() {
             var namespacePrefix = $"{typeof(SettingsManager).Namespace}.Root.";
 
-            foreach(var type in typeof(SettingsManager).Assembly.GetTypes())
-                if(type.GetCustomAttribute(typeof(GooberHelperSettingAttribute), true) is GooberHelperSettingAttribute) {
-                    var id = type.Namespace.Length < namespacePrefix.Length
-                        ? type.Name
-                        : $"{type.Namespace[namespacePrefix.Length..]}.{type.Name}";
+            foreach(var type in typeof(SettingsManager).Assembly.GetTypes()) {
+                if(!type.IsDefined(typeof(GooberHelperSettingAttribute), false))
+                    continue;
                     
-                    Utils.Log($"{type.Name} -> {id}");
-                    
-                    settingClasses[id] = type;
-                }
+                var id = type.Namespace.Length < namespacePrefix.Length
+                    ? type.Name
+                    : $"{type.Namespace[namespacePrefix.Length..]}.{type.Name}";
+                
+                Utils.Log($"{type.Name} -> {id}");
+                
+                settingClasses[id] = type;
+            }
         }
 
         [OnUnload]

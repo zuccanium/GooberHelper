@@ -58,7 +58,7 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu {
                 Add(new OptionSlider(Option.ShowActiveOptions));
 
             //options profiles
-            Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_profiles")));
+            Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_profiles")));
             
             Add(new OptionsProfileCreateButton());
             Add(new OptionsProfileImportButton());

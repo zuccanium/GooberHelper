@@ -1,4 +1,5 @@
 using System;
+using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Cil;
 
@@ -7,7 +8,8 @@ using MonoMod.Cil;
 //red -> way too early (high delay)
 
 namespace Celeste.Mod.GooberHelper.Options.Miscellaneous {
-    public static class BufferDelayVisualization {
+    [GooberHelperOption]
+    public class BufferDelayVisualization : AbstractOption {
         public class BufferOffsetIndicator : Entity {
             private Image image;
             private Color color;

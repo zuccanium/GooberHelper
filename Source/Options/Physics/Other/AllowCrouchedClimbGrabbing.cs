@@ -9,8 +9,8 @@ using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
-    [GooberHelperOption(Option.AllowCrouchedClimbGrabbing)]
-    public static class AllowCrouchedClimbGrabbing {
+    [GooberHelperOption]
+    public class AllowCrouchedClimbGrabbing : AbstractOption {
         [ILHook]
         private static void patch_Player_NormalUpdate(ILContext il) {
             var cursor = new ILCursor(il);

@@ -1,12 +1,20 @@
 using System;
 using System.Reflection;
+using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
-    public static class FastFallHitboxSquish {
+    [GooberHelperOption]
+    public class FastFallHitboxSquish : AbstractOption {
+        public override OptionType Type { get; set; } = OptionType.Float;
+        public override float? RightMin { get; set; } = 0f;
+        public override float? RightMax { get; set; } = 100f;
+        public override float Step { get; set; } = 5f;
+        public override string Suffix { get; set; } = "%";
+
         private static bool ignoreFalseDucking = false;
         private static float oldCompression = 0f;
         

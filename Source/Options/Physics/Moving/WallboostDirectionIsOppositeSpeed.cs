@@ -4,8 +4,8 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Moving {
-    [GooberHelperOption(Option.WallboostDirectionIsOppositeSpeed)]
-    public static class WallboostDirectionIsOppositeSpeed {
+    [GooberHelperOption]
+    public class WallboostDirectionIsOppositeSpeed : AbstractOption {
         [ILHook]
         private static void patch_Player_ClimbJump(ILContext il) {
             var cursor = new ILCursor(il);

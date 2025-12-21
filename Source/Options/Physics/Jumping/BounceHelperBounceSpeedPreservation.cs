@@ -1,4 +1,3 @@
-using System;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
@@ -6,8 +5,8 @@ using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
-    [GooberHelperOption(Option.BounceHelperBounceSpeedPreservation)]
-    public static class BounceHelperBounceSpeedPreservation {
+    [GooberHelperOption]
+    public class BounceHelperBounceSpeedPreservation : AbstractOption {
         private static Vector2 beforeUpdateSpeed;
 
         [ILHook("BounceHelper", "Celeste.Mod.BounceHelper.BounceHelperModule", "bounce")]

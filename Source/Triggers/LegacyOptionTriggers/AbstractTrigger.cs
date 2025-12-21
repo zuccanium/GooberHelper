@@ -57,7 +57,7 @@ namespace Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers {
                 if(Enum.TryParse(optionNameOverrides.TryGetValue(optionName, out var actualOptionName) ? actualOptionName : optionName, out Option option)) {
                     var id = optionName[..1].ToLower() + optionName[1..];
 
-                    SettingValues[option] = type == OptionType.Float ? data.Int(id, (int)OptionsManager.Options[option].DefaultValue) : (data.Bool(id, false) ? 1 : 0);
+                    SettingValues[option] = type == OptionType.Float ? data.Int(id, (int)OptionsManager.OptionToInstance[option].DefaultValue) : (data.Bool(id, false) ? 1 : 0);
                 } else {
                     HandleWeirdOption(optionName);
                 }

@@ -5,8 +5,8 @@ using Celeste.Mod.GooberHelper.Extensions;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.BadelineBossSpeedPreservation)]
-    public static class BadelineBossSpeedPreservation {
+    [GooberHelperOption]
+    public class BadelineBossSpeedPreservation : AbstractOption {
         [ILHook]
         private static void patch_Player_AttractBegin(ILContext il) {
             var cursor = new ILCursor(il);

@@ -5,8 +5,8 @@ using Celeste.Mod.GooberHelper.Extensions;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.BubbleSpeedPreservation)]
-    public static class BubbleSpeedPreservation {
+    [GooberHelperOption]
+    public class BubbleSpeedPreservation : AbstractOption {
         [ILHook(typeof(Player), "DashCoroutine")]
         [ILHook(typeof(Player), "RedDashCoroutine")]
         private static void modifyDashSpeedThing(ILContext il) {

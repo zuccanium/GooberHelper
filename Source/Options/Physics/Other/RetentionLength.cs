@@ -4,8 +4,14 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
-    [GooberHelperOption(Option.RetentionLength)]
-    public static class RetentionLength {
+    [GooberHelperOption]
+    public class RetentionLength : AbstractOption {
+        public override OptionType Type { get; set; } = OptionType.Float;
+        public override float DefaultValue { get; set; } = 4f;
+        public override float? RightMin { get; set; } = 0f;
+        public override float Step { get; set; } = 1f;
+        public override string Suffix { get; set; } = "f";
+
         [ILHook]
         private static void patch_Player_OnCollideH(ILContext il) {
             var cursor = new ILCursor(il);
@@ -19,7 +25,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         public static float OverrideRetentionLength(float orig) {
             var retentionLength = GetOptionValue(Option.RetentionLength);
 
-            return retentionLength != 4
+            return retentionLength != 4f
                 ? retentionLength / 60f
                 : orig;
         }

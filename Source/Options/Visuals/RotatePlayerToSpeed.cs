@@ -1,11 +1,10 @@
 using System;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Extensions;
-using Celeste.Mod.GooberHelper.Options.GeneralHooks;
 
-namespace Celeste.Mod.GooberHelper.Options {
-    [GooberHelperOption()]
-    public static class RotatePlayerToSpeed {
+namespace Celeste.Mod.GooberHelper.Options.Visuals {
+    [GooberHelperOption]
+    public class RotatePlayerToSpeed : AbstractOption {        
         public static bool OnUpdateSprite(Player player, PlayerExtensions.PlayerExtensionFields ext, ref bool somethingActive) {
             if(!GetOptionBool(Option.RotatePlayerToSpeed))
                 return false;

@@ -1,12 +1,16 @@
 using System;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
-using Celeste.Mod.GooberHelper.Options.Physics.Jumping;
 using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
     public static class VerticalJumpSpeed {
+        public enum Value {
+            None = ReservedHybridEnumConstant + 0,
+            DashSpeed = ReservedHybridEnumConstant + 1,
+        }
+
         private static Vector2 originalSpeed;
 
         [ILHook(typeof(Player), "WallJump")]
@@ -37,20 +41,20 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             var upwardsOptionValue = GetOptionValue(Option.UpwardsJumpSpeedPreservationThreshold);
 
             var doDownwardsStuff = Input.MoveY > 0 && originalSpeed.Y > 0 && (
-                downwardsOptionValue == (int)VerticalJumpSpeedPreservationHybridValue.None
+                downwardsOptionValue == (int)Value.None
                     ? false
 
-                : downwardsOptionValue == (int)VerticalJumpSpeedPreservationHybridValue.DashSpeed
+                : downwardsOptionValue == (int)Value.DashSpeed
                     ? player.StateMachine.state == Player.StDash
 
                 : originalSpeed.Y >= downwardsOptionValue
             );
 
             var doUpwardsStuff = originalSpeed.Y < 0 && (
-                upwardsOptionValue == (int)VerticalJumpSpeedPreservationHybridValue.None
+                upwardsOptionValue == (int)Value.None
                     ? false
                 
-                : upwardsOptionValue == (int)VerticalJumpSpeedPreservationHybridValue.DashSpeed
+                : upwardsOptionValue == (int)Value.DashSpeed
                     ? player.StateMachine.state == Player.StDash
                 
                 : originalSpeed.Y <= -upwardsOptionValue
@@ -88,7 +92,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             var downwardsOptionValue = GetOptionValue(Option.DownwardsJumpSpeedPreservationThreshold);
 
             if(
-                downwardsOptionValue != (int)VerticalJumpSpeedPreservationHybridValue.None &&
+                downwardsOptionValue != (int)Value.None &&
                 self.varJumpSpeed > 0f &&
                 self.Speed.Y == self.varJumpSpeed &&
                 self.varJumpTimer > 0f
@@ -115,7 +119,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             => originalSpeed = player.GetConservedSpeed();
 
         private static float overrideVarJumpSpeed(float orig, Player player) {
-            if(GetOptionValue(Option.DownwardsJumpSpeedPreservationThreshold) == (int)VerticalJumpSpeedPreservationHybridValue.None)
+            if(GetOptionValue(Option.DownwardsJumpSpeedPreservationThreshold) == (int)Value.None)
                 return orig;
 
             var varJumpSpeed = player.varJumpSpeed;

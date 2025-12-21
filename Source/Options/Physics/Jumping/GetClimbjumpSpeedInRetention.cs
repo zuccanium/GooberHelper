@@ -5,8 +5,8 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
-    [GooberHelperOption(Option.GetClimbjumpSpeedInRetention)]
-    public static class GetClimbjumpSpeedInRetention {
+    [GooberHelperOption]
+    public class GetClimbjumpSpeedInRetention : AbstractOption {
         [ILHook]
         private static void patch_Player_ClimbJump(ILContext il) {
             var cursor = new ILCursor(il);

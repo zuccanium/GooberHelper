@@ -5,8 +5,14 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
-    [GooberHelperOption(Option.AllowUpwardsClimbGrabbing)]
-    public static class AllowUpwardsClimbGrabbing {
+    [GooberHelperOption]
+    public class AllowUpwardsClimbGrabbing : AbstractOption {
+        public enum Value {
+            None,
+            WhileHoldingUp,
+            Always
+        }
+
         private static bool legallyClimbjumping = false;
 
         [ILHook]
@@ -54,9 +60,9 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         }
 
         private static bool canGrab(Player player)
-            => GetOptionEnum<AllowUpwardsClimbGrabbingValue>(Option.AllowUpwardsClimbGrabbing) switch {
-                AllowUpwardsClimbGrabbingValue.WhileHoldingUp => legallyClimbjumping || player.CanUnDuck && Input.MoveY < 0f,
-                AllowUpwardsClimbGrabbingValue.Always => legallyClimbjumping || player.CanUnDuck,
+            => GetOptionEnum<Value>(Option.AllowUpwardsClimbGrabbing) switch {
+                Value.WhileHoldingUp => legallyClimbjumping || player.CanUnDuck && Input.MoveY < 0f,
+                Value.Always => legallyClimbjumping || player.CanUnDuck,
                 _ => true,
             };
     }

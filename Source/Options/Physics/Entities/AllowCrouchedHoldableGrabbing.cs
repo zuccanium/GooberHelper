@@ -8,8 +8,8 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.AllowCrouchedHoldableGrabbing)]
-    public static class AllowCrouchedHoldableGrabbing {
+    [GooberHelperOption]
+    public class AllowCrouchedHoldableGrabbing : AbstractOption {
         [ILHook]
         private static void patch_Player_Pickup(ILContext il) {
             var cursor = new ILCursor(il);

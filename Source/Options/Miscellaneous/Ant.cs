@@ -1,8 +1,8 @@
 using Celeste.Mod.GooberHelper.Attributes;
 
 namespace Celeste.Mod.GooberHelper.Options.Miscellaneous {
-    [GooberHelperOption(Option.Ant)]
-    public static class Ant {
+    [GooberHelperOption]
+    public class Ant : AbstractOption {
         // ░█████╗░███╗░░██╗████████╗
         // ██╔══██╗████╗░██║╚══██╔══╝
         // ███████║██╔██╗██║░░░██║░░░

@@ -1,8 +1,8 @@
 using Celeste.Mod.GooberHelper.Attributes;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
-    [GooberHelperOption(Option.SwapHorizontalAndVerticalSpeedOnWalljump)]
-    public static class SwapHorizontalAndVerticalSpeedOnWalljump {
+    [GooberHelperOption]
+    public class SwapHorizontalAndVerticalSpeedOnWalljump : AbstractOption {
         public static void InWallJump(Player player, Vector2 originalSpeed, int dir) {
             if(!GetOptionBool(Option.SwapHorizontalAndVerticalSpeedOnWalljump))
                 return;

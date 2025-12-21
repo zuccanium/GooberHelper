@@ -3,8 +3,8 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Dashing {
-    [GooberHelperOption(Option.KeepDashAttackOnCollision)]
-    public static class KeepDashAttackOnCollision {
+    [GooberHelperOption]
+    public class KeepDashAttackOnCollision : AbstractOption {
         [ILHook(typeof(Player), "OnCollideH")]
         [ILHook(typeof(Player), "OnCollideV")]
         private static void keepDashAttack(ILContext il) {

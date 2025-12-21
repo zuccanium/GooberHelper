@@ -6,8 +6,8 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
-    [GooberHelperOption(Option.AllowClimbingInDashState)]
-    public static class AllowClimbingInDashState {
+    [GooberHelperOption]
+    public class AllowClimbingInDashState : AbstractOption {
         [ILHook]
         private static void patch_Player_DashUpdate(ILContext il) {
             var cursor = new ILCursor(il);

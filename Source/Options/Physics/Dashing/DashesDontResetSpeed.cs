@@ -4,8 +4,14 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Dashing {
-    [GooberHelperOption(Option.DashesDontResetSpeed)]
-    public static class DashesDontResetSpeed {
+    [GooberHelperOption]
+    public class DashesDontResetSpeed : AbstractOption {
+        public enum Value {
+            None,
+            Legacy,
+            On,
+        }
+
         [ILHook]
         private static void patch_Player_DashCoroutine(ILContext il) {
             var cursor = new ILCursor(il);
@@ -19,7 +25,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Dashing {
                 cursor.Index--;
 
                 cursor.EmitLdloc1();
-                cursor.EmitLdcI4((int)DashesDontResetSpeedValue.Legacy);
+                cursor.EmitLdcI4((int)Value.Legacy);
                 cursor.EmitDelegate(overrideCondition);
             }
 
@@ -32,7 +38,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Dashing {
                 cursor.Index--;
 
                 cursor.EmitLdloc1();
-                cursor.EmitLdcI4((int)DashesDontResetSpeedValue.On);
+                cursor.EmitLdcI4((int)Value.On);
                 cursor.EmitDelegate(overrideCondition);
             }
         }

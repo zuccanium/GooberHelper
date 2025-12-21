@@ -55,33 +55,39 @@
 # CUSTOM MENU
     menu_gooberhelper_title=GooberHelper
     menu_gooberhelper_options=GooberHelper Options
+
     menu_gooberhelper_reset_all_options=Reset All Options
+    menu_gooberhelper_reset_all_options_description=(press the journal key under any individual option or category to reset it)
+
+    menu_gooberhelper_reset_category_options=Reset Category Options
+    menu_gooberhelper_reset_category_options_description=(press the journal key under any individual option to reset it)
+    
     menu_gooberhelper_category_physics=Physics
-    menu_gooberhelper_category_jumping=Jumping
-    menu_gooberhelper_category_dashing=Dashing
-    menu_gooberhelper_category_moving=Moving
-    menu_gooberhelper_category_entities=Entities
-    menu_gooberhelper_category_other=Other
+        menu_gooberhelper_category_jumping=Jumping
+        menu_gooberhelper_category_dashing=Dashing
+        menu_gooberhelper_category_moving=Moving
+        menu_gooberhelper_category_entities=Entities
+        menu_gooberhelper_category_other=Other
+    
     menu_gooberhelper_category_visuals=Visuals
     menu_gooberhelper_category_miscellaneous=Miscellaneous
     menu_gooberhelper_category_general=General
-    menu_gooberhelper_category_profiles=Profiles
 
-    menu_gooberhelper_create_profile=Create Options Profile
-    menu_gooberhelper_import_create_profile=Import and Create Options Profile
+    menu_gooberhelper_profiles=Profiles
+        menu_gooberhelper_create_profile=Create Options Profile
+        menu_gooberhelper_import_create_profile=Import and Create Options Profile
 
-    menu_gooberhelper_rename_profile_dialog=Rename the profile...
-    menu_gooberhelper_name_profile_dialog=Name the profile...
+        menu_gooberhelper_rename_profile_dialog=Rename the profile...
+        menu_gooberhelper_name_profile_dialog=Name the profile...
 
-    menu_gooberhelper_import_create_profile_description=imports the options profile from clipboard and creates it
-    menu_gooberhelper_export_profile_description=export the options profile to clipboard
-    menu_gooberhelper_import_profile_description=import the options profile from clipboard
-    menu_gooberhelper_delete_profile_description=there is no "are you sure?" confirmation window
-    menu_gooberhelper_reset_all_options_description=(press the journal key under any individual option or category to reset it)
+        menu_gooberhelper_import_create_profile_description=imports the options profile from clipboard and creates it
+        menu_gooberhelper_export_profile_description=export the options profile to clipboard
+        menu_gooberhelper_import_profile_description=import the options profile from clipboard
+        menu_gooberhelper_delete_profile_description=there is no "are you sure?" confirmation window
 
-    menu_gooberhelper_import_profile_error=an error occurred. invalid input probably?
-    menu_gooberhelper_import_profile_success=success!
-    menu_gooberhelper_import_create_profile_success=success! imported and created profile "name"
+        menu_gooberhelper_import_profile_error=an error occurred. invalid input probably?
+        menu_gooberhelper_import_profile_success=success!
+        menu_gooberhelper_import_create_profile_success=success! imported and created profile "name"
 
 # ENUMS
     gooberhelper_enum_Absolute=Absolute

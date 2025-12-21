@@ -4,8 +4,8 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.ReflectBounceSpeedPreservation)]
-    public static class ReflectBounceSpeedPreservation {
+    [GooberHelperOption]
+    public class ReflectBounceSpeedPreservation : AbstractOption {
         [OnHook]
         private static void patch_Player_Rebound(On.Celeste.Player.orig_Rebound orig, Player self, int direction = 0) {
             if(!GetOptionBool(Option.ReflectBounceSpeedPreservation)) {

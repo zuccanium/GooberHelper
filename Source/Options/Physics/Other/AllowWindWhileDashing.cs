@@ -4,8 +4,14 @@ using Celeste.Mod.GooberHelper.Extensions;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
-    [GooberHelperOption(Option.AllowWindWhileDashing)]
-    public static class AllowWindWhileDashing {
+    [GooberHelperOption]
+    public class AllowWindWhileDashing : AbstractOption {
+        public enum Value {
+            None,
+            Velocity,
+            Speed,
+        }
+
         public static void OverrideDashSpeed(Player player, Vector2 originalDashSpeed, Vector2 originalSpeed, ref Vector2 orig) {
             var ext = player.GetExtensionFields();
 
@@ -33,7 +39,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
 
         private static void setWindBoost(Player player, Vector2 move) {
             if(
-                GetOptionValue(Option.AllowWindWhileDashing) == (int)AllowWindWhileDashingValue.Speed &&
+                GetOptionValue(Option.AllowWindWhileDashing) == (int)Value.Speed &&
                 player.DashDir == Vector2.Zero &&
                 player.StateMachine.State == 2
             ) {
@@ -42,7 +48,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         }
 
         private static int overrideStateCondition(int orig)
-            => GetOptionValue(Option.AllowWindWhileDashing) == (int)AllowWindWhileDashingValue.Velocity
+            => GetOptionValue(Option.AllowWindWhileDashing) == (int)Value.Velocity
                 ? -1
                 : orig;
     }

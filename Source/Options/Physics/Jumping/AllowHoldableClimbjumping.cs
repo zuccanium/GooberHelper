@@ -4,8 +4,8 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
-    [GooberHelperOption(Option.AllowHoldableClimbjumping)]
-    public static class AllowHoldableClimbjumping {
+    [GooberHelperOption]
+    public class AllowHoldableClimbjumping : AbstractOption {
         [ILHook(typeof(Player), "RedDashUpdate")]
         [ILHook(typeof(Player), "HitSquashUpdate")]
         [ILHook(typeof(Player), "NormalUpdate")]

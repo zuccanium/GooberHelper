@@ -2,8 +2,8 @@ using System;
 using Celeste.Mod.GooberHelper.Attributes;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Dashing {
-    [GooberHelperOption(Option.ReverseDashSpeedPreservation)]
-    public static class ReverseDashSpeedPreservation {
+    [GooberHelperOption]
+    public class ReverseDashSpeedPreservation : AbstractOption {
         public static void OverrideDashSpeed(Player player, Vector2 originalDashSpeed, Vector2 originalSpeed, ref Vector2 orig) {
             var enabled = GetOptionBool(Option.ReverseDashSpeedPreservation);
 

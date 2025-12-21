@@ -17,8 +17,8 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu.OptionCategoryMenu {
         public override void Added() {
             Add(new Header(Dialog.Clean($"menu_gooberhelper_category_{Category}")));
 
-            foreach(var optionData in Categories[Category])
-                Add(new OptionSlider(optionData.Id));
+            foreach(var option in CategoryToOptions[Category])
+                Add(new OptionSlider(option));
 
             Add(new SubHeader(""));
 

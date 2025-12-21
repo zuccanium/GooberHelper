@@ -6,8 +6,15 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
-    [GooberHelperOption(Option.AllDirectionHypersAndSupers)]
-    public static class AllDirectionHypersAndSupers {
+    [GooberHelperOption]
+    public class AllDirectionHypersAndSupers : AbstractOption {
+        public enum Value {
+            None,
+            RequireGround,
+            WorkWithCoyoteTimeAndDontRefill,
+            WorkWithCoyoteTime
+        }
+
         [ILHook(typeof(Player), "RedDashUpdate")]
         [ILHook(typeof(Player), "DashUpdate")]
         private static void allowAllDirectionHypersAndSupers(ILContext il) {
@@ -51,9 +58,9 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
         }
 
         private static bool trySuperJump(Player player, bool alwaysRefills) {
-            var allDirectionHypersAndSupersValue = GetOptionEnum<AllDirectionHypersAndSupersValue>(Option.AllDirectionHypersAndSupers);
+            var allDirectionHypersAndSupersValue = GetOptionEnum<Value>(Option.AllDirectionHypersAndSupers);
 
-            if(allDirectionHypersAndSupersValue == AllDirectionHypersAndSupersValue.None)
+            if(allDirectionHypersAndSupersValue == Value.None)
                 return false;
             
             var extvarsJumpCount = ExtendedVariantMode.GetJumpCount?.Invoke() ?? 0;
@@ -65,7 +72,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
             //real stuff
             var coyoteCondition =
                 (player.jumpGraceTimer > 0f || extvarsJumpCount > 0) && 
-                allDirectionHypersAndSupersValue != AllDirectionHypersAndSupersValue.RequireGround; //WorkWithCoyoteTime or WorkWithCoyoteTimeAndRefill
+                allDirectionHypersAndSupersValue != Value.RequireGround; //WorkWithCoyoteTime or WorkWithCoyoteTimeAndRefill
 
             var groundedCondition =
                 (player.CollideCheck<JumpThru>(player.Position + Vector2.UnitY * player.Collider.Height) && player.CollideCheck<JumpThru>(player.Position + Vector2.UnitY)) ||
@@ -80,7 +87,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
                 return false;
 
             //actual logic
-            var canMaybeRefill = groundedCondition || allDirectionHypersAndSupersValue == AllDirectionHypersAndSupersValue.WorkWithCoyoteTime;
+            var canMaybeRefill = groundedCondition || allDirectionHypersAndSupersValue == Value.WorkWithCoyoteTime;
 
             if(alwaysRefills || canMaybeRefill && player.dashRefillCooldownTimer <= 0f && !player.Inventory.NoRefills)
                 player.RefillDash();

@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using Celeste.Mod.GooberHelper.Attributes;
-using MonoMod.Utils;
 
 namespace Celeste.Mod.GooberHelper.Options.General {
-    [GooberHelperOption(Option.ShowActiveOptions)]
-    public static class ShowActiveOptions {
+    [GooberHelperOption]
+    public class ShowActiveOptions : AbstractOption {
         [Tracked(false)]
         public class GooberOptionsList : Entity {
             public static readonly float Padding = 8f;

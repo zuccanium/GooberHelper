@@ -3,8 +3,8 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
-    [GooberHelperOption(Option.AllDirectionDreamJumps)]
-    public static class AllDirectionDreamJumps {
+    [GooberHelperOption]
+    public class AllDirectionDreamJumps : AbstractOption {
         [ILHook(typeof(Player), "DreamDashUpdate")]
         [ILHook(typeof(Player), "DreamDashEnd")]
         private static void allowAllDirectionDreamJumps(ILContext il) {

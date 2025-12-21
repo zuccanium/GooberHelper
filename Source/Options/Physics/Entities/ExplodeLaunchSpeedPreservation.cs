@@ -6,8 +6,16 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
-    [GooberHelperOption(Option.ExplodeLaunchSpeedPreservation)]
-    public static class ExplodeLaunchSpeedPreservation {
+    [GooberHelperOption]
+    public class ExplodeLaunchSpeedPreservation : AbstractOption {
+        public enum Value {
+            None,
+            Horizontal,
+            Vertical,
+            Both,
+            Magnitude,
+        }
+
         private static Vector2 originalSpeed;
 
         [ILHook]
@@ -35,18 +43,18 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
         //they call me john goodatnamingstuff
         //i need to stop saying john everywhere
         private static void doStuff(Player player) {
-            var explodeLaunchSpeedPreservationValue = GetOptionEnum<ExplodeLaunchSpeedPreservationValue>(Option.ExplodeLaunchSpeedPreservation);
+            var explodeLaunchSpeedPreservationValue = GetOptionEnum<Value>(Option.ExplodeLaunchSpeedPreservation);
             
-            if(explodeLaunchSpeedPreservationValue == ExplodeLaunchSpeedPreservationValue.None)
+            if(explodeLaunchSpeedPreservationValue == Value.None)
                 return;
 
             var componentMax = player.Speed.Sign() * Vector2.Max(player.Speed.Abs(), originalSpeed.Abs());
 
             object _ = explodeLaunchSpeedPreservationValue switch {
-                ExplodeLaunchSpeedPreservationValue.Horizontal => player.Speed.X = componentMax.X,
-                ExplodeLaunchSpeedPreservationValue.Vertical => player.Speed.Y = componentMax.Y,
-                ExplodeLaunchSpeedPreservationValue.Both => player.Speed = componentMax,
-                ExplodeLaunchSpeedPreservationValue.Magnitude => player.Speed = player.Speed.SafeNormalize() * Math.Max(originalSpeed.Length(), player.Speed.Length()),
+                Value.Horizontal => player.Speed.X = componentMax.X,
+                Value.Vertical => player.Speed.Y = componentMax.Y,
+                Value.Both => player.Speed = componentMax,
+                Value.Magnitude => player.Speed = player.Speed.SafeNormalize() * Math.Max(originalSpeed.Length(), player.Speed.Length()),
                 _ => null
             };
 
