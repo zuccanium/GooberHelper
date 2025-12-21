@@ -28,7 +28,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Categories.MouseJoystick {
                 Center = Engine.Viewport.Bounds.Center.ToVector2();
             }
 
-            [OnLoadLevel]
+            [SubscribeToEvent(typeof(Everest.Events.Level), "OnLoadLevel")]
             public static void LoadLevel(Level level, Player.IntroTypes playerIntro, bool isFromLoader) {
                 if(level.Tracker.GetEntity<MouseJoystickDisplay>() is null)
                     level.Add(new MouseJoystickDisplay());

@@ -30,13 +30,13 @@ namespace Celeste.Mod.GooberHelper {
         }
 
         public override void Load()
-            => OnLoadAttribute.Load();
+            => OnLoadAttribute.InvokeOnTargets();
 
         public override void LoadContent(bool firstLoad)
-            => OnLoadContentAttribute.Load();
+            => OnLoadContentAttribute.InvokeOnTargets();
 
         public override void Unload()
-            => OnUnloadAttribute.Unload();
+            => OnUnloadAttribute.InvokeOnTargets();
 
         public override void CreateModMenuSection(TextMenu menu, bool inGame, EventInstance pauseSnapshot) {
             CreateModMenuSectionHeader(menu, inGame, pauseSnapshot);

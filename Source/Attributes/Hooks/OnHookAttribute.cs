@@ -2,12 +2,10 @@ using System;
 using System.Reflection;
 using MonoMod.RuntimeDetour;
 
-#nullable enable
-
 namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
     //i dont know why you would ever want to use multiple on hooks but okay have fun
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class OnHookAttribute : BaseHookAttribute {
+    public class OnHookAttribute : AbstractHookAttribute {
         public OnHookAttribute()
             => Targets = [];
     

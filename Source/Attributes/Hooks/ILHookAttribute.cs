@@ -4,11 +4,9 @@ using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
 
-#nullable enable
-
 namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class ILHookAttribute : BaseHookAttribute {
+    public class ILHookAttribute : AbstractHookAttribute {
         public ILHookAttribute()
             => Targets = [];
     

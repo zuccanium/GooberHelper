@@ -4,13 +4,12 @@ using System.Linq;
 using System.Reflection;
 using Celeste.Mod.GooberHelper.Helpers;
 using MonoMod.RuntimeDetour;
-using MonoMod.Utils;
 
 #nullable enable
 
 namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public abstract class BaseHookAttribute : Attribute {
+    public abstract class AbstractHookAttribute : Attribute {
         public static readonly List<object> AppliedHooks = []; //ILHook or Hook
     
         //i could definitely just split this part but Qhatever
@@ -160,9 +159,9 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
 
         [OnLoad]
         public static void Load() {
-            foreach(var type in typeof(BaseHookAttribute).Assembly.GetTypes()) {
+            foreach(var type in typeof(AbstractHookAttribute).Assembly.GetTypes()) {
                 foreach(var method in type.GetMethods(Utils.BindingFlagsAll)) {
-                    if(method.GetCustomAttributes<BaseHookAttribute>() is not BaseHookAttribute[] attributes)
+                    if(method.GetCustomAttributes<AbstractHookAttribute>() is not AbstractHookAttribute[] attributes)
                         continue;
 
                     foreach(var attribute in attributes) {       

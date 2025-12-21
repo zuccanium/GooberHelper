@@ -10,7 +10,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             Depth = -1000;
         }
 
-        [OnLoadLevel]
+        [SubscribeToEvent(typeof(Everest.Events.Level), "OnLoadLevel")]
         public static void LoadLevel(Level level, Player.IntroTypes playerIntro, bool isFromLoader) {
             if(level.Tracker.GetEntity<OptionsEnabledIndicator>() is null)
                 level.Add(new OptionsEnabledIndicator());

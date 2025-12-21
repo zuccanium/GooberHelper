@@ -6,22 +6,13 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Settings.Root {
     [GooberHelperSetting]
     public class FastMenuing : AbstractToggle {
-        [OnLoad]
-        public static void Load() {
-            Everest.Events.Input.OnInitialize += UpdateFastMenuing;
-        }
-
-        [OnUnload]
-        public static void Unload() {
-            Everest.Events.Input.OnInitialize -= UpdateFastMenuing;
-        }
-
         public override void OnValueChange(bool value) {
             base.OnValueChange(value);
 
             UpdateFastMenuing();
         }
 
+        [SubscribeToEvent(typeof(Everest.Events.Input), "OnInitialize")]
         public static void UpdateFastMenuing() {
             //menuleft isnt special but everything else will be null if it is
             if(Input.MenuLeft == null)
