@@ -1,4 +1,4 @@
-namespace Celeste.Mod.GooberHelper.Settings.Buttons {
+namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractButton : AbstractSetting {
         public virtual void OnPressed() {}
 

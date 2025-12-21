@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
@@ -10,6 +9,8 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
     [GooberHelperOption]
     public class AllowCrouchedHoldableGrabbing : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.AllowingThings;
+
         [ILHook]
         private static void patch_Player_Pickup(ILContext il) {
             var cursor = new ILCursor(il);

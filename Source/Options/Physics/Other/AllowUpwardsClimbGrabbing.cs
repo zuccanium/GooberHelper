@@ -7,6 +7,8 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
     [GooberHelperOption]
     public class AllowUpwardsClimbGrabbing : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.AllowingThings;
+
         public enum Value {
             None,
             WhileHoldingUp,

@@ -41,20 +41,20 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu {
             Add(new ResetAllButton());
 
             //categories
-            Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_physics")));
+            Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_Physics")));
                 Add(new OptionCategoryButton(OptionCategory.Jumping));
                 Add(new OptionCategoryButton(OptionCategory.Dashing));
                 Add(new OptionCategoryButton(OptionCategory.Moving));
                 Add(new OptionCategoryButton(OptionCategory.Entities));
                 Add(new OptionCategoryButton(OptionCategory.Other));
 
-            Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_visuals")));
+            Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_Visuals")));
                 Add(new OptionCategoryButton(OptionCategory.Visuals));
 
-            Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_miscellaneous")));
+            Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_Miscellaneous")));
                 Add(new OptionCategoryButton(OptionCategory.Miscellaneous));
 
-            Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_general")));
+            Add(new TextMenuExt.SubHeaderExt(Dialog.Clean("menu_gooberhelper_category_General")));
                 Add(new OptionSlider(Option.ShowActiveOptions));
 
             //options profiles

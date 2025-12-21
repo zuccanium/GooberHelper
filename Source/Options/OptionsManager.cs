@@ -39,7 +39,6 @@ namespace Celeste.Mod.GooberHelper.Options {
         
         public enum OptionType {
             Boolean,
-            Integer,
             Float,
             Enum
         }
@@ -53,6 +52,14 @@ namespace Celeste.Mod.GooberHelper.Options {
             Visuals,
             Miscellaneous,
             General
+        }
+
+        public enum OptionGroup {
+            None,
+            Special,
+            SpeedPreservation,
+            NewThings,
+            AllowingThings
         }
 
         [OnLoad]
@@ -71,6 +78,8 @@ namespace Celeste.Mod.GooberHelper.Options {
 
                 optionInstance.InferData();
 
+                Utils.Log($"{optionInstance.Option} is of category {optionInstance.Category}");
+
                 //normal option stuff
                 OptionToInstance[optionInstance.Option] = optionInstance;
 
@@ -84,14 +93,18 @@ namespace Celeste.Mod.GooberHelper.Options {
                 categoryOptions.Add(optionInstance.Option);
             }
 
-            if(OptionToInstance.Count == Enum.GetValues<Option>().Length)
-                return;
+            if(OptionToInstance.Count != Enum.GetValues<Option>().Length) {
+                Utils.Log("heyyyy uhhh i think you forgot an option or two");
+                
+                foreach(var option in Enum.GetValues<Option>())
+                    if(!OptionToInstance.TryGetValue(option, out var _))
+                        Utils.Log($"couldnt find {option} in the dictionary!");
+            }
 
-            Utils.Log("heyyyy uhhh i think you forgot an option or two");
-            
-            foreach(var option in Enum.GetValues<Option>())
-                if(!OptionToInstance.TryGetValue(option, out var _))
-                    Utils.Log($"couldnt find {option} in the dictionary!");
+            //theyre sorted by however c# sorts the types iterator in an assembly for now
+            //they should be sorted by option enum value
+            foreach(var categoryOptions in CategoryToOptions.Values)
+                categoryOptions.Sort();
         }
 
         [OnUnload]

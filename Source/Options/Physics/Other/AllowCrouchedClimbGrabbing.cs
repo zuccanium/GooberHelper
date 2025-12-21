@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Helpers;

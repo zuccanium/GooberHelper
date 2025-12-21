@@ -8,6 +8,8 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
     [GooberHelperOption]
     public class AllDirectionHypersAndSupers : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.AllowingThings;
+
         public enum Value {
             None,
             RequireGround,

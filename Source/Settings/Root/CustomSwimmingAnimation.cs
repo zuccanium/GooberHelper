@@ -2,11 +2,6 @@ using System;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
-using Celeste.Mod.GooberHelper.Helpers;
-using Celeste.Mod.GooberHelper.Options.GeneralHooks;
-using Celeste.Mod.GooberHelper.Settings.Toggles;
-using Celeste.Mod.Helpers;
-using Microsoft.Xna.Framework.Graphics;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Settings.Root {

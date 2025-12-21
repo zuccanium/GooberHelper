@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.UI;
 using FMOD.Studio;

@@ -1,6 +1,6 @@
 using System;
 
-namespace Celeste.Mod.GooberHelper.Settings.Toggles.DebugMapPhysics {
+namespace Celeste.Mod.GooberHelper.Settings.Root.DebugMapPhysicsUtils {
     //REFERENCED CODE FROM https://github.com/jongallant/LiquidSimulator/blob/master/Assets/Scripts/LiquidSimulator.cs A LOT
     //THANK YOU
     public class CellFluidSimulation {

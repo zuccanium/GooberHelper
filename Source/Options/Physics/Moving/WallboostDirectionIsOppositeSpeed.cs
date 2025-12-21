@@ -6,6 +6,8 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Moving {
     [GooberHelperOption]
     public class WallboostDirectionIsOppositeSpeed : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.NewThings;
+
         [ILHook]
         private static void patch_Player_ClimbJump(ILContext il) {
             var cursor = new ILCursor(il);

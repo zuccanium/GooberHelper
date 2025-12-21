@@ -1,5 +1,4 @@
 using Celeste.Mod.GooberHelper.Attributes;
-using Celeste.Mod.GooberHelper.Settings.Buttons;
 
 namespace Celeste.Mod.GooberHelper.Settings.Root {
     [GooberHelperSetting]

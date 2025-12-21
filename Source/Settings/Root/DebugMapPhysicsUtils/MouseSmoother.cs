@@ -1,7 +1,7 @@
 using Celeste.Editor;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 
-namespace Celeste.Mod.GooberHelper.Settings.Toggles.DebugMapPhysics {
+namespace Celeste.Mod.GooberHelper.Settings.Root.DebugMapPhysicsUtils {
     public class MouseSmoother {
         private static Vector2[] mouseSmoothingBuffer = new Vector2[5];
         private static int mouseSmoothingBufferIndex = 0;

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Celeste.Mod.GooberHelper.Settings.Toggles;
 
 namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractFloat : AbstractValuedSetting<float, float> {

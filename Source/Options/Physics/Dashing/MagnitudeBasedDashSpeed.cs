@@ -4,6 +4,8 @@ using Celeste.Mod.GooberHelper.Attributes;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Dashing {
     [GooberHelperOption]
     public class MagnitudeBasedDashSpeed : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.NewThings;
+
         public enum Value {
             None,
             OnlyCardinal,

@@ -4,6 +4,7 @@ dotnet_diagnostic.IDE0058.severity = none
 dotnet_diagnostic.IDE0060.severity = none
 dotnet_diagnostic.IDE0051.severity = none
 
+
 # high priority (personal beef)
 csharp_new_line_before_open_brace = none 
 csharp_space_before_open_parenthesis = false:warning
@@ -14,6 +15,9 @@ csharp_space_before_open_parenthesis = false:warning
 # csharp_new_line_before_finally  =  false
 # csharp_new_line_before_members_in_anonymous_types  =  false
 # csharp_new_line_before_members_in_object_initializers  =  false
+
+# not actually a big deal but seeing unnecessary usings sucks
+dotnet_diagnostic.IDE0005.severity = error
 
 # normal
 csharp_style_prefer_braces = false:warning

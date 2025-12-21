@@ -6,6 +6,8 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Dashing {
     [GooberHelperOption]
     public class DashesDontResetSpeed : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.AllowingThings;
+
         public enum Value {
             None,
             Legacy,

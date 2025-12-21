@@ -4,6 +4,8 @@ using Celeste.Mod.GooberHelper.Attributes;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
     [GooberHelperOption]
     public class JumpInversion : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.SpeedPreservation;
+
         public enum Value {
             None,
             GroundJumps,

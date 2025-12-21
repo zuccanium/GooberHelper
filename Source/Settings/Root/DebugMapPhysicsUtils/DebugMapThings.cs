@@ -1,6 +1,6 @@
 using System;
 
-namespace Celeste.Mod.GooberHelper.Settings.Toggles.DebugMapPhysics {
+namespace Celeste.Mod.GooberHelper.Settings.Root.DebugMapPhysicsUtils {
     public static class DebugMapThings {
         public static MouseSmoother MouseSmoother = new();
 

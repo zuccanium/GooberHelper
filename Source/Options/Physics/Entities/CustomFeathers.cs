@@ -9,6 +9,8 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
     [GooberHelperOption]
     public class CustomFeathers : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.NewThings;
+
         public enum Value {
             None,
             KeepIntro,

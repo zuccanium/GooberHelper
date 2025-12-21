@@ -5,7 +5,14 @@ using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
-    public static class VerticalJumpSpeed {
+    public class VerticalJumpSpeed : AbstractOption {
+        public override OptionType Type { get; set; } = OptionType.Float;
+        public override Type EnumType { get; set; } = typeof(Value);
+        public override float DefaultValue { get; set; } = (float)Value.None;
+        public override float? RightMin { get; set; } = 0f;
+        public override float Step { get; set; } = 10f;
+        public override string Suffix { get; set; } = "px/s";
+
         public enum Value {
             None = ReservedHybridEnumConstant + 0,
             DashSpeed = ReservedHybridEnumConstant + 1,
@@ -39,6 +46,9 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         private static void setPlayerSpeed(Player player, bool isSuperJump) {
             var downwardsOptionValue = GetOptionValue(Option.DownwardsJumpSpeedPreservationThreshold);
             var upwardsOptionValue = GetOptionValue(Option.UpwardsJumpSpeedPreservationThreshold);
+
+            Utils.Log("d " + downwardsOptionValue);
+            Utils.Log("u " + upwardsOptionValue);
 
             var doDownwardsStuff = Input.MoveY > 0 && originalSpeed.Y > 0 && (
                 downwardsOptionValue == (int)Value.None

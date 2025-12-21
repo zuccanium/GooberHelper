@@ -1,7 +1,17 @@
 using System;
 
 namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
-    public static class HoldableSpeedInheritance {
+    public class HoldableSpeedInheritance : AbstractOption {
+        public override OptionType Type { get; set; } = OptionType.Float;
+        public override Type EnumType { get; set; } = typeof(Value);
+        public override float DefaultValue { get; set; } = (float)Value.None;
+        public override float? LeftMax { get; set; } = 0f;
+        public override float? RightMin { get; set; } = 0f;
+        public override float Step { get; set; } = 5f;
+        public override bool SkipLeftMax { get; set; } = true;
+        public override bool SkipRightMin { get; set; } = true;
+        public override string Suffix { get; set; } = "%";
+
         public enum Value {
             None = ReservedHybridEnumConstant + 0,
             MatchPlayer = ReservedHybridEnumConstant + 1

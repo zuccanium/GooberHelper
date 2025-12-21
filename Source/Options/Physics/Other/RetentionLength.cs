@@ -6,6 +6,8 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
     [GooberHelperOption]
     public class RetentionLength : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.Special;
+
         public override OptionType Type { get; set; } = OptionType.Float;
         public override float DefaultValue { get; set; } = 4f;
         public override float? RightMin { get; set; } = 0f;

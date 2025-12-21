@@ -1,6 +1,5 @@
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
-using Celeste.Mod.GooberHelper.Settings.Toggles;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.GooberHelper.Settings.Root {

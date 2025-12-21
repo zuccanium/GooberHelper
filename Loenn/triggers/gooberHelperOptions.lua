@@ -1,3 +1,5 @@
+local options = require("libraries.options")
+
 local trigger = {}
 
 trigger.name = "GooberHelper/GooberHelperOptions"
@@ -14,118 +16,14 @@ trigger.placements = {
     }
 }
 
-local function categoryHeader(name)
-    return "====== " .. name:upper() .. " ======"
-end
+local disableOptions = {}
+local isOption = {}
+local isDisableOption = {}
 
-local options = {
-    categoryHeader("Jumping"),
-    "JumpInversion: [None|GroundJumps|All]",
-    "WalljumpSpeedPreservation: [None|FakeRCB|Preserve|Invert]",
-    "WallbounceSpeedPreservation",
-    "HyperAndSuperSpeedPreservation",
-    "UpwardsJumpSpeedPreservationThreshold: [None|DashSpeed|number]",
-    "DownwardsJumpSpeedPreservationThreshold: [None|DashSpeed|number]",
-    "BounceHelperBounceSpeedPreservation",
-
-    "GetClimbjumpSpeedInRetention",
-    "AdditiveVerticalJumpSpeed",
-    "SwapHorizontalAndVerticalSpeedOnWalljump",
-    "VerticalToHorizontalSpeedOnGroundJump: [None|Vertical|Magnitude]",
-    "CornerboostBlocksEverywhere",
-
-    "AllDirectionHypersAndSupers: [None|RequireGround|WorkWithCoyoteTime]",
-    "AllowUpwardsCoyote",
-    "AllDirectionDreamJumps",
-    "AllowHoldableClimbjumping",
-
-    categoryHeader("Dashing"),
-    "VerticalDashSpeedPreservation",
-    "ReverseDashSpeedPreservation",
-
-    "MagnitudeBasedDashSpeed: [None|OnlyCardinal|All]",
-
-    "DashesDontResetSpeed: [None|Legacy|On]",
-    "KeepDashAttackOnCollision",
-    "DownDemoDashing",
-
-    categoryHeader("Moving"),
-    "CobwobSpeedInversion: [None|RequireSpeed|WorkWithRetention]",
-
-    "WallboostDirectionIsOppositeSpeed",
-    "WallboostSpeedIsOppositeSpeed",
-    "HorizontalTurningSpeedInversion",
-    "VerticalTurningSpeedInversion",
-    "DownwardsAirFrictionBehavior",
-    "IgnoreForcemove",
-
-    "UpwardsTransitionSpeedPreservation",
-
-    categoryHeader("Entities"),
-    "RefillFreezeLength: [number]",
-
-    "DreamBlockSpeedPreservation: [None|Horizontal|Vertical|Both|Magnitude]",
-    "SpringSpeedPreservation: [None|Preserve|Invert]",
-    "ReboundSpeedPreservation",
-    "PointBounceSpeedPreservation",
-    "ReflectBounceSpeedPreservation",
-    "ExplodeLaunchSpeedPreservation: [None|Horizontal|Vertical|Both|Magnitude]",
-    "PickupSpeedInversion",
-    "BubbleSpeedPreservation",
-    "FeatherEndSpeedPreservation",
-    "BadelineBossSpeedPreservation",
-
-    "CustomFeathers: [None|KeepIntro|SkipIntro]",
-    "CustomSwimming",
-    "LenientStunning",
-    "HoldableSpeedInheritanceHorizontal: [None|MatchPlayer|number]",
-    "HoldableSpeedInheritanceVertical: [None|MatchPlayer|number]",
-    "ReverseBackboosts",
-
-    "AllowCrouchedHoldableGrabbing",
-    "CoreBlockAllDirectionActivation",
-
-    categoryHeader("Other"),
-    "RetentionLength: [number]",
-
-    "ConserveBeforeDashSpeed",
-    "ClimbingSpeedPreservation",
-
-    "RemoveNormalEnd",
-    "FastFallHitboxSquish: [number]",
-    "LiftboostAdditionHorizontal: [number]",
-    "LiftboostAdditionVertical: [number]",
-    "AdvantageousLiftboost",
-
-    "AllowUpwardsClimbGrabbing: [None|WhileHoldingUp|Always]",
-    "AllowCrouchedClimbGrabbing",
-    "AllowClimbingInDashState",
-    "AllowWindWhileDashing",
-
-    categoryHeader("Visuals"),
-    "PlayerShaderMask: [None|Cover|HairOnly]",
-    "TheoNuclearReactor",
-    "RotatePlayerToSpeed",
-
-    categoryHeader("Miscellaneous"),
-    "AlwaysExplodeSpinners",
-    "GoldenBlocksAlwaysLoad",
-    "RefillFreezeGameSuspension",
-    "BufferDelayVisualization",
-    "Ant",
-
-    categoryHeader("General"),
-    "ShowActiveOptions",
-}
-
-local disableOptions = {};
-local isOption = {};
-local isDisableOption = {};
-
-local specialInputFields = {};
+local specialInputFields = {}
 
 for _, value in ipairs(options) do
-    local disableOptionName = value;
+    local disableOptionName = value
 
     if value:sub(-1, -1) == "]" then
         local field = {
@@ -133,17 +31,17 @@ for _, value in ipairs(options) do
             canBeNumber = false
         }
 
-        local splitter = value:find(":");
-        local optionKey = value:sub(1, splitter - 1);
-        local optionEnumContent = value:sub(splitter + 3, -2);
+        local splitter = value:find(":")
+        local optionKey = value:sub(1, splitter - 1)
+        local optionEnumContent = value:sub(splitter + 3, -2)
 
         for str in string.gmatch(optionEnumContent, "([^|]+)") do
             local id = str:lower()
             
             if id == "number" then
-                field.canBeNumber = true;
+                field.canBeNumber = true
             else
-                field.options[id] = true;
+                field.options[id] = true
             end
         end
 
@@ -152,12 +50,12 @@ for _, value in ipairs(options) do
         disableOptionName = optionKey
     else
         if value:sub(1, 1) ~= "=" then
-            isOption[value] = true;
+            isOption[value] = true
         end
     end
 
-    table.insert(disableOptions, disableOptionName);
-    isDisableOption[disableOptionName] = true;
+    table.insert(disableOptions, disableOptionName)
+    isDisableOption[disableOptionName] = true
 end
 
 local function createOptionsField(fieldOptions, validator)
@@ -182,11 +80,11 @@ trigger.fieldInformation = {
         function(input)
             if #input == 0 then return true end
 
-            local splitter = input:find(":") or 1;
-            local valueData = specialInputFields[input:sub(1, splitter - 1)];
+            local splitter = input:find(":") or 1
+            local valueData = specialInputFields[input:sub(1, splitter - 1)]
 
             if valueData == nil then
-                return isOption[input] == true;
+                return isOption[input] == true
             end
 
             if input:sub(splitter + 1, splitter + 1) == " " then
@@ -194,10 +92,10 @@ trigger.fieldInformation = {
             end
 
             if valueData.canBeNumber and tonumber(input:sub(splitter + 1, -1)) ~= nil then
-                return true;
+                return true
             end
             
-            return valueData.options[input:sub(splitter + 1, -1):lower()] ~= nil;
+            return valueData.options[input:sub(splitter + 1, -1):lower()] ~= nil
         end
     ),
     disable = createOptionsField(
@@ -205,7 +103,7 @@ trigger.fieldInformation = {
         function(input)
             if #input == 0 then return true end
 
-            return isDisableOption[input] == true;
+            return isDisableOption[input] == true
         end
     ),
     flag = {

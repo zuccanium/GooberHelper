@@ -1,14 +1,9 @@
 using Celeste.Mod.GooberHelper.Attributes;
+using Celeste.Mod.GooberHelper.Options.GeneralHooks;
 
 namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
     [GooberHelperOption]
-    public class DownwardsJumpSpeedPreservationThreshold : AbstractOption {
-        public override OptionType Type { get; set; } = OptionType.Float;
-        public override float? RightMin { get; set; } = 0f;
-        public override float? RightMax { get; set; } = 240f;
-        public override float Step { get; set; } = 10f;
-        public override string Suffix { get; set; } = "px/s";
-        
+    public class DownwardsJumpSpeedPreservationThreshold : VerticalJumpSpeed {        
         //implemented in GeneralHooks/VerticalJumpSpeed.cs
     }
 }

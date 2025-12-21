@@ -2,7 +2,6 @@ using Celeste.Mod.Entities;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Celeste.Mod.GooberHelper.Entities {

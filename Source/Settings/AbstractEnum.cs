@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Celeste.Mod.GooberHelper.Settings.Toggles;
 
 namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractEnum<T> : AbstractValuedSetting<T, T> where T : struct, Enum {

@@ -1,10 +1,6 @@
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Helpers;
-using Celeste.Mod.Helpers;
-using MonoMod.Cil;
-using Celeste;
-using Microsoft.Xna.Framework.Input;
 using System;
 using Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick;
 using Celeste.Mod.GooberHelper.Settings.Root.MouseJoystick.AbsoluteMode;

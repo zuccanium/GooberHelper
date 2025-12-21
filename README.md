@@ -35,10 +35,9 @@ the less important things (but still important) are
 you should try to avoid manually hooking things. you can add the ``[OnHook]`` or ``[ILHook]`` attribute to any method to automatically hook it. examples of this can be found throughout the entire codebase
 
 when adding an option, the bare minimum list of files you need to modify is
-- Options/OptionsManager.Categories.cs
-- Options/OptionsManager.Options.cs
+- Options/OptionsManager.OptionsEnum.cs
 - Dialog/*.txt
-- Loenn/triggers/gooberHelperOptions.cs
+- Loenn/triggers/gooberHelperOptions.lua
 
 have fun (?) contributing!!!
 

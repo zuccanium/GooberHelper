@@ -6,7 +6,7 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 using Microsoft.Xna.Framework.Input;
 
-namespace Celeste.Mod.GooberHelper.Settings.Toggles.DebugMapPhysics {
+namespace Celeste.Mod.GooberHelper.Settings.Root.DebugMapPhysicsUtils {
     public static class MapEditorHooks {
         private static string[] generateInfoText()
             => [

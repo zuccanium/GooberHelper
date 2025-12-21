@@ -1,5 +1,4 @@
 using Celeste.Mod.GooberHelper.Attributes;
-using Celeste.Mod.GooberHelper.Settings.Toggles;
 using Celeste.Mod.GooberHelper.UI.OptionsMenu;
 
 namespace Celeste.Mod.GooberHelper.Settings.Root {

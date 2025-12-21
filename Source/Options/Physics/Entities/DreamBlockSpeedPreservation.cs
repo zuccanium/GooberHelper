@@ -7,6 +7,8 @@ using MonoMod.Utils;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
     [GooberHelperOption]
     public class DreamBlockSpeedPreservation : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.SpeedPreservation;
+        
         public enum Value {
             None,
             Horizontal,

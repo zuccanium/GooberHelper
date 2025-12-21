@@ -20,11 +20,13 @@ namespace Celeste.Mod.GooberHelper.Options {
         public virtual float Step { get; set; } = 1;
         public virtual string Suffix { get; set; }
 
+        public virtual OptionGroup HeadGroup { get; set; } = OptionGroup.None;
+
         protected virtual void InferOption() {
             if(!Enum.TryParse<Option>(GetType().Name, out var parsedOption)) {
                 Utils.Log($"couldnt parse {GetType()} as an option :/ ?");
 
-                return;                
+                return;
             }
 
             Option = parsedOption;

@@ -1,6 +1,6 @@
 using System;
 
-namespace Celeste.Mod.GooberHelper.Settings.Toggles {
+namespace Celeste.Mod.GooberHelper.Settings {
     public abstract class AbstractValuedSetting<TStored, TReal> : AbstractSetting {
         public virtual void OnValueChange(TReal value)
             => SettingProperty.SetValue(ContainerObject, value);

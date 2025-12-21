@@ -32,7 +32,7 @@ namespace Celeste.Mod.GooberHelper.UI {
             else if(optionInstance.EnumType is Type enumType)
                 AddEnumerable(new EnumSliderOptions(optionInstance.EnumType), optionValue);
             
-            if(optionInstance.Type == OptionType.Float || optionInstance.Type == OptionType.Integer) {
+            if(optionInstance.Type == OptionType.Float) {
                 LeftMin = optionInstance.LeftMin;
                 LeftMax = optionInstance.LeftMax;
                 RightMin = optionInstance.RightMin;

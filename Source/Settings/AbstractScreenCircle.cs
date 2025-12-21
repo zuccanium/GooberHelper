@@ -1,6 +1,4 @@
-using System;
 using Celeste.Mod.GooberHelper.DataStructures;
-using Celeste.Mod.GooberHelper.Settings.Toggles;
 using Celeste.Mod.GooberHelper.UI;
 
 namespace Celeste.Mod.GooberHelper.Settings {
