@@ -11,6 +11,7 @@ local headers = require("mods").requireFromPlugin("libraries.goober.headers")
 return {
 	headers.categoryHeader("Jumping"),
 	headers.groupHeader("SpeedPreservation"),
+	"CobwobSpeedInversion: [None|RequireSpeed|WorkWithRetention]",
 	"JumpInversion: [None|GroundJumps|All]",
 	"WalljumpSpeedPreservation: [None|FakeRCB|Preserve|Invert]",
 	"WallbounceSpeedPreservation",
@@ -47,21 +48,19 @@ return {
 
 	headers.categoryHeader("Moving"),
 	headers.groupHeader("SpeedPreservation"),
-	"CobwobSpeedInversion: [None|RequireSpeed|WorkWithRetention]",
 	"HorizontalTurningSpeedInversion",
 	"VerticalTurningSpeedInversion",
-	"UpwardsTransitionSpeedPreservation",
-
+	
 	headers.groupHeader("NewThings"),
 	"WallboostDirectionIsOppositeSpeed",
 	"WallboostSpeedIsOppositeSpeed",
 	"DownwardsAirFrictionBehavior",
 	"IgnoreForcemove",
-
+	
 	headers.categoryHeader("Entities"),
 	headers.groupHeader("Special"),
 	"RefillFreezeLength: [number]",
-
+	
 	headers.groupHeader("SpeedPreservation"),
 	"DreamBlockSpeedPreservation: [None|Horizontal|Vertical|Both|Magnitude]",
 	"SpringSpeedPreservation: [None|Preserve|Invert]",
@@ -73,7 +72,7 @@ return {
 	"BubbleSpeedPreservation",
 	"FeatherEndSpeedPreservation",
 	"BadelineBossSpeedPreservation",
-
+	
 	headers.groupHeader("NewThings"),
 	"CustomFeathers: [None|KeepIntro|SkipIntro]",
 	"CustomSwimming",
@@ -81,18 +80,19 @@ return {
 	"HoldableSpeedInheritanceHorizontal: [number|None|MatchPlayer]",
 	"HoldableSpeedInheritanceVertical: [number|None|MatchPlayer]",
 	"ReverseBackboosts",
-
+	
 	headers.groupHeader("AllowingThings"),
 	"AllowCrouchedHoldableGrabbing",
 	"CoreBlockAllDirectionActivation",
-
+	
 	headers.categoryHeader("Other"),
 	headers.groupHeader("Special"),
 	"RetentionLength: [number]",
-
+	
 	headers.groupHeader("SpeedPreservation"),
 	"ConserveBeforeDashSpeed",
 	"ClimbingSpeedPreservation",
+	"UpwardsTransitionSpeedPreservation",
 
 	headers.groupHeader("NewThings"),
 	"FastFallHitboxSquish: [number]",

@@ -150,6 +150,7 @@
     # TITLES
         # PHYSICS
             # JUMPING
+                gooberhelper_option_CobwobSpeedInversion=Cobwob Speed Inversion
                 gooberhelper_option_JumpInversion=Jump Inversion
                 gooberhelper_option_WalljumpSpeedPreservation=Walljump Speed Preservation
                 gooberhelper_option_WallbounceSpeedPreservation=Wallbounce Speed Preservation
@@ -180,10 +181,8 @@
                 gooberhelper_option_DownDemoDashing=Down Demo Dashing
 
             # MOVING
-                gooberhelper_option_CobwobSpeedInversion=Cobwob Speed Inversion
                 gooberhelper_option_HorizontalTurningSpeedInversion=Horizontal Turning Speed Inversion
                 gooberhelper_option_VerticalTurningSpeedInversion=Vertical Turning Speed Inversion
-                gooberhelper_option_UpwardsTransitionSpeedPreservation=Upwards Transition Speed Preservation
                 
                 gooberhelper_option_WallboostDirectionIsOppositeSpeed=Wall Boost Direction Is Opposite Speed
                 gooberhelper_option_WallboostSpeedIsOppositeSpeed=Wall Boost Speed Is Always Opposite Speed
@@ -219,6 +218,7 @@
                 
                 gooberhelper_option_ConserveBeforeDashSpeed=Conserve Before Dash Speed
                 gooberhelper_option_ClimbingSpeedPreservation=Climbing Speed Preservation
+                gooberhelper_option_UpwardsTransitionSpeedPreservation=Upwards Transition Speed Preservation
 
                 gooberhelper_option_FastFallHitboxSquish=Fast Fall Hitbox Squish
                 gooberhelper_option_LiftboostAdditionHorizontal=Liftboost Addition Horizontal
@@ -249,6 +249,7 @@
     # DESCRIPTIONS
         # PHYSICS
             # JUMPING
+                gooberhelper_option_description_CobwobSpeedInversion=grin{n}Speed = only inverts your raw speed{n}Retention = can invert your retained speed too
                 gooberhelper_option_description_JumpInversion=reverse ultra real{n}Ground Jumps = only works on ground jumps{n}All = works with climbjumps too
                 gooberhelper_option_description_WalljumpSpeedPreservation=makes walljumps not reset your horizontal speed{n}Fake RCB = normal walljumps will act like RCBs and neutral walljumps will act like NRCBs (without the wallboost part){n}Preserve = walljumps will preserve all of your speed no matter which direction{n}Invert = they can be used to invert speed too
                 gooberhelper_option_description_WallbounceSpeedPreservation=applies whatever horizontal speed you had before you dashed to a wallbounce
@@ -279,10 +280,8 @@
                 gooberhelper_option_description_DownDemoDashing=yes
             
             # MOVING
-                gooberhelper_option_description_CobwobSpeedInversion=grin{n}Speed = only inverts your raw speed{n}Retention = can invert your retained speed too
                 gooberhelper_option_description_HorizontalTurningSpeedInversion=turn around to invert your horizontal speed whenever
                 gooberhelper_option_description_VerticalTurningSpeedInversion=same as above but vertical and really freaky
-                gooberhelper_option_description_UpwardsTransitionSpeedPreservation=buh
                 
                 gooberhelper_option_description_WallboostDirectionIsOppositeSpeed=wallboost dir is based on the opposite of your speed (on climbjump) (OVERWRITES BELOW)
                 gooberhelper_option_description_WallboostSpeedIsOppositeSpeed=wallboost speed dir is based on the opposite of your speed (on wallboost)
@@ -318,6 +317,7 @@
                 
                 gooberhelper_option_description_ConserveBeforeDashSpeed=accounts for the player's speed before dashing when handling general speed conservation stuff in this mod
                 gooberhelper_option_description_ClimbingSpeedPreservation=seiuedhrfgiotsedrofhgn
+                gooberhelper_option_description_UpwardsTransitionSpeedPreservation=buh
 
                 gooberhelper_option_description_FastFallHitboxSquish=really really weird                
                 gooberhelper_option_description_LiftboostAdditionHorizontal=uncapped

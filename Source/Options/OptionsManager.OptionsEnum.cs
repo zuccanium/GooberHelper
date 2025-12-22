@@ -5,6 +5,7 @@ namespace Celeste.Mod.GooberHelper.Options {
     public static partial class OptionsManager {
         public enum Option {
             //jumping
+            CobwobSpeedInversion,
             JumpInversion,
             WalljumpSpeedPreservation,
             WallbounceSpeedPreservation,
@@ -35,10 +36,8 @@ namespace Celeste.Mod.GooberHelper.Options {
             DownDemoDashing,
 
             //moving
-            CobwobSpeedInversion,
             HorizontalTurningSpeedInversion,
             VerticalTurningSpeedInversion,
-            UpwardsTransitionSpeedPreservation,
 
             WallboostDirectionIsOppositeSpeed,
             WallboostSpeedIsOppositeSpeed,
@@ -74,6 +73,7 @@ namespace Celeste.Mod.GooberHelper.Options {
 
             ConserveBeforeDashSpeed,
             ClimbingSpeedPreservation,
+            UpwardsTransitionSpeedPreservation,
 
             FastFallHitboxSquish,
             LiftboostAdditionHorizontal,
