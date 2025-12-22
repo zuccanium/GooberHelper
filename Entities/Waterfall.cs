@@ -6,10 +6,23 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Monocle;
 
+
 namespace Celeste.Mod.GooberHelper.Entities {
+    //this is terrible i know
+    //its different on the dev branch
+    public static class EntityDataExtensions {
+        public static Color HexColorSafe(this EntityData data, string key, Color defaultValue = default) {
+            if(data.Values != null)
+                return data.HexColor(key, defaultValue);
+
+            return defaultValue;
+        }
+    }
+    
     [CustomEntity("GooberHelper/Waterfall")]
     [TrackedAs(typeof(Water))]
     public class Waterfall : Water {
+
         public class Splash {
             public float Position;
             public Vector2 Direction;
@@ -26,6 +39,9 @@ namespace Celeste.Mod.GooberHelper.Entities {
         private bool nonCollidable = false;
         
         private float speed;
+
+        private Color backgroundWaterColor;
+        private float backgroundWaterOpacity;
 
         private Color waterColor;
         private List<Texture2D> waterTextureLayers;
@@ -49,8 +65,11 @@ namespace Celeste.Mod.GooberHelper.Entities {
             Depth = data.Int("depth", -9999);
             
             speed = data.Float("speed", 200f);
+
+            backgroundWaterColor = data.HexColorSafe("backgroundWaterColor", Color.LightSkyBlue);
+            backgroundWaterOpacity = data.Float("backgroundWaterOpacity", 0.3f);
             
-            waterColor = data.HexColor("waterColor", Color.White);
+            waterColor = data.HexColorSafe("waterColor", Color.White);
             waterTextureLayers = [..
                 data.Attr("waterTextureLayers", "objects/waterfall/GooberHelper/water")
                     .Split(",")
@@ -61,7 +80,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             waterSpeed = data.Float("waterSpeed", 192f);
             waterLayerDistance = data.Float("waterLayerDistance", 0f);
 
-            splashColor = data.HexColor("splashColor", Color.White);
+            splashColor = data.HexColorSafe("splashColor", Color.White);
             splashTextures = [.. 
                 data.Attr("splashTextures", "objects/waterfall/GooberHelper/splash")
                     .Split(",")
@@ -71,7 +90,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             splashSpeed = data.Float("splashSpeed", 96f);
             splashSize = data.Float("splashSize", 0.75f);
             splashOpacity = data.Float("splashOpacity", 0.75f);
-            splashDensity = data.Float("splashDensity", 0.1f);
+            splashDensity = data.Float("splashDensity", 0.5f);
             splashDistance = data.Float("splashDistance", 48f);
 
             nonCollidable = data.Bool("nonCollidable", false);
@@ -91,6 +110,8 @@ namespace Celeste.Mod.GooberHelper.Entities {
 
             for(var i = 0f; i < 1f; i += 1f / (splashDensity * Width))
                 splashes.Add(new Splash(i));
+
+            FillColor = backgroundWaterColor * backgroundWaterOpacity;
         }
 
         public override void Update() {
@@ -149,7 +170,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
                 var worldPosition = BottomLeft + new Vector2(splash.Position * Width, 0);
                 var pathLerp = (time * splashSpeed / splashDistance + splash.Offset) % 1f;
 
-                if(pathLerp > 1f - Engine.DeltaTime * splashSpeed / splashDistance)
+                if(pathLerp >= 1f - Engine.DeltaTime * splashSpeed / splashDistance)
                     splash.Position = Random.Shared.NextFloat();
 
                 worldPosition += splash.Direction * pathLerp * splashDistance;
