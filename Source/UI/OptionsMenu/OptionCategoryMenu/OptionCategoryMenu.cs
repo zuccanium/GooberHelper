@@ -16,6 +16,8 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu.OptionCategoryMenu {
 
         public override void Added() {
             Add(new Header(Dialog.Clean($"menu_gooberhelper_category_{Category}")));
+            
+            Add(new ResetCategoryButton(Category));
 
             foreach(var option in CategoryToOptions[Category]) {
                 var headGroup = OptionToInstance[option].HeadGroup;
@@ -25,10 +27,6 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu.OptionCategoryMenu {
 
                 Add(new OptionSlider(option));
             }
-
-            Add(new SubHeader(""));
-
-            Add(new ResetCategoryButton(Category));
         }
 
         private void onLeave() {

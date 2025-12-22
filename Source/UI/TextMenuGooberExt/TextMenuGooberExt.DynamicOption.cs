@@ -277,14 +277,14 @@ namespace Celeste.Mod.GooberHelper.UI {
                 if(!AllowFastMovement)
                     return;
 
-                if(Input.Jump.Pressed) {
-                    Input.Jump.ConsumeBuffer();
+                if(GooberHelperModule.Settings.IncreaseSliderStep.Pressed) {
+                    GooberHelperModule.Settings.IncreaseSliderStep.ConsumeBuffer();
                     
                     MovementSpeed++;
                 }
                 
-                if(Input.Grab.Pressed) {
-                    Input.Grab.ConsumeBuffer();
+                if(GooberHelperModule.Settings.DecreaseSliderStep.Pressed) {
+                    GooberHelperModule.Settings.DecreaseSliderStep.ConsumeBuffer();
                     
                     MovementSpeed--;
                 }

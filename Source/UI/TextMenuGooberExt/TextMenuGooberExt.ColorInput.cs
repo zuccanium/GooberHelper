@@ -1,5 +1,4 @@
 using System;
-using Celeste.Mod.GooberHelper.Helpers;
 
 namespace Celeste.Mod.GooberHelper.UI {
     public static partial class TextMenuGooberExt {

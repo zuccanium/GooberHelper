@@ -1,7 +1,6 @@
 
 using System;
 using System.Collections.Generic;
-using Celeste.Mod.GooberHelper.Helpers;
 
 namespace Celeste.Mod.GooberHelper.UI {
     public static partial class TextMenuGooberExt {

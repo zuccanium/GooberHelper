@@ -9,6 +9,8 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
     [GooberHelperOption]
     public class FastFallHitboxSquish : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.NewThings;
+        
         public override OptionType Type { get; set; } = OptionType.Float;
         public override float? RightMin { get; set; } = 0f;
         public override float? RightMax { get; set; } = 100f;

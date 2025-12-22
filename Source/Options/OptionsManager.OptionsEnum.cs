@@ -36,21 +36,18 @@ namespace Celeste.Mod.GooberHelper.Options {
 
             //moving
             CobwobSpeedInversion,
+            HorizontalTurningSpeedInversion,
+            VerticalTurningSpeedInversion,
+            UpwardsTransitionSpeedPreservation,
 
             WallboostDirectionIsOppositeSpeed,
             WallboostSpeedIsOppositeSpeed,
-            HorizontalTurningSpeedInversion,
-            VerticalTurningSpeedInversion,
             DownwardsAirFrictionBehavior,
             IgnoreForcemove,
 
-            UpwardsTransitionSpeedPreservation,
-
-            //other
+            //entities
             RefillFreezeLength,
-            RetentionLength,
 
-            ConserveBeforeDashSpeed,
             DreamBlockSpeedPreservation,
             SpringSpeedPreservation,
             ReboundSpeedPreservation,
@@ -64,23 +61,30 @@ namespace Celeste.Mod.GooberHelper.Options {
 
             CustomFeathers,
             CustomSwimming,
-            RemoveNormalEnd,
             LenientStunning,
             HoldableSpeedInheritanceHorizontal,
             HoldableSpeedInheritanceVertical,
-            FastFallHitboxSquish,
-
+            ReverseBackboosts,
+            
             AllowCrouchedHoldableGrabbing,
-            AllowUpwardsClimbGrabbing,
-            AllowCrouchedClimbGrabbing,
-            ClimbingSpeedPreservation,
-            AllowClimbingInDashState,
             CoreBlockAllDirectionActivation,
-            AllowWindWhileDashing,
+
+            //other
+            RetentionLength,
+
+            ConserveBeforeDashSpeed,
+            ClimbingSpeedPreservation,
+
+            FastFallHitboxSquish,
             LiftboostAdditionHorizontal,
             LiftboostAdditionVertical,
             AdvantageousLiftboost,
-            ReverseBackboosts,
+
+            AllowUpwardsClimbGrabbing,
+            AllowCrouchedClimbGrabbing,
+            AllowClimbingInDashState,
+            AllowWindWhileDashing,
+            RemoveNormalEnd,
 
             //visuals
             PlayerShaderMask,

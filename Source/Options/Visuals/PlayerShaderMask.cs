@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Celeste.Mod.GooberHelper.Options.Visuals {
     [GooberHelperOption]
     public class PlayerShaderMask : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.NewThings;
+
         public enum Value {
             None,
             HairOnly,

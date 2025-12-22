@@ -5,6 +5,8 @@ using MonoMod.Cil;
 namespace Celeste.Mod.GooberHelper.Options.Miscellaneous {
     [GooberHelperOption]
     public class AlwaysExplodeSpinners : AbstractOption {
+        public override OptionGroup HeadGroup { get; set; } = OptionGroup.NewThings;
+
         [ILHook(typeof(CrystalStaticSpinner), "OnPlayer")]
         [ILHook("FrostTempleHelper", "FrostHelper.CustomSpinner", "OnPlayer")]
         [ILHook("VivHelper", "VivHelper.Entities.CustomSpinner", "OnPlayer")]

@@ -55,8 +55,10 @@ namespace Celeste.Mod.GooberHelper {
         protected object GooberHelperOptionsButton { get; }
         protected object ResetAllOptionsButton { get; }
 
-        //binds (the single one)
+        //keys
         [DefaultButtonBinding(Buttons.LeftTrigger, Keys.Tab)]
         public ButtonBinding ExitGameSuspension { get; set; } = new ButtonBinding(Buttons.LeftTrigger, Keys.Tab);
+        public ButtonBinding IncreaseSliderStep { get; set; } = new ButtonBinding(Buttons.RightShoulder, Keys.C);
+        public ButtonBinding DecreaseSliderStep { get; set; } = new ButtonBinding(Buttons.LeftShoulder, Keys.Z);
     }
 }

@@ -12,13 +12,19 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             if(holder is not Player player)
                 return;
             
-            var holdableSpeed = self.SpeedGetter();
+            var holdableSpeedMaybe = self.SpeedGetter?.Invoke();
+            var holdableSpeed = holdableSpeedMaybe ?? Vector2.Zero;
 
             ReverseBackboosts.AfterRelease(self, force, ref holdableSpeed, player);
             HoldableSpeedInheritanceHorizontal.AfterRelease(self, force, ref holdableSpeed, player);
             HoldableSpeedInheritanceVertical.AfterRelease(self, force, ref holdableSpeed, player);
 
-            self.SpeedSetter.Invoke(holdableSpeed);
+            //dont set the speed if there wasnt a speed to begin with
+            //the only reason it doesnt return earlier is because there might be other important code in the invoked methods that doesnt just change the holdable speed
+            if(holdableSpeedMaybe is not Vector2)
+                return;
+
+            self.SpeedSetter?.Invoke(holdableSpeed);
         }
     }
 }

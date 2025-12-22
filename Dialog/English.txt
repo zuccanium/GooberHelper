@@ -220,16 +220,16 @@
                 gooberhelper_option_ConserveBeforeDashSpeed=Conserve Before Dash Speed
                 gooberhelper_option_ClimbingSpeedPreservation=Climbing Speed Preservation
 
-                gooberhelper_option_RemoveNormalEnd=Remove Normal End
-                gooberhelper_option_AllowWindWhileDashing=Allow Wind While Dashing
+                gooberhelper_option_FastFallHitboxSquish=Fast Fall Hitbox Squish
                 gooberhelper_option_LiftboostAdditionHorizontal=Liftboost Addition Horizontal
                 gooberhelper_option_LiftboostAdditionVertical=Liftboost Addition Vertical
                 gooberhelper_option_AdvantageousLiftboost=Advantageous Liftboost
-                gooberhelper_option_FastFallHitboxSquish=Fast Fall Hitbox Squish
 
                 gooberhelper_option_AllowUpwardsClimbGrabbing=Allow Upwards Climb Grabbing
                 gooberhelper_option_AllowCrouchedClimbGrabbing=Allow Crouched Climb Grabbing
                 gooberhelper_option_AllowClimbingInDashState=Allow Climbing in Dash State
+                gooberhelper_option_AllowWindWhileDashing=Allow Wind While Dashing
+                gooberhelper_option_RemoveNormalEnd=Remove Normal End
 
         # VISUALS
             gooberhelper_option_PlayerShaderMask=Player Shader Mask
@@ -244,7 +244,7 @@
             gooberhelper_option_Ant=ant
 
         # GENERAL
-            gooberhelper_option_ShowActiveOptions=Show Active Settings
+            gooberhelper_option_ShowActiveOptions=Show Active Options
 
     # DESCRIPTIONS
         # PHYSICS
@@ -280,15 +280,14 @@
             
             # MOVING
                 gooberhelper_option_description_CobwobSpeedInversion=grin{n}Speed = only inverts your raw speed{n}Retention = can invert your retained speed too
+                gooberhelper_option_description_HorizontalTurningSpeedInversion=turn around to invert your horizontal speed whenever
+                gooberhelper_option_description_VerticalTurningSpeedInversion=same as above but vertical and really freaky
+                gooberhelper_option_description_UpwardsTransitionSpeedPreservation=buh
                 
                 gooberhelper_option_description_WallboostDirectionIsOppositeSpeed=wallboost dir is based on the opposite of your speed (on climbjump) (OVERWRITES BELOW)
                 gooberhelper_option_description_WallboostSpeedIsOppositeSpeed=wallboost speed dir is based on the opposite of your speed (on wallboost)
-                gooberhelper_option_description_HorizontalTurningSpeedInversion=turn around to invert your horizontal speed whenever
-                gooberhelper_option_description_VerticalTurningSpeedInversion=same as above but vertical and really freaky
                 gooberhelper_option_description_DownwardsAirFrictionBehavior=slows you down less while fastfalling with more than max falling speed
                 gooberhelper_option_description_IgnoreForcemove=overrides the moveX forcemove override in the player update method
-
-                gooberhelper_option_description_UpwardsTransitionSpeedPreservation=buh
             
             # ENTITIES
                 gooberhelper_option_description_RefillFreezeLength=hi clantis
@@ -317,19 +316,19 @@
             # OTHER
                 gooberhelper_option_description_RetentionLength=more lenient cornerboosts
                 
-                gooberhelper_option_description_ConserveBeforeDashSpeed=accounts for the player's speed before dashing when handling speed general conservation stuff in this mod
+                gooberhelper_option_description_ConserveBeforeDashSpeed=accounts for the player's speed before dashing when handling general speed conservation stuff in this mod
                 gooberhelper_option_description_ClimbingSpeedPreservation=seiuedhrfgiotsedrofhgn
 
-                gooberhelper_option_description_RemoveNormalEnd=doesnt reset your retention or wallboost timer when you exit stNormal
                 gooberhelper_option_description_FastFallHitboxSquish=really really weird                
-                gooberhelper_option_description_AllowUpwardsClimbGrabbing=jdfnhijukhniujfkngb{n}None = none{n}While Holding Up = while holding up{n}Always = always
-                gooberhelper_option_description_AllowCrouchedClimbGrabbing=edsiurufhgiuserdfhgt
-                gooberhelper_option_description_AllowClimbingInDashState=sdjifhgkljsdhglikesdhrg
-
-                gooberhelper_option_description_AllowWindWhileDashing=💨💨💨💨{n}Velocity = adds the wind offset to your position even in dash state{n}Speed = actually adds the wind speed to the player's speed when initiating a dash
                 gooberhelper_option_description_LiftboostAdditionHorizontal=uncapped
                 gooberhelper_option_description_LiftboostAdditionVertical=also uncapped
                 gooberhelper_option_description_AdvantageousLiftboost=checks which direction (both x and y) of liftboost will maximize the absolute value of the player's speed
+
+                gooberhelper_option_description_AllowUpwardsClimbGrabbing=jdfnhijukhniujfkngb{n}None = none{n}While Holding Up = while holding up{n}Always = always
+                gooberhelper_option_description_AllowCrouchedClimbGrabbing=edsiurufhgiuserdfhgt
+                gooberhelper_option_description_AllowClimbingInDashState=sdjifhgkljsdhglikesdhrg
+                gooberhelper_option_description_AllowWindWhileDashing=💨💨💨💨{n}Velocity = adds the wind offset to your position even in dash state{n}Speed = actually adds the wind speed to the player's speed when initiating a dash
+                gooberhelper_option_description_RemoveNormalEnd=doesnt reset your retention or wallboost timer when you exit stNormal
 
         # VISUALS
             gooberhelper_option_description_PlayerShaderMask=masks the player sprite with a cool shader{n}Hair Only = only applies to hair and cateline/foxeline tails{n}Cover = covers the entire player sprite and all components

@@ -5,9 +5,11 @@ namespace Celeste.Mod.GooberHelper.UI.OptionsMenu.OptionCategoryMenu {
         public ResetCategoryButton(OptionCategory category) : base(Dialog.Clean("menu_gooberhelper_reset_category_options")) {
             Category = category;
 
-            this.AddDescription(MenuManager.CurrentMenu, Dialog.Clean("menu_gooberhelper_reset_category_options_description"));
-
             OnPressed += onPressed;
+        }
+
+        public override void Added() {
+            this.AddDescription(MenuManager.CurrentMenu, Dialog.Clean("menu_gooberhelper_reset_category_options_description"));
         }
 
         private void onPressed() {
