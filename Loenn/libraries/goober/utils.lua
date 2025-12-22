@@ -1,8 +1,8 @@
-local gooberUtils = {}
+local utils = {}
 
 --#region general
 
-function gooberUtils.transferFields(target, source)
+function utils.transferFields(target, source)
     if source == nil then
         return target
     end
@@ -19,7 +19,7 @@ end
 --#region field types
 
 local function genericField(type, value, data)
-    return gooberUtils.transferFields(
+    return utils.transferFields(
         {
             fieldType = type,
             default = value
@@ -29,27 +29,27 @@ local function genericField(type, value, data)
 end
 
 ---@param value boolean
-function gooberUtils.booleanField(value, data)
+function utils.booleanField(value, data)
     return genericField("boolean", value, data)
 end
 
 ---@param value number
-function gooberUtils.numberField(value, data)
+function utils.numberField(value, data)
     return genericField("number", value, data)
 end
 
 ---@param value number
-function gooberUtils.intField(value, data)
+function utils.intField(value, data)
     return genericField("integer", value, data)
 end
 
 ---@param value string
-function gooberUtils.stringField(value, data)
+function utils.stringField(value, data)
     return genericField("string", value, data)
 end
 
 ---@param value string
-function gooberUtils.colorField(value, data)
+function utils.colorField(value, data)
     if data == nil then
         data = {}
     end
@@ -60,7 +60,7 @@ function gooberUtils.colorField(value, data)
 end
 
 ---@param value string
-function gooberUtils.listField(value, elementOptions, data)
+function utils.listField(value, elementOptions, data)
     if data == nil then
         data = {}
     end
@@ -74,7 +74,7 @@ end
 
 --#region placement generation
 
-function gooberUtils.fieldInformationToPlacementData(fieldInfo)
+function utils.fieldInformationToPlacementData(fieldInfo)
     local data = {}
 
     for key, value in pairs(fieldInfo) do
@@ -86,4 +86,4 @@ end
 
 --#endregion placement generation
 
-return gooberUtils
+return utils
