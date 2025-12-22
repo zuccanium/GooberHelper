@@ -51,7 +51,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root.DebugMapPhysicsUtils {
                 foreach(var level in self.selection) {
                     var ext = level.GetExtensionFields();
 
-                    ext.Velocity = DebugMapThings.MouseSmoother.GetOffset() * Engine.DeltaTime;
+                    ext.Velocity = MouseSmoother.GetOffset() * Engine.DeltaTime;
                     ext.BeingDragged = true;
                 }
             }

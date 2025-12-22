@@ -1,78 +1,44 @@
--- local drawableSpriteStruct = require("structs.drawable_sprite")
-
--- -- IM SORRY LOENN PEOPLE
--- -- I SWEAR I HAVE A REASON FOR THIS
--- -- LOOK AT THE BOTTOM OF THE CODE
--- local state = require("loaded_state")
--- local selectionUtils = require("selections")
+local utils = require("mods").requireFromPlugin("libraries.goober.utils")
 
 local entity = {}
 
--- so the keybind to add a node can be used to refresh the entity
-entity.nodeLimits = { 0, 1 }
 entity.name = "GooberHelper/Waterfall"
-entity.color = {0.0, 0.5, 1.0, 0.5}
-entity.placements = {
-    name = "waterfall",
-    data = {
-        width = 8,
-        height = 8,
-
-        depth = -9999,
-
-        speed = 200,
-
-        backgroundWaterColor = "87cefa", -- Color.LightSkyBlue (water fill color)
-        backgroundWaterOpacity = 0.3, -- also from the water fill color
-
-        waterColor = "ffffff",
-        waterTextureLayers = "objects/waterfall/GooberHelper/water",
-        waterLayerDistance = 0,
-        waterSpeed = 200,
-        waterPadding = 3,
-
-        splashColor = "ffffff",
-        splashTextures = "objects/waterfall/GooberHelper/splash",
-        splashSpeed = 96,
-        splashSize = 0.75,
-        splashOpacity = 0.75,
-        splashDensity = 0.5,
-        splashDistance = 48,
-
-        nonCollidable = false,
-    }
+entity.color = { 0.0, 0.5, 1.0, 0.5 }
+entity.fieldInformation = {
+    width = utils.intField(8),
+    height = utils.intField(8),
+    depth = utils.intField(-9999),
+    speed = utils.numberField(200),
+    backgroundWaterColor = utils.colorField("LightSkyBlue"), -- this is from the vanilla water entity
+    backgroundWaterOpacity = utils.numberField(0.3), -- this too
+    waterColor = utils.colorField("White"),
+    waterTextureLayers = utils.listField(
+        "objects/waterfall/GooberHelper/water",
+        utils.stringField("", {
+            width = 400
+        })
+    ),
+    waterLayerDistance = utils.numberField(0),
+    waterSpeed = utils.numberField(200),
+    waterPadding = utils.intField(3),
+    splashColor = utils.colorField("White"),
+    splashTextures = utils.listField(
+        "objects/waterfall/GooberHelper/splash",
+        utils.stringField("", {
+            width = 400
+        })
+    ),
+    splashSpeed = utils.numberField(96),
+    splashSize = utils.numberField(0.75),
+    splashOpacity = utils.numberField(0.75),
+    splashDensity = utils.numberField(0.1),
+    splashDistance = utils.numberField(48),
+    nonCollidable = utils.booleanField(false)
 }
 
-entity.fieldInformation = {
-    depth = {
-        fieldType = "integer"
-    },
-    backgroundWaterColor = {
-        fieldType = "color"
-    },
-    waterColor = {
-        fieldType = "color"
-    },
-    waterTextureLayers = {
-        fieldType = "list",
-        elementOptions = {
-            width = 400,
-            fieldType = "string"
-        }
-    },
-    waterPadding = {
-        fieldType = "integer"
-    },
-    splashColor = {
-        fieldType = "color"
-    },
-    splashTextures = {
-        fieldType = "list",
-        elementOptions = {
-            width = 400,
-            fieldType = "string"
-        }
-    },
+entity.placements = {
+    name = "waterfall",
+    data = utils.fieldInformationToPlacementData(entity.fieldInformation)
 }
 
 entity.ignoredFields = {
@@ -129,6 +95,18 @@ entity.fieldOrder = {
 -- the following code is unusable until loenn either adds support for what im trying to do or i get a christmas spirit brain blast that gives me a path to make this work
 -- i hope you enjoyed reading that
 -- goodbye
+
+-- local drawableSpriteStruct = require("structs.drawable_sprite")
+
+
+-- -- IM SORRY LOENN PEOPLE
+-- -- I SWEAR I HAVE A REASON FOR THIS
+-- -- LOOK AT THE BOTTOM OF THE CODE
+-- local state = require("loaded_state")
+-- local selectionUtils = require("selections")
+
+-- -- so the keybind to add a node can be used to refresh the entity
+-- entity.nodeLimits = { 0, 1 }
 
 -- local function createWaterSprites(sprites, instance)
 --     local texture = instance.waterTextureLayers and instance.waterTextureLayers:split(",")()[1] or "objects/waterfall/GooberHelper/water"

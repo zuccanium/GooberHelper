@@ -1,4 +1,4 @@
-local options = require("libraries.options")
+local options = require("mods").requireFromPlugin("libraries.goober.options")
 
 local trigger = {}
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Celeste.Editor;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
-using Celeste.Mod.GooberHelper.Settings.Toggles.DebugMapPhysics;
+using Celeste.Mod.GooberHelper.Settings.Root.DebugMapPhysicsUtils;
 using MonoMod.Utils;
 
 namespace Celeste.Mod.GooberHelper.Extensions {

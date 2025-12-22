@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using Celeste.Mod.GooberHelper.Extensions;
 
 namespace Celeste.Mod.GooberHelper.Entities {
     [CustomEntity("GooberHelper/Waterfall")]
@@ -51,10 +52,10 @@ namespace Celeste.Mod.GooberHelper.Entities {
             
             speed = data.Float("speed", 200f);
 
-            backgroundWaterColor = data.HexColor("backgroundWaterColor", Color.LightSkyBlue);
+            backgroundWaterColor = data.HexColorSafe("backgroundWaterColor", Color.LightSkyBlue);
             backgroundWaterOpacity = data.Float("backgroundWaterOpacity", 0.3f);
             
-            waterColor = data.HexColor("waterColor", Color.White);
+            waterColor = data.HexColorSafe("waterColor", Color.White);
             waterTextureLayers = [..
                 data.Attr("waterTextureLayers", "objects/waterfall/GooberHelper/water")
                     .Split(",")
@@ -65,7 +66,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             waterSpeed = data.Float("waterSpeed", 192f);
             waterLayerDistance = data.Float("waterLayerDistance", 0f);
 
-            splashColor = data.HexColor("splashColor", Color.White);
+            splashColor = data.HexColorSafe("splashColor", Color.White);
             splashTextures = [.. 
                 data.Attr("splashTextures", "objects/waterfall/GooberHelper/splash")
                     .Split(",")
@@ -75,7 +76,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
             splashSpeed = data.Float("splashSpeed", 96f);
             splashSize = data.Float("splashSize", 0.75f);
             splashOpacity = data.Float("splashOpacity", 0.75f);
-            splashDensity = data.Float("splashDensity", 0.1f);
+            splashDensity = data.Float("splashDensity", 0.5f);
             splashDistance = data.Float("splashDistance", 48f);
 
             nonCollidable = data.Bool("nonCollidable", false);
@@ -155,7 +156,7 @@ namespace Celeste.Mod.GooberHelper.Entities {
                 var worldPosition = BottomLeft + new Vector2(splash.Position * Width, 0);
                 var pathLerp = (time * splashSpeed / splashDistance + splash.Offset) % 1f;
 
-                if(pathLerp > 1f - Engine.DeltaTime * splashSpeed / splashDistance)
+                if(pathLerp >= 1f - Engine.DeltaTime * splashSpeed / splashDistance)
                     splash.Position = Random.Shared.NextFloat();
 
                 worldPosition += splash.Direction * pathLerp * splashDistance;
