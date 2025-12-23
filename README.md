@@ -32,12 +32,13 @@ the less important things (but still important) are
     - if you need to explicitly declare the type, please use ``default(TypeName)``
 
 ## gooberhelper-specific things
-you should try to avoid manually hooking things. you can add the ``[OnHook]`` or ``[ILHook]`` attribute to any method to automatically hook it. examples of this can be found throughout the entire codebase
+you should try to avoid manually hooking things. you can add the ``[OnHook]`` or ``[ILHook]`` attribute to any method to automatically hook it based on the method name. examples of this can be found throughout the entire codebase
 
 when adding an option, the bare minimum list of files you need to modify is
 - Options/OptionsManager.OptionsEnum.cs
 - Dialog/*.txt
-- Loenn/triggers/gooberHelperOptions.lua
+- Loenn/libraries/options.lua (read the comment in here)
+- the file containing the option ofc
 
 have fun (?) contributing!!!
 
