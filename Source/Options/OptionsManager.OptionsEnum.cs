@@ -79,6 +79,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             LiftboostAdditionHorizontal,
             LiftboostAdditionVertical,
             AdvantageousLiftboost,
+            StackableUltras,
 
             AllowUpwardsClimbGrabbing,
             AllowCrouchedClimbGrabbing,

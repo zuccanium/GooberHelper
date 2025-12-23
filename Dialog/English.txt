@@ -224,6 +224,7 @@
                 gooberhelper_option_LiftboostAdditionHorizontal=Liftboost Addition Horizontal
                 gooberhelper_option_LiftboostAdditionVertical=Liftboost Addition Vertical
                 gooberhelper_option_AdvantageousLiftboost=Advantageous Liftboost
+                gooberhelper_option_StackableUltras=Stackable Ultras
 
                 gooberhelper_option_AllowUpwardsClimbGrabbing=Allow Upwards Climb Grabbing
                 gooberhelper_option_AllowCrouchedClimbGrabbing=Allow Crouched Climb Grabbing
@@ -323,6 +324,7 @@
                 gooberhelper_option_description_LiftboostAdditionHorizontal=uncapped
                 gooberhelper_option_description_LiftboostAdditionVertical=also uncapped
                 gooberhelper_option_description_AdvantageousLiftboost=checks which direction (both x and y) of liftboost will maximize the absolute value of the player's speed
+                gooberhelper_option_description_StackableUltras=chain multiple downdiag dashes to gain an ultra multiplier for each
 
                 gooberhelper_option_description_AllowUpwardsClimbGrabbing=jdfnhijukhniujfkngb{n}None = none{n}While Holding Up = while holding up{n}Always = always
                 gooberhelper_option_description_AllowCrouchedClimbGrabbing=edsiurufhgiuserdfhgt

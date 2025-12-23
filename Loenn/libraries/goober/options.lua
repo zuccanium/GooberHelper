@@ -99,6 +99,7 @@ return {
 	"LiftboostAdditionHorizontal: [number]",
 	"LiftboostAdditionVertical: [number]",
 	"AdvantageousLiftboost",
+	"StackableUltras",
 
 	headers.groupHeader("AllowingThings"),
 	"AllowUpwardsClimbGrabbing: [None|WhileHoldingUp|Always]",

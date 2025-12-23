@@ -33,6 +33,8 @@ namespace Celeste.Mod.GooberHelper.Extensions {
             public float PlayerRotationTarget = 0f;
             public float PlayerRotation = 0f;
 
+            public int StackedUltras = 0;
+
             public PlayerExtensionFields()
                 => Utils.Log("CREATING EXTENSION FIELDS!!!");
         }
