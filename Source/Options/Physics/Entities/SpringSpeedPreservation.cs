@@ -22,7 +22,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
                 return;
             }
 
-            var originalSpeed = self.Speed;
+            var originalSpeed = self.GetConservedSpeed();
 
             orig(self, fromY);
 

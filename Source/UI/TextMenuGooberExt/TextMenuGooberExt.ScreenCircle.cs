@@ -7,7 +7,7 @@ namespace Celeste.Mod.GooberHelper.UI {
         public class ScreenCircle : TextMenu.Item {
             [Tracked(false)]
             public class ScreenCircleMover : Entity {
-                public static readonly Color CircleColor = Color.Red;
+                public static readonly Color CircleColor = Color.Red * 0f;
                 public static readonly Color EdgeColor = Color.Cyan;
                 public static readonly Color PaddingColor = Color.DeepPink * 0.5f;
                 public static readonly Color CornerColor = Color.DeepSkyBlue;

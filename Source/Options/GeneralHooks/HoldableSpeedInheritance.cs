@@ -31,7 +31,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             var playerSpeedComponent = Vector2.Dot(player.Speed, direction);
 
             var newSpeedComponent = optionValue == (int)Value.MatchPlayer
-                ? Math.Sign(holdableSpeedComponent) * Math.Max(Math.Abs(holdableSpeedComponent), Math.Abs(playerSpeedComponent) * 0.8f)
+                ? playerSpeedComponent - 80f * Math.Sign(playerSpeedComponent) //80f for the speed lost while throwing (i know this isnt a perfect solution but it works honestly)
                 : holdableSpeedComponent + playerSpeedComponent * optionValue / 100f;
 
             holdableSpeed -= holdableSpeed * direction;

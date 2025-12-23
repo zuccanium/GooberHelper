@@ -39,7 +39,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
 
         private static void setWindBoost(Player player, Vector2 move) {
             if(
-                GetOptionValue(Option.AllowWindWhileDashing) == (int)Value.Speed &&
+                GetOptionEnum<Value>(Option.AllowWindWhileDashing) == Value.Speed &&
                 player.DashDir == Vector2.Zero &&
                 player.StateMachine.State == 2
             ) {
@@ -48,7 +48,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         }
 
         private static int overrideStateCondition(int orig)
-            => GetOptionValue(Option.AllowWindWhileDashing) == (int)Value.Velocity
+            => GetOptionEnum<Value>(Option.AllowWindWhileDashing) == Value.Velocity
                 ? -1
                 : orig;
     }

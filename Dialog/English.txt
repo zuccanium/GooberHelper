@@ -144,6 +144,9 @@
     gooberhelper_enum_Speed=Speed
     gooberhelper_enum_Velocity=Velocity
 
+    gooberhelper_enum_DashAim=Dash Aim
+    gooberhelper_enum_Aim=Aim
+
     gooberhelper_enum_MatchPlayer=Match Player
 
 # OPTIONS
@@ -196,7 +199,7 @@
                 gooberhelper_option_SpringSpeedPreservation=Spring Speed Preservation
                 gooberhelper_option_ReboundSpeedPreservation=Rebound Speed Preservation
                 gooberhelper_option_PointBounceSpeedPreservation=Point Bounce Speed Preservation
-                gooberhelper_option_ReflectBounceSpeedPreservation=Reflect Bounce Speed Preservation
+                gooberhelper_option_ReflectBounceSpeedInversion=Reflect Bounce Speed Inversion
                 gooberhelper_option_ExplodeLaunchSpeedPreservation=Explode Launch Speed Preservation
                 gooberhelper_option_PickupSpeedInversion=Pickup Speed Inversion
                 gooberhelper_option_BubbleSpeedPreservation=Bubble Speed Preservation
@@ -296,12 +299,12 @@
                 gooberhelper_option_description_SpringSpeedPreservation=yeah{n}Preserve = they will preserve your speed{n}Invert = they can invert your speed if you hold in the opposite direction
                 gooberhelper_option_description_ReboundSpeedPreservation=you can reverse speed off of anything that calls the Rebound() (dash blocks, kevins, breaker boxes, etc)
                 gooberhelper_option_description_PointBounceSpeedPreservation=shielded feathers, hearts, and probably some other things will preserve your speed
-                gooberhelper_option_description_ReflectBounceSpeedPreservation=same thing as above but this literally only applies to oshiro doors lmao
+                gooberhelper_option_description_ReflectBounceSpeedInversion=same thing as above but this literally only applies to oshiro doors lmao
                 gooberhelper_option_description_ExplodeLaunchSpeedPreservation=speed is preserved when hitting anything that calls ExplodeLaunch() (bumpers, pufferfish, etc)
                 gooberhelper_option_description_PickupSpeedInversion=Loenn everest.yaml bin Dialog Graphics
                 gooberhelper_option_description_BubbleSpeedPreservation=hello
                 gooberhelper_option_description_FeatherEndSpeedPreservation=makes feathers not reset your speed when they run out of time. this also gives free feather end boosts
-                gooberhelper_option_description_BadelineBossSpeedPreservation=zeeble blimp glong????
+                gooberhelper_option_description_BadelineBossSpeedPreservation=zeeble blimp glong????{n}Preserve = just gives you your original speed back in the push direction{n}Invert = that but you can swap which direction it pushes you in{n}DashAim = you get launched in whatever direction you would dash in based on your aim{n}Aim = same thing but it doesnt snap to one of eight directions
                 
                 gooberhelper_option_description_CustomFeathers=they preserve speed and rounce{n}Keep Intro = they will preserve your speed but not skip the slowdown intro{n}Skip Intro = they will skip the slowdown intro
                 gooberhelper_option_description_CustomSwimming=the effects of aquaculture on our industrialized society

@@ -51,7 +51,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             SpringSpeedPreservation,
             ReboundSpeedPreservation,
             PointBounceSpeedPreservation,
-            ReflectBounceSpeedPreservation,
+            ReflectBounceSpeedInversion,
             ExplodeLaunchSpeedPreservation,
             PickupSpeedInversion,
             BubbleSpeedPreservation,

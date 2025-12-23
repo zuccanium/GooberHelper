@@ -1,4 +1,3 @@
-using System;
 using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
@@ -18,7 +17,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
 
             orig(self, from);
 
-            self.Speed = self.Speed.SafeNormalize() * Math.Max(originalSpeed.Length(), self.Speed.Length());
+            self.Speed = Utils.MaxLengthInclusive(self.Speed, originalSpeed.Length());
         }
     }
 }

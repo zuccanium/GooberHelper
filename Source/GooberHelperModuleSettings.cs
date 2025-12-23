@@ -40,7 +40,7 @@ namespace Celeste.Mod.GooberHelper {
                 public ClampBehavior.ClampBehaviorValue ClampBehavior { get; set; } = Settings.Root.MouseJoystick.RelativeMode.ClampBehavior.ClampBehaviorValue.Circle;
                 public Color OuterColor { get; set; } = new Color(0, 0, 0, 0);
                 public Color BorderColor { get; set; } = new Color(0, 1f, 0, 1f);
-                public Color InnerColor { get; set; } = new Color(0.8f, 0.2f, 1f, 0.2f);
+                public Color InnerColor { get; set; } = new Color(0.2f, 0.8f, 1f, 0.2f);
                 public Color DeadzoneBorderColor { get; set; } = new Color(1f, 1f, 1f, 0.5f);
                 public float BorderThickness { get; set; } = 2f;
                 public float DeadzoneBorderThickness { get; set; } = 2f;

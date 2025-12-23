@@ -30,8 +30,11 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
             cursor.EmitDelegate(preserveBoostSpeed);
         }
 
-        private static void preserveBoostSpeed(Player player)
-            => player.GetExtensionFields().BoostSpeedPreserved = player.Speed;
+        private static void preserveBoostSpeed(Player player) {
+            var ext = player.GetExtensionFields();
+
+            ext.BoostSpeedPreserved = player.GetConservedSpeed(ext);
+        }
 
         private static float overrideSpeed(float orig, Player player) {
             if(!GetOptionBool(Option.BubbleSpeedPreservation))

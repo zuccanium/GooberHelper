@@ -50,7 +50,6 @@ namespace Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers {
             {"PickupSpeedReversal", "PickupSpeedInversion"},
             {"WallJumpSpeedPreservation", "WalljumpSpeedPreservation"},
             {"ShowActiveSettings", "ShowActiveOptions"},
-            {"BadelineBossSpeedReversing", "BadelineBossSpeedPreservation"},
         }) {
             //backwards compatibility!!!!
             SettingValues[Option.UpwardsJumpSpeedPreservationThreshold] = data.Bool("verticalDashSpeedPreservation")
@@ -74,6 +73,9 @@ namespace Celeste.Mod.GooberHelper.Triggers.LegacyOptionTriggers {
             
             if(data.Bool("springSpeedPreservation"))
                 SettingValues[Option.SpringSpeedPreservation] = (float)SpringSpeedPreservation.Value.Invert;
+            
+            if(data.Bool("badelineBossSpeedReversing"))
+                SettingValues[Option.BadelineBossSpeedPreservation] = (float)BadelineBossSpeedPreservation.Value.Preserve;
         }
 
         [OnLoad]

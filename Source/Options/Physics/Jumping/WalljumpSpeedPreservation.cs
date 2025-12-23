@@ -8,7 +8,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Jumping {
             None,
             FakeRCB,
             Preserve,
-            Invert,
+            Invert
         }
 
         public static void InWallJump(Player player, Vector2 originalSpeed, int dir) {
