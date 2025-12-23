@@ -1,5 +1,5 @@
 using System;
-using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace Celeste.Mod.GooberHelper {
     public static partial class Utils {
@@ -14,26 +14,25 @@ namespace Celeste.Mod.GooberHelper {
         public static string Color(this string str, string color) => color + str + AnsiReset;
         public static string Color(this string str, string foreground, string background) => foreground + background + str + AnsiReset;
 
+// #if DEBUG
         public static readonly string LogBackgroundColor1 = GetAnsiBackgroundColorCode(new Color(20, 20, 20));
         public static readonly string LogBackgroundColor2 = GetAnsiBackgroundColorCode(new Color(25, 25, 25));
         public static readonly string LogForegroundColor = GetAnsiForegroundColorCode(new Color(0, 255, 0));
 
         private static int logColorCycle = 0;
 
-#if DEBUG
+        [Conditional("DEBUG")]
         public static void Log(object obj)
             => Log(obj.ToString());
 
-        public static void Log(DefaultInterpolatedStringHandler str)
-            => Log(str.ToString());
-
+        [Conditional("DEBUG")]
         public static void Log(string str)
             => Console.WriteLine(
                 str
                     .PadRight((int)MathF.Ceiling((float)str.Length / Console.WindowWidth) * Console.WindowWidth, ' ')
                     .Color(
                         GetAnsiColorCode(Calc.HsvToColor(
-                            new System.Diagnostics.StackTrace().FrameCount * 0.8236f % 1f, //arbitrary number for effectively hashing
+                            new StackTrace().FrameCount * 0.8236f % 1f, //arbitrary number for effectively hashing
                             1f,
                             1f
                         )),
@@ -42,15 +41,15 @@ namespace Celeste.Mod.GooberHelper {
                             : LogBackgroundColor2
                     )
             );
-#else
-        public static void Log(object obj)
-            => Log(obj.ToString());
+// #else
+//         public static void Log(object obj)
+//             => Log(obj.ToString());
 
-        public static void Log(DefaultInterpolatedStringHandler str)
-            => Logger.Verbose("GooberHelper", str);
+//         public static void Log(string tag, [InterpolatedStringHandlerArgument("tag")] Logger.LogInterpolatedStringHandler<LogLevelConstTypes.Verbose> str)
+//             => Logger.Verbose("GooberHelper", str);
 
-        public static void Log(string str)
-            => Logger.Verbose("GooberHelper", str);
-#endif
+//         public static void Log(string str)
+//             => Logger.Verbose("GooberHelper", str);
+// #endif
     }
 }
