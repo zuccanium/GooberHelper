@@ -16,10 +16,14 @@ namespace Celeste.Mod.GooberHelper.UI {
 
                 public Vector2 MoverPosition;
 
-                public AbstractDraggableThing(Vector2 moverPosition, MTexture texture, MTexture moverTexture) {
+                public Action OnChange;
+                public Color Color = Color.White;
+
+                public AbstractDraggableThing(Vector2 moverPosition, MTexture texture, MTexture moverTexture, Action onChange = null) {
                     Texture = texture;
                     MoverTexture = moverTexture;
                     MoverPosition = moverPosition;
+                    OnChange = onChange;
                 }
 
                 public abstract Vector2 FromScreen(Vector2 position, out bool outOfBounds);
@@ -39,18 +43,21 @@ namespace Celeste.Mod.GooberHelper.UI {
                     if(Dragging && !MInput.Mouse.CheckLeftButton)
                         Dragging = draggingSomething = false;
 
-                    if(Dragging)
+                    if(Dragging) {
                         MoverPosition = mouseFromScreen;
+
+                        OnChange?.Invoke();
+                    }
                 }
 
-                public virtual void Render(Vector2 position, float easedEase, ref float offset, Color? color = null, float gap = 0) {
+                public virtual void Render(Vector2 position, float easedEase, ref float offset, float gap = 0) {
                     ScreenPosition = position + Vector2.UnitX * offset;
                     
                     Draw.SpriteBatch.Draw(
                         Texture.Texture.Texture,
-                        ScreenPosition,
+                        ScreenPosition.Floor(),
                         new Rectangle(0, 0, Texture.Width, (int)(Texture.Height * easedEase)),
-                        color ?? Color.White
+                        Color
                     );
 
                     if(ToScreen(MoverPosition).Y <= position.Y + Texture.Height * easedEase + 2) //2 for leniency
@@ -61,7 +68,7 @@ namespace Celeste.Mod.GooberHelper.UI {
             }
 
             public class DraggableCircle : AbstractDraggableThing {
-                public DraggableCircle(Vector2 moverPosition, MTexture texture, MTexture moverTexture) : base(moverPosition, texture, moverTexture) {}
+                public DraggableCircle(Vector2 moverPosition, MTexture texture, MTexture moverTexture, Action onChange = null) : base(moverPosition, texture, moverTexture, onChange) {}
 
                 public override Vector2 FromScreen(Vector2 position, out bool outOfBounds) {
                     var raw = (position - ScreenPosition) / new Vector2(Texture.Width, Texture.Height) * 2 - new Vector2(1, 1);
@@ -79,7 +86,9 @@ namespace Celeste.Mod.GooberHelper.UI {
             }
 
             public class DraggableSlider : AbstractDraggableThing {
-                public DraggableSlider(float moverPosition, MTexture texture, MTexture moverTexture) : base(new Vector2(0, moverPosition), texture, moverTexture) {}
+                public Color BackgroundColor = Color.Transparent;
+
+                public DraggableSlider(float moverPosition, MTexture texture, MTexture moverTexture, Action onChange = null) : base(new Vector2(0, moverPosition), texture, moverTexture, onChange) {}
 
                 public override Vector2 FromScreen(Vector2 position, out bool outOfBounds) {
                     var raw = (position - ScreenPosition) / new Vector2(Texture.Width, Texture.Height);
@@ -94,6 +103,18 @@ namespace Celeste.Mod.GooberHelper.UI {
 
                 public override bool GetSelected(Vector2 mousePosition, Vector2 toScreen) =>
                     Math.Abs(toScreen.X - mousePosition.X) < Texture.Width / 2 + Threshold && Math.Abs(toScreen.Y - mousePosition.Y) < Threshold || Dragging;
+
+                public override void Render(Vector2 position, float easedEase, ref float offset, float gap = 0) {
+                    Draw.Rect(
+                        ScreenPosition.X,
+                        ScreenPosition.Y,
+                        Texture.Width,
+                        Texture.Height * easedEase,
+                        BackgroundColor
+                    );
+                    
+                    base.Render(position, easedEase, ref offset, gap);
+                }
             }
 
             public static bool? MouseVisiblity;
@@ -115,16 +136,22 @@ namespace Celeste.Mod.GooberHelper.UI {
             private float easedEase = 0;
             private ColorDiplayMode displayMode = ColorDiplayMode.Rgba;
 
-            private MTexture hueWheel = GFX.Gui["GooberHelper/hueWheel"];
-            private MTexture brightnessSlider = GFX.Gui["GooberHelper/brightnessSlider"];
-            private MTexture alphaSlider = GFX.Gui["GooberHelper/alphaSlider"];
+            private MTexture hueWheelTexture = GFX.Gui["GooberHelper/hueWheel"];
+            private MTexture brightnessSliderTexture = GFX.Gui["GooberHelper/brightnessSlider"];
+            private MTexture alphaSliderTexture = GFX.Gui["GooberHelper/alphaSlider"];
             
-            private MTexture sliderMover = GFX.Gui["GooberHelper/sliderMover"];
-            private MTexture hueWheelMover = GFX.Gui["GooberHelper/hueWheelMover"];
-            
+            private MTexture sliderMoverTexture = GFX.Gui["GooberHelper/sliderMover"];
+            private MTexture hueWheelMoverTexture = GFX.Gui["GooberHelper/hueWheelMover"];
+                        
             private DraggableCircle draggableHueWheel;
             private DraggableSlider draggableBrightnessSlider;
+            
+            private DraggableSlider draggableRedSlider;
+            private DraggableSlider draggableGreenSlider;
+            private DraggableSlider draggableBlueSlider;
+            
             private DraggableSlider draggableAlphaSlider;
+
             private static bool draggingSomething = false;
 
             public Action<Color> OnValueChange;
@@ -139,7 +166,7 @@ namespace Celeste.Mod.GooberHelper.UI {
             }
 
             public override float Height()
-                => ActiveFont.LineHeight + hueWheel.Height * easedEase;
+                => ActiveFont.LineHeight + hueWheelTexture.Height * easedEase;
 
             public override float LeftWidth()
                 => ActiveFont.Measure(Label).X;
@@ -188,9 +215,14 @@ namespace Celeste.Mod.GooberHelper.UI {
                 if(draggableHueWheel == null) {
                     var hsv = VectorColor.RgbToHsv();
 
-                    draggableHueWheel = new DraggableCircle(Calc.AngleToVector(-hsv.X * MathF.Tau, hsv.Y), hueWheel, hueWheelMover);
-                    draggableBrightnessSlider = new DraggableSlider(hsv.Z, brightnessSlider, sliderMover);
-                    draggableAlphaSlider = new DraggableSlider(VectorColor.W, alphaSlider, sliderMover);
+                    draggableHueWheel = new DraggableCircle(Calc.AngleToVector(-hsv.X * MathF.Tau, hsv.Y), hueWheelTexture, hueWheelMoverTexture, onUpdateHsv);
+                    draggableBrightnessSlider = new DraggableSlider(hsv.Z, brightnessSliderTexture, sliderMoverTexture, onUpdateHsv);
+
+                    draggableRedSlider = new DraggableSlider(VectorColor.X, alphaSliderTexture, sliderMoverTexture, onUpdateRgb);
+                    draggableGreenSlider = new DraggableSlider(VectorColor.Y, alphaSliderTexture, sliderMoverTexture, onUpdateRgb);
+                    draggableBlueSlider = new DraggableSlider(VectorColor.Z, alphaSliderTexture, sliderMoverTexture, onUpdateRgb);
+
+                    draggableAlphaSlider = new DraggableSlider(VectorColor.W, alphaSliderTexture, sliderMoverTexture, onUpdateAlpha);
                 }
 
                 MouseVisiblity = true;
@@ -203,6 +235,52 @@ namespace Celeste.Mod.GooberHelper.UI {
                 draggingSomething = false;
 
                 MouseVisiblity = null;
+            }
+
+            private void onUpdateHsv() {
+                var hsv = new Vector4(
+                    -draggableHueWheel.MoverPosition.Angle() / MathF.Tau + 1f,
+                    draggableHueWheel.MoverPosition.Length(),
+                    draggableBrightnessSlider.MoverPosition.Y,
+                    draggableAlphaSlider.MoverPosition.Y
+                );
+
+                VectorColor = hsv.HsvToRgb();
+                OnValueChange(VectorColor.ToColor());
+
+                updateRgbSliders();
+            }
+
+            private void onUpdateRgb() {
+                var rgb = new Vector4(
+                    draggableRedSlider.MoverPosition.Y,
+                    draggableGreenSlider.MoverPosition.Y,
+                    draggableBlueSlider.MoverPosition.Y,
+                    draggableAlphaSlider.MoverPosition.Y
+                );
+
+                VectorColor = rgb;
+                OnValueChange(VectorColor.ToColor());
+
+                updateHsvSliders();
+            }
+
+            private void onUpdateAlpha() {
+                VectorColor.W = draggableAlphaSlider.MoverPosition.Y;
+                OnValueChange(VectorColor.ToColor());
+            }
+
+            private void updateHsvSliders() {
+                var hsv = VectorColor.RgbToHsv();
+
+                draggableHueWheel.MoverPosition = Calc.AngleToVector(-hsv.X * MathF.Tau, hsv.Y);
+                draggableBrightnessSlider.MoverPosition.Y = hsv.Z;
+            }
+
+            private void updateRgbSliders() {
+                draggableRedSlider.MoverPosition.Y = VectorColor.X;
+                draggableGreenSlider.MoverPosition.Y = VectorColor.Y;
+                draggableBlueSlider.MoverPosition.Y = VectorColor.Z;
             }
 
             public override void Update() {
@@ -220,21 +298,21 @@ namespace Celeste.Mod.GooberHelper.UI {
                 ease = Calc.Approach(ease, Editing ? 1f : 0f, Engine.RawDeltaTime * 4f);
                 easedEase = Ease.QuadOut(ease);
 
-                if(ease > 0f && draggableHueWheel != null) {
-                    draggableHueWheel.Update();
-                    draggableBrightnessSlider.Update();
-                    draggableAlphaSlider.Update();
+                if(ease <= 0f)
+                    return;
 
-                    var hsv = new Vector4(
-                        -draggableHueWheel.MoverPosition.Angle() / MathF.Tau + 1,
-                        draggableHueWheel.MoverPosition.Length(),
-                        draggableBrightnessSlider.MoverPosition.Y,
-                        draggableAlphaSlider.MoverPosition.Y
-                    );
+                //if this one is null, then all of them are
+                if(draggableHueWheel == null)
+                    return;
 
-                    VectorColor = hsv.HsvToRgb();
-                    OnValueChange(VectorColor.ToColor());
-                }
+                draggableHueWheel.Update();
+                draggableBrightnessSlider.Update();
+                
+                draggableRedSlider.Update();
+                draggableGreenSlider.Update();
+                draggableBlueSlider.Update();
+
+                draggableAlphaSlider.Update();
             }
 
             public override void Render(Vector2 position, bool highlighted) {
@@ -275,16 +353,47 @@ namespace Celeste.Mod.GooberHelper.UI {
                 );
 
                 if(ease > 0f && draggableHueWheel != null) {
-                    var gap = 20;
+                    var gap = 20f;
 
                     var offset = 0f;
                     var offsetPosition = position + new Vector2(0, ActiveFont.LineHeight / 2 + 10);
 
                     var hsv = VectorColor.RgbToHsv();
+                    var hsvToColor = Calc.HsvToColor(hsv.X, hsv.Y, hsv.Z);
 
-                    draggableHueWheel?.Render(offsetPosition, easedEase, ref offset, Calc.HsvToColor(0, 0, hsv.Z), gap);
-                    draggableBrightnessSlider?.Render(offsetPosition, easedEase, ref offset, Calc.HsvToColor(hsv.X, hsv.Y, 1), gap);
-                    draggableAlphaSlider?.Render(offsetPosition, easedEase, ref offset, Calc.HsvToColor(hsv.X, hsv.Y, hsv.Z), gap);
+                    //hue
+                        draggableHueWheel.Color = Calc.HsvToColor(0, 0, hsv.Z);
+                        draggableHueWheel.Render(offsetPosition, easedEase, ref offset, gap);
+                    
+                    //brightness
+                        draggableBrightnessSlider.Color = Calc.HsvToColor(hsv.X, hsv.Y, 1);
+                        draggableBrightnessSlider.Render(offsetPosition, easedEase, ref offset, gap);
+                    
+                    offset += gap * 2f;
+
+                    //red
+                        draggableRedSlider.BackgroundColor = draggableRedSlider.Color = hsvToColor;
+                        draggableRedSlider.Color.R = 255;
+                        draggableRedSlider.BackgroundColor.R = 0;
+                        draggableRedSlider.Render(offsetPosition, easedEase, ref offset, gap);
+                    
+                    //green
+                        draggableGreenSlider.BackgroundColor = draggableGreenSlider.Color = hsvToColor;
+                        draggableGreenSlider.Color.G = 255;
+                        draggableGreenSlider.BackgroundColor.G = 0;
+                        draggableGreenSlider.Render(offsetPosition, easedEase, ref offset, gap);
+                    
+                    //blue
+                        draggableBlueSlider.BackgroundColor = draggableBlueSlider.Color = hsvToColor;
+                        draggableBlueSlider.Color.B = 255;
+                        draggableBlueSlider.BackgroundColor.B = 0;
+                        draggableBlueSlider.Render(offsetPosition, easedEase, ref offset, gap);
+
+                    offset += gap * 2f;
+                    
+                    //alpha
+                        draggableAlphaSlider.Color = hsvToColor;
+                        draggableAlphaSlider.Render(offsetPosition, easedEase, ref offset, gap);
                 }
             }
         }
