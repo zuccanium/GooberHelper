@@ -5,6 +5,9 @@ namespace Celeste.Mod.GooberHelper.Options {
         public static void ResetAll(OptionSetter setter) {
             if(setter == OptionSetter.User)
                 GooberHelperModule.Settings.UserDefinedOptions.Clear();
+            
+            if(setter == OptionSetter.Map)
+                GooberHelperModule.Session.MapDefinedOptions.Clear();
         }
 
         public static bool GetUserEnabledEvilOption()

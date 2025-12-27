@@ -32,7 +32,8 @@ namespace Celeste.Mod.GooberHelper.Triggers {
         }
 
         public void AddToStack() {
-            if(!revertOnLeave && !revertOnDeath) GooberHelperModule.Session.Stack.Clear();
+            if(!revertOnLeave && !revertOnDeath)
+                GooberHelperModule.Session.Stack.Clear();
 
             GooberHelperModule.Session.Stack.Add(Changes);
             Changes.Apply();
