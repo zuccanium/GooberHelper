@@ -7,7 +7,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
         public override float? LeftMax { get; set; } = 0f;
         public override float? RightMin { get; set; } = 0f;
         public override float Step { get; set; } = 5f;
-        public override string Suffix { get; set; } = "px/s";
+        public override string Suffix { get; set; } = " px/s";
         
         //implemented in in GeneralHooks/LiftBoost.cs
     }

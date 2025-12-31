@@ -11,7 +11,7 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
         public override float DefaultValue { get; set; } = (float)Value.None;
         public override float? RightMin { get; set; } = 0f;
         public override float Step { get; set; } = 10f;
-        public override string Suffix { get; set; } = "px/s";
+        public override string Suffix { get; set; } = " px/s";
 
         public enum Value {
             None = ReservedHybridEnumConstant + 0,

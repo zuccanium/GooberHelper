@@ -17,24 +17,21 @@
         # MOUSE JOYSTICK
             menu_gooberhelper_setting_Mode=Mode
 
-            # ABSOLUTE MODE
+            # [shared]
                 menu_gooberhelper_setting_Circle=Circle
                 menu_gooberhelper_setting_OuterColor=Outer Color
                 menu_gooberhelper_setting_BorderColor=Border Color
                 menu_gooberhelper_setting_InnerColor=Inner Color
                 menu_gooberhelper_setting_BorderThickness=Border Thickness
+
+            # ABSOLUTE MODE
             
             # RELATIVE MODE
-                menu_gooberhelper_setting_Circle=Circle
                 menu_gooberhelper_setting_DeadzoneRadius=Deadzone Radius
                 menu_gooberhelper_setting_UseRegularMouse=Use Regular Mouse
                 menu_gooberhelper_setting_ClickBehavior=Click Behavior
                 menu_gooberhelper_setting_ClampBehavior=Clamp Behavior
-                menu_gooberhelper_setting_OuterColor=Outer Color
-                menu_gooberhelper_setting_BorderColor=Border Color
-                menu_gooberhelper_setting_InnerColor=Inner Color
                 menu_gooberhelper_setting_DeadzoneBorderColor=Deadzone Border Color
-                menu_gooberhelper_setting_BorderThickness=Border Thickness
                 menu_gooberhelper_setting_DeadzoneBorderThickness=Deadzone Thickness
     
     # DESCRIPTIONS
