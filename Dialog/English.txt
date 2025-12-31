@@ -37,7 +37,7 @@
     # DESCRIPTIONS
         menu_gooberhelper_setting_description_DebugMapPhysics=adds really janky physics simulations to the debug map{n}press f5 in the debug map to see instructions
         menu_gooberhelper_setting_description_FastMenuing=reduces the time needed for menu inputs to repeat and speeds up the postcard animation
-        menu_gooberhelper_setting_description_CustomSwimmingAnimation=gives Options/Physics/Other/CustomSwimming its own animation
+        menu_gooberhelper_setting_description_CustomSwimmingAnimation=gives Options/Physics/Entities/CustomSwimming its own animation
         
         # MOUSE JOYSTICK
             menu_gooberhelper_setting_description_Mode=Absolute = based on the raw mouse position on the screen{n}Relative = not based on the raw mouse position and more versatile
