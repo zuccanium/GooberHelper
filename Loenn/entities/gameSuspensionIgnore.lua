@@ -3,9 +3,6 @@
 -- this entire file refrenced/copied from a lot in this file
 -- thank you ja
 
-local drawableRectangle = require("structs.drawable_rectangle")
-local utils = require("utils")
-
 local entities = require("entities") -- the jautils version of this uses a tryRequire but i dont have that and its probably fine
 
 local function getAllSids() end

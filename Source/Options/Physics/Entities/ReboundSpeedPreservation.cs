@@ -1,0 +1,29 @@
+using System;
+using Celeste.Mod.GooberHelper.Attributes;
+using Celeste.Mod.GooberHelper.Attributes.Hooks;
+using Celeste.Mod.GooberHelper.Extensions;
+
+namespace Celeste.Mod.GooberHelper.Options.Physics.Entities {
+    [GooberHelperOption]
+    public class ReboundSpeedPreservation : AbstractOption {
+        [OnHook]
+        private static void patch_Player_Rebound(On.Celeste.Player.orig_Rebound orig, Player self, int direction = 0) {
+            if(!GetOptionBool(Option.ReboundSpeedPreservation)) {
+                orig(self, direction);
+
+                return;
+            }
+
+            var originalSpeed = self.GetConservedSpeed();
+
+            orig(self, direction);
+
+            var sign = Utils.FirstSign(self.Speed.X, self.moveX, originalSpeed.X);
+                        
+            self.Speed.X = sign * Utils.UnsignedAbsMax(
+                self.Speed.X,
+                originalSpeed.X
+            );
+        }
+    }
+}

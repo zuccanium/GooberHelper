@@ -1,3 +1,5 @@
+-- deprecated
+
 local trigger = {}
 
 trigger.name = "GooberHelper/RefillFreezeLength"
