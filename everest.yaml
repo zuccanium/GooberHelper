@@ -9,11 +9,15 @@
   OptionalDependencies:
     - Name: XaphanHelper
       Version: 1.0.58
-    - Name: LollydesSjStuffs
-      Version: 1.0.2
     - Name: CollabUtils2
       Version: 1.10.14
     - Name: PlatinumStrawberry
       Version: 1.0.0
+    - Name: KoseiHelper
+      Version: 1.0.0
     - Name: ExtendedVariantMode
       Version: 0.40.0
+    - Name: BounceHelper
+      Version: 1.0.0
+    - Name: VivHelper
+      Version: 1.0.0
