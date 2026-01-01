@@ -140,7 +140,7 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
 
         public void ResolveTargets(MethodInfo method) {
             if(Targets.Length == 0)
-                Logger.Warn("GooberHelper", $"there arent any targets on the hook attribute for method {method.Name} on {method.DeclaringType}");
+                Utils.Log($"there arent any targets on the hook attribute for method {method.Name} on {method.DeclaringType}!");
 
             foreach(var target in Targets) {
                 if(GetMethod(target.DeclaringType, target.MethodName.Split("_"), 0) is not MethodBase targetMethod) {

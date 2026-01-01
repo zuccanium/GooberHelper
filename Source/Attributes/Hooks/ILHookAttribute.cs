@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
@@ -14,6 +15,14 @@ namespace Celeste.Mod.GooberHelper.Attributes.Hooks {
             => Targets = [(declaringType, methodName)];
 
         public ILHookAttribute(string assemblyName, string typeName, string methodName) {
+            //ik this is slow and stupid but i really want the warning to go away
+            //theres only a few hooks that do this, so it shouldnt be too bad
+            if(!Everest.Modules.Any(item => item.GetType().Assembly.FullName.StartsWith(assemblyName))) {
+                Utils.Log($"{assemblyName} not loaded while loading an ilhook! returning");
+
+                return;
+            }
+
             if(Type.GetType($"{typeName}, {assemblyName}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null") is not Type type) {
                 Utils.Log($"couldnt find type {typeName}!");
 
