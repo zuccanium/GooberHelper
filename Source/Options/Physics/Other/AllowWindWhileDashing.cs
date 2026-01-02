@@ -19,7 +19,7 @@ namespace Celeste.Mod.GooberHelper.Options.Physics.Other {
                 orig.X += ext.DashWindBoost.X;
                 
                 if(!player.onGround)
-                    orig.X += ext.DashWindBoost.Y;
+                    orig.Y += ext.DashWindBoost.Y;
 
                 ext.DashWindBoost = Vector2.Zero;
             }
