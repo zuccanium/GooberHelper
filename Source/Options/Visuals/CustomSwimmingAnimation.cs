@@ -4,9 +4,9 @@ using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 using MonoMod.Cil;
 
-namespace Celeste.Mod.GooberHelper.Settings.Root {
-    [GooberHelperSetting]
-    public class CustomSwimmingAnimation : AbstractToggle {
+namespace Celeste.Mod.GooberHelper.Options.Visuals {
+    [GooberHelperOption]
+    public class CustomSwimmingAnimation : AbstractOption {
         public static ParticleType P_SwimTrail;
         public static ParticleType P_SwimLaunchBurst;
 
@@ -55,7 +55,7 @@ namespace Celeste.Mod.GooberHelper.Settings.Root {
             => player is not null
             // && player.CollideCheck<Water>(player.Position + new Vector2(0, -15))
             && GetOptionBool(Option.CustomSwimming) 
-            && GooberHelperModule.Settings.CustomSwimmingAnimation;
+            && GetOptionBool(Option.CustomSwimmingAnimation);
 
         [ILHook]
         private static void patch_Player_SwimUpdate(ILContext il) {
@@ -139,12 +139,15 @@ namespace Celeste.Mod.GooberHelper.Settings.Root {
         }
 
         public static void ParticleBurst(Player player) {
+            if(!ShouldDoAnimation(player))
+                return;
+
             particleBurstOnSystem(player, player.level.ParticlesBG);
             particleBurstOnSystem(player, player.level.ParticlesFG);
         }
 
         private static void maybeCreateTrail(Player player) {
-            if(!GooberHelperModule.Settings.CustomSwimmingAnimation || !GetOptionBool(Option.CustomSwimming))
+            if(!GetOptionBool(Option.CustomSwimmingAnimation) || !GetOptionBool(Option.CustomSwimming))
                 return;
 
             var speed = player.Speed.Length();

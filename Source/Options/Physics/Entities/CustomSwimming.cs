@@ -4,7 +4,7 @@ using Celeste.Mod.GooberHelper.Attributes;
 using Celeste.Mod.GooberHelper.Attributes.Hooks;
 using Celeste.Mod.GooberHelper.Extensions;
 using Celeste.Mod.GooberHelper.Helpers;
-using Celeste.Mod.GooberHelper.Settings.Root;
+using Celeste.Mod.GooberHelper.Options.Visuals;
 using Celeste.Mod.Helpers;
 using MonoMod.Cil;
 

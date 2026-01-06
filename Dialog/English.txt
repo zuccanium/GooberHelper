@@ -12,7 +12,6 @@
         menu_gooberhelper_setting_DebugMapPhysics=Debug Map Physics
         menu_gooberhelper_setting_ShowOptionsInGame=Show Options in Game
         menu_gooberhelper_setting_FastMenuing=Fast Menuing
-        menu_gooberhelper_setting_CustomSwimmingAnimation=Custom Swimming Animation
         
         # MOUSE JOYSTICK
             menu_gooberhelper_setting_Mode=Mode
@@ -37,7 +36,6 @@
     # DESCRIPTIONS
         menu_gooberhelper_setting_description_DebugMapPhysics=adds really janky physics simulations to the debug map{n}press f5 in the debug map to see instructions
         menu_gooberhelper_setting_description_FastMenuing=reduces the time needed for menu inputs to repeat and speeds up the postcard animation
-        menu_gooberhelper_setting_description_CustomSwimmingAnimation=gives Options/Physics/Entities/CustomSwimming its own animation
         
         # MOUSE JOYSTICK
             menu_gooberhelper_setting_description_Mode=Absolute = based on the raw mouse position on the screen{n}Relative = not based on the raw mouse position and more versatile
@@ -236,6 +234,7 @@
             gooberhelper_option_PlayerShaderMask=Player Shader Mask
             gooberhelper_option_TheoNuclearReactor=Theo Nuclear Reactor
             gooberhelper_option_RotatePlayerToSpeed=Rotate Player To Speed
+            gooberhelper_option_CustomSwimmingAnimation=Custom Swimming Animation
 
         # MISCELLANEOUS
             gooberhelper_option_AlwaysExplodeSpinners=Always Explode Spinners
@@ -336,6 +335,7 @@
             gooberhelper_option_description_PlayerShaderMask=masks the player sprite with a cool shader{n}Hair Only = only applies to hair and cateline/foxeline tails{n}Cover = covers the entire player sprite and all components
             gooberhelper_option_description_TheoNuclearReactor=FLASHING LIGHTS WARNING
             gooberhelper_option_description_RotatePlayerToSpeed=fish mode
+            gooberhelper_option_description_CustomSwimmingAnimation=gives Options/Physics/Entities/CustomSwimming its own animation
 
         # MISCELLANEOUS
             gooberhelper_option_description_AlwaysExplodeSpinners=have fun

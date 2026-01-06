@@ -113,6 +113,7 @@ return {
 	"PlayerShaderMask: [None|HairOnly|Cover]",
 	"TheoNuclearReactor",
 	"RotatePlayerToSpeed",
+	"CustomSwimmingAnimation",
 
 	headers.categoryHeader("Miscellaneous"),
 	headers.groupHeader("NewThings"),

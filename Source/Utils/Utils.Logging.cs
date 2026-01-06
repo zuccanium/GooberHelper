@@ -14,7 +14,7 @@ namespace Celeste.Mod.GooberHelper {
         public static string Color(this string str, string color) => color + str + AnsiReset;
         public static string Color(this string str, string foreground, string background) => foreground + background + str + AnsiReset;
 
-// #if DEBUG
+#if DEBUG
         public static readonly string LogBackgroundColor1 = GetAnsiBackgroundColorCode(new Color(20, 20, 20));
         public static readonly string LogBackgroundColor2 = GetAnsiBackgroundColorCode(new Color(25, 25, 25));
         public static readonly string LogForegroundColor = GetAnsiForegroundColorCode(new Color(0, 255, 0));
@@ -41,15 +41,14 @@ namespace Celeste.Mod.GooberHelper {
                             : LogBackgroundColor2
                     )
             );
-// #else
-//         public static void Log(object obj)
-//             => Log(obj.ToString());
+#else
+        [Conditional("DEBUG")]
+        public static void Log(object obj)
+            => Log(obj.ToString());
 
-//         public static void Log(string tag, [InterpolatedStringHandlerArgument("tag")] Logger.LogInterpolatedStringHandler<LogLevelConstTypes.Verbose> str)
-//             => Logger.Verbose("GooberHelper", str);
-
-//         public static void Log(string str)
-//             => Logger.Verbose("GooberHelper", str);
-// #endif
+        [Conditional("DEBUG")]
+        public static void Log(string str)
+            => Logger.Verbose("GooberHelper", str);
+#endif
     }
 }
