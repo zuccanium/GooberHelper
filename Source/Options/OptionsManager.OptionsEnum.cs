@@ -19,6 +19,7 @@ namespace Celeste.Mod.GooberHelper.Options {
             SwapHorizontalAndVerticalSpeedOnWalljump,
             VerticalToHorizontalSpeedOnGroundJump,
             CornerboostBlocksEverywhere,
+            HyperAndSuperWithDashAttackJump,
 
             AllDirectionHypersAndSupers,
             AllowUpwardsCoyote,

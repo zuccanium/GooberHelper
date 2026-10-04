@@ -8,8 +8,12 @@ namespace Celeste.Mod.GooberHelper.Options.GeneralHooks {
             var isClimbjump = particles == false && playSfx == false;
             var originalSpeed = self.Speed;
 
-            if(!isClimbjump)
+            if(!isClimbjump) {
                 VerticalToHorizontalSpeedOnGroundJump.BeforeJump(self, originalSpeed);
+                
+                if (HyperAndSuperWithDashAttackJump.BeforeJump(self))
+                    return;
+            }
 
             JumpInversion.BeforeJump(self, isClimbjump);
 

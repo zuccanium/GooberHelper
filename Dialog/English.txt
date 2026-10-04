@@ -163,6 +163,7 @@
                 gooberhelper_option_SwapHorizontalAndVerticalSpeedOnWalljump=Swap Horizontal And Vertical Speed on Wall Jump
                 gooberhelper_option_VerticalToHorizontalSpeedOnGroundJump=Vertical Speed To Horizontal Speed on Ground Jump
                 gooberhelper_option_CornerboostBlocksEverywhere=Cornerboost Blocks Everywhere
+                gooberhelper_option_HyperAndSuperWithDashAttackJump=Hyper And Super With Dash Attack Jump
                 
                 gooberhelper_option_AllDirectionHypersAndSupers=All Direction Hypers And Supers
                 gooberhelper_option_AllowUpwardsCoyote=Allow Upwards Coyote
@@ -267,6 +268,7 @@
                 gooberhelper_option_description_SwapHorizontalAndVerticalSpeedOnWalljump=yeah
                 gooberhelper_option_description_VerticalToHorizontalSpeedOnGroundJump=works for hypers/supers too{n}Vertical = only converts your vertical speed{n}Magnitude = converts the magnitude of your speed
                 gooberhelper_option_description_CornerboostBlocksEverywhere=all tiles behave like vivhelper cornerboost blocks
+                gooberhelper_option_description_HyperAndSuperWithDashAttackJump=jumps will be replaced with hypers/supers if you have dash attack.{n}(physics -> dashing -> keep dash attack on collision is strongly recommended)
                 
                 gooberhelper_option_description_AllDirectionHypersAndSupers=you can demohyper/super with all dash directions{n}Ground = requires a solid or jumpthrough to work{n}Coyote = same as above it works with coyote time and extended variants jump count too{n}Coyote And Refill = same as above but it refills your dash when you extend (this is a 1f with normal coyote time)
                 gooberhelper_option_description_AllowUpwardsCoyote=yeah

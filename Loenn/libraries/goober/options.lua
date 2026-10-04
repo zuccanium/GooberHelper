@@ -26,6 +26,7 @@ return {
 	"SwapHorizontalAndVerticalSpeedOnWalljump",
 	"VerticalToHorizontalSpeedOnGroundJump: [None|Vertical|Magnitude]",
 	"CornerboostBlocksEverywhere",
+	"HyperAndSuperWithDashAttackJump",
 
 	headers.groupHeader("AllowingThings"),
 	"AllDirectionHypersAndSupers: [None|RequireGround|WorkWithCoyoteTimeAndDontRefill|WorkWithCoyoteTime]",
