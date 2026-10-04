@@ -57,6 +57,9 @@ return {
 	"DownwardsAirFrictionBehavior",
 	"IgnoreForcemove",
 	
+	headers.groupHeader("AllowingThings"),
+	"HalfGravityThreshold",
+	
 	headers.categoryHeader("Entities"),
 	headers.groupHeader("Special"),
 	"RefillFreezeLength: [number]",

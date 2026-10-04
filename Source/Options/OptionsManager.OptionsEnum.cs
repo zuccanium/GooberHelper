@@ -43,6 +43,8 @@ namespace Celeste.Mod.GooberHelper.Options {
             WallboostSpeedIsOppositeSpeed,
             DownwardsAirFrictionBehavior,
             IgnoreForcemove,
+            
+            HalfGravityThreshold,
 
             //entities
             RefillFreezeLength,

@@ -187,6 +187,8 @@
                 gooberhelper_option_WallboostSpeedIsOppositeSpeed=Wall Boost Speed Is Always Opposite Speed
                 gooberhelper_option_DownwardsAirFrictionBehavior=Downwards Air Friction Behavior
                 gooberhelper_option_IgnoreForcemove=Ignore Forcemove
+                
+                gooberhelper_option_description_HalfGravityThreshold=Half Gravity Threshold
 
             # ENTITIES
                 gooberhelper_option_RefillFreezeLength=Refill Freeze Length
@@ -291,6 +293,8 @@
                 gooberhelper_option_description_WallboostSpeedIsOppositeSpeed=wallboost speed dir is based on the opposite of your speed (on wallboost)
                 gooberhelper_option_description_DownwardsAirFrictionBehavior=slows you down less while fastfalling with more than max falling speed
                 gooberhelper_option_description_IgnoreForcemove=overrides the moveX forcemove override in the player update method
+                
+                gooberhelper_option_description_HalfGravityThreshold=changes the threshold where holding jump can half gravity
             
             # ENTITIES
                 gooberhelper_option_description_RefillFreezeLength=hi clantis
