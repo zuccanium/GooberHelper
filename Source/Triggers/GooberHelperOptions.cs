@@ -8,12 +8,21 @@ namespace Celeste.Mod.GooberHelper.Triggers {
     [Tracked(false)]
     public class GooberHelperOptions : Trigger {
         public OptionChanges Changes;
+
+        private string flag;
+        private string notFlag;
+        
         private bool revertOnLeave;
         private bool revertOnDeath;
+
+        private bool entered;
 
         public GooberHelperOptions(EntityData data, Vector2 offset) : base(data, offset) {
             Changes = new OptionChanges(data);
 
+            flag = data.String("flag");
+            notFlag = data.String("notFlag");
+            
             revertOnLeave = data.Bool("revertOnLeave");
             revertOnDeath = data.Bool("revertOnDeath");
         }
@@ -73,6 +82,12 @@ namespace Celeste.Mod.GooberHelper.Triggers {
             if(GooberHelperModule.Session.Stack.Count > 0 && GooberHelperModule.Session.Stack.Last() == Changes)
                 return;
 
+            if(flag is not null && !player.level.Session.GetFlag(flag))
+                return;
+
+            if(notFlag is not null && player.level.Session.GetFlag(notFlag))
+                return;
+            
             AddToStack();
         }
 
